@@ -99,7 +99,7 @@ function App() {
       if (cards[first] === cards[second]) {
         setMatched([...matched, first, second]);
       }
-      setTimeout(() => setFlipped([]), 300);
+      setTimeout(() => setFlipped([]), 500);
     }
   }, [flipped]);
 
@@ -107,7 +107,7 @@ function App() {
   useEffect(() => {
     if (matched.length === cards.length && cards.length > 0) {
       const endTime = new Date();
-      const timeTaken = (endTime - startTime) / 100; // Time in seconds
+      const timeTaken = (endTime - startTime) / 500; // Time in seconds
       setCompletionTime(timeTaken);
       if (bestTime === null || timeTaken < bestTime) {
         setBestTime(timeTaken);
