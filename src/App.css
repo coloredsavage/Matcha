@@ -1,0 +1,168 @@
+.App {
+  text-align: center;
+  padding: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Keep 4 columns */
+  gap: 10px;
+  max-width: 450px; /* Increased from 500px */
+  margin: 20px auto;
+}
+
+.insane-grid {
+  grid-template-columns: repeat(8, 1fr); /* Larger grid for Kinda Insane mode */
+  max-width: 900px;
+}
+
+.insane-insane-grid {
+  grid-template-columns: repeat(10, 1fr); /* Even larger grid for Insane Insane mode */
+  max-width: 1125px;
+}
+
+.card {
+  width: 100px;
+  height: 100px;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.card > div {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-size: 2em;
+  transition: transform 0.6s;
+}
+
+.front {
+  background: #4CAF50;
+  color: white;
+  transform: rotateY(0deg);
+}
+
+.back {
+  background: white;
+  transform: rotateY(180deg);
+}
+
+.flipped .front {
+  transform: rotateY(180deg);
+}
+
+.flipped .back {
+  transform: rotateY(0deg);
+}
+
+.win-message {
+  margin: 20px auto;
+  padding: 15px 30px;
+  background: #4CAF50;
+  color: white;
+  border-radius: 50px;
+  animation: celebrate 0.5s ease-in-out 3;
+}
+
+@keyframes celebrate {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.win-message {
+  background: white;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 2rem auto;
+  max-width: 400px;
+}
+
+.play-again-btn {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  font-size: 1.1rem;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  margin-top: 1rem;
+}
+
+.play-again-btn:hover {
+  transform: scale(1.05);
+  background: #45a049;
+}
+
+.completion-time {
+  margin: 20px auto;
+  padding: 10px 20px;
+  background: #f0f0f0;
+  color: #333;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  max-width: 400px;
+  text-align: center;
+}
+
+.timer {
+  margin: 10px auto;
+}
+
+.timer h2 {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+.main-time {
+  font-size: 2rem;
+  margin-right: 0.2rem;
+}
+
+.milliseconds {
+  font-size: 1.2rem;
+}
+
+.ghost-time {
+  opacity: 0.5;
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+.lose-message {
+  margin: 20px auto;
+  padding: 15px 30px;
+  background: #f44336;
+  color: white;
+  border-radius: 50px;
+  text-align: center;
+}
+
+.time-adjustment-message {
+  margin: 10px auto;
+  padding: 10px 20px;
+  background: #ffeb3b;
+  color: #333;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  max-width: 400px;
+  text-align: center;
+}
+
+@keyframes shuffle {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(10deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.grid.shuffling {
+  animation: shuffle 0.5s ease-in-out;
+}
