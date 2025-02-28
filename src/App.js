@@ -125,7 +125,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Designer Memory Game 🎮</h1>
+      <h1>Matcha 🕹️</h1>
       {gameStarted && difficulty === 'hard' && (
         <div className="timer">
           <h2>Time Remaining: 

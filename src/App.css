@@ -3,30 +3,27 @@
   padding: 20px;
 }
 
-/* Default Grid (4 columns, adjusts for mobile) */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); /* Flexible columns */
+  grid-template-columns: repeat(4, 1fr); /* Keep 4 columns */
   gap: 10px;
-  max-width: 90%;
+  max-width: 450px; /* Increased from 500px */
   margin: 20px auto;
 }
 
-/* Larger Grid Variations */
 .insane-grid {
-  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr)); /* Adapts dynamically */
-  max-width: 95%;
+  grid-template-columns: repeat(8, 1fr); /* Larger grid for Kinda Insane mode */
+  max-width: 900px;
 }
 
 .insane-insane-grid {
-  grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
-  max-width: 98%;
+  grid-template-columns: repeat(10, 1fr); /* Even larger grid for Insane Insane mode */
+  max-width: 1125px;
 }
 
-/* Card Adjustments */
 .card {
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   perspective: 1000px;
   cursor: pointer;
 }
@@ -40,11 +37,10 @@
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  font-size: 1.5em; /* Scales text for better fit */
+  font-size: 2em;
   transition: transform 0.6s;
 }
 
-/* Front & Back Styling */
 .front {
   background: #4CAF50;
   color: white;
@@ -56,7 +52,6 @@
   transform: rotateY(180deg);
 }
 
-/* Flip Effect */
 .flipped .front {
   transform: rotateY(180deg);
 }
@@ -65,16 +60,13 @@
   transform: rotateY(0deg);
 }
 
-/* Win Message */
 .win-message {
   margin: 20px auto;
-  padding: 15px;
+  padding: 15px 30px;
   background: #4CAF50;
   color: white;
-  border-radius: 10px;
-  font-size: 1rem;
+  border-radius: 50px;
   animation: celebrate 0.5s ease-in-out 3;
-  max-width: 80%;
 }
 
 @keyframes celebrate {
@@ -83,14 +75,22 @@
   100% { transform: scale(1); }
 }
 
-/* Button Styling */
+.win-message {
+  background: white;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 2rem auto;
+  max-width: 400px;
+}
+
 .play-again-btn {
   background: #4CAF50;
   color: white;
   border: none;
-  padding: 10px 20px;
-  font-size: 1rem;
-  border-radius: 20px;
+  padding: 12px 30px;
+  font-size: 1.1rem;
+  border-radius: 25px;
   cursor: pointer;
   transition: transform 0.2s;
   margin-top: 1rem;
@@ -101,67 +101,117 @@
   background: #45a049;
 }
 
-/* Timer */
-.timer {
-  margin: 10px auto;
+.completion-time {
+  margin: 20px auto;
+  padding: 10px 20px;
+  background: #f0f0f0;
+  color: #333;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  max-width: 400px;
   text-align: center;
 }
 
+.timer {
+  margin: 10px auto;
+}
+
+.timer h2 {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
 .main-time {
-  font-size: 1.8rem;
+  font-size: 2rem;
   margin-right: 0.2rem;
 }
 
 .milliseconds {
-  font-size: 1rem;
+  font-size: 1.2rem;
 }
 
 .ghost-time {
   opacity: 0.5;
-  font-size: 0.9rem;
+  font-size: 1rem;
   margin-top: 10px;
 }
 
-/* Responsive Tweaks */
-@media (max-width: 600px) {
-  .grid {
-    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
-  }
-
-  .card {
-    width: 70px;
-    height: 70px;
-    font-size: 1.2em;
-  }
-
-  .win-message {
-    font-size: 0.9rem;
-    padding: 10px;
-  }
-
-  .play-again-btn {
-    font-size: 0.9rem;
-    padding: 8px 18px;
-  }
+.lose-message {
+  margin: 20px auto;
+  padding: 15px 30px;
+  background: #f44336;
+  color: white;
+  border-radius: 50px;
+  text-align: center;
 }
 
-@media (max-width: 400px) {
+.time-adjustment-message {
+  margin: 10px auto;
+  padding: 10px 20px;
+  background: #ffeb3b;
+  color: #333;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  max-width: 400px;
+  text-align: center;
+}
+
+@keyframes shuffle {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(10deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.grid.shuffling {
+  animation: shuffle 0.5s ease-in-out;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
   .grid {
-    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+    grid-template-columns: repeat(4, 1fr); /* 2 columns on smaller screens */
+    max-width: 350px;
+  }
+
+  .insane-grid {
+    grid-template-columns: repeat(4, 1fr); /* 4 columns on smaller screens */
+    max-width: 450px;
+  }
+
+  .insane-insane-grid {
+    grid-template-columns: repeat(5, 1fr); /* 5 columns on smaller screens */
+    max-width: 562.5px;
   }
 
   .card {
-    width: 60px;
-    height: 60px;
-    font-size: 1em;
+    width: 80px;
+    height: 80px;
   }
 
-  .win-message {
-    font-size: 0.8rem;
+  .card > div {
+    font-size: 1.5em;
+  }
+
+  .win-message, .completion-time, .time-adjustment-message {
+    max-width: 300px;
+    font-size: 1rem;
   }
 
   .play-again-btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+  }
+
+  .main-time {
+    font-size: 1.5rem;
+  }
+
+  .milliseconds {
+    font-size: 1rem;
+  }
+
+  .ghost-time {
     font-size: 0.8rem;
-    padding: 6px 16px;
   }
 }
