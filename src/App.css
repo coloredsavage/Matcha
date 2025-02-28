@@ -1,14 +1,129 @@
-.App {
-  text-align: center;
-  padding: 20px;
+
+@font-face {
+  font-family: 'Groteska';;
+  src: url('./fonts/Groteska-Book.otf') format('truetype');
+  font-family: 'Groteska';;
+  src: url('./fonts/Groteska-Medium.otf') format('truetype');
+  font-family: 'Sf-Pro-Display';;
+  src: url('./fonts/SF-Pro-Display-Regular.otf') format('truetype');
 }
 
+/* Change background color to #000000 */
+body {
+  background-color: #000000;
+  color: white; /* Ensure text is readable on dark background */
+}
+
+/* Center the game landing page UI */
+.App {
+  position: relative;
+  text-align: center;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Ensure it takes full height of the viewport */
+}
+
+.App::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('./assets/Gridbg.svg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat;
+  opacity: 0.5; /* Adjust the opacity as needed */
+  z-index: -1; /* Ensure the background is behind the content */
+}
+
+/* Style the start game button */
+.start-game-btn {
+  background: #5ED88D;
+  color: black;
+  border: none;
+  padding: 20px 80px; /* Increased padding for larger size */
+  font-size: 1.2rem; /* Increased font size */
+  border-radius: 75px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  margin-top: 2rem;
+  font-family: 'Groteska', sans-serif;
+  font-weight:500;
+}
+
+.start-game-btn:hover {
+  transform: scale(1.02);
+  background: #ffffff; /* Slightly darker shade on hover */
+}
+
+/* Existing styles */
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Keep 4 columns */
   gap: 10px;
-  max-width: 450px; /* Increased from 500px */
+  flex: 1;
   margin: 20px auto;
+}
+
+.easy-grid, .medium-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 3 columns */
+  grid-template-rows: repeat(3, 1fr); /* 4 rows */
+  gap: 10px; /* Adds spacing between grid items */
+  max-width: 320px; /* Slightly larger to accommodate margins */
+  margin: auto; /* Centers the grid */
+  padding: 10px; /* Adds some spacing inside */
+  justify-content: center;
+}
+
+/* Inserted styles */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.App > * {
+  flex: 0 1;
+}
+
+footer {
+  padding: 10px 0;
+  text-align: center;
+  width: 100%;
+  position: relative;
+  bottom: -140px;
+  font-family: 'Groteska-Book', sans-serif;
+  font-weight: 400;
+}
+/* Mobile Optimization */
+@media (max-width: 768px) {
+  footer {
+    padding: 10px 0;
+    text-align: center;
+    width: 100%;
+    position: relative;
+    bottom: -135px;
+    font-size: 0.7em;
+    font-family: 'Groteska-Book', sans-serif;
+    font-weight: 400;
+  }
+}
+
+/* Additional existing styles */
+.hard-grid {
+  grid-template-columns: repeat(4, 1fr); /* 4 columns for Hard mode */
+  max-width: 450px;
 }
 
 .insane-grid {
@@ -19,6 +134,26 @@
 .insane-insane-grid {
   grid-template-columns: repeat(10, 1fr); /* Even larger grid for Insane Insane mode */
   max-width: 1125px;
+}
+
+.memory-grid-4x4 {
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 400px;
+}
+
+.memory-grid-4x5 {
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 500px;
+}
+
+.memory-grid-4x6 {
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 600px;
+}
+
+.memory-grid-4x7 {
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 700px;
 }
 
 .card {
@@ -42,7 +177,7 @@
 }
 
 .front {
-  background: #4CAF50;
+  background: #5ED88D;
   color: white;
   transform: rotateY(0deg);
 }
@@ -50,6 +185,14 @@
 .back {
   background: white;
   transform: rotateY(180deg);
+}
+
+.card.matched .card-back {
+  background-color: #FBE64D;
+}
+
+.card.unmatched .card-back {
+  background-color: #EE8768;
 }
 
 .flipped .front {
@@ -113,28 +256,80 @@
 }
 
 .timer {
-  margin: 10px auto;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  /* Add any additional styling you need */
+}
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+  .timer {
+    top: -150px;
+    right: 16px;
+    /* Adjust any other properties if needed */
+  }
 }
 
 .timer h2 {
   display: flex;
   align-items: baseline;
   justify-content: center;
+  
 }
 
 .main-time {
-  font-size: 2rem;
+  font-size: 2.4rem;
   margin-right: 0.2rem;
+  font-family: 'Groteska-Book', sans-serif;
+  font-weight: 400;
+}
+
+.best-time {
+  font-size: 2.4rem;
+  margin-right: 0.2rem;
+  font-family: 'Groteska-Book', sans-serif;
+  font-weight: 400;
+  color: #f0f0f0;
+  opacity: 0.3;
+  margin-top: -25px; 
+  position: relative;
+  left: 30px;
 }
 
 .milliseconds {
-  font-size: 1.2rem;
+  font-size: 0.9rem;
+  display: inline-block;
+  width: 3ch; /* Adjust width to match max possible characters */
+  text-align: right;
 }
 
 .ghost-time {
   opacity: 0.5;
   font-size: 1rem;
   margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+  .main-time {
+    font-size: 2.5rem; /* Reduce size for mobile */
+    margin-right: 0.1rem;
+  }
+
+  .best-time {
+    font-size: 1.8rem; /* Match with main-time for consistency */
+    margin-top: -15px; /* Reduce negative margin for better spacing */
+  }
+
+  .milliseconds {
+    font-size: 0.8rem; /* Slightly smaller for compact design */
+    width: 2.5ch; /* Adjust width accordingly */
+  }
+
+  .ghost-time {
+    font-size: 0.9rem; /* Reduce slightly for better spacing */
+    margin-top: 5px;
+  }
 }
 
 .lose-message {
@@ -167,11 +362,23 @@
   animation: shuffle 0.5s ease-in-out;
 }
 
-/* Responsive Design */
+/* Mobile Grid Styling */
 @media (max-width: 768px) {
-  .grid {
-    grid-template-columns: repeat(4, 1fr); /* 2 columns on smaller screens */
-    max-width: 350px;
+  .easy-grid, .medium-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
+    grid-template-rows: repeat(4, 1fr); /* 4 equal rows */
+    gap: 8px; /* Spacing between the cards */
+    max-width: 90vw; /* Ensures the grid scales properly */
+    margin: 0 auto; /* Centers the grid */
+    padding: 10px;
+  }
+
+  .hard-grid {
+    grid-template-columns: repeat(4, 1fr); /* 3 columns on smaller screens */
+    max-width: 300px;
+    position: relative;
+    left: -32px;
   }
 
   .insane-grid {
@@ -184,13 +391,20 @@
     max-width: 562.5px;
   }
 
+  .memory-grid-4x4, .memory-grid-4x5, .memory-grid-4x6, .memory-grid-4x7 {
+    grid-template-columns: repeat(4, 1fr); /* 2 columns on smaller screens */
+    max-width: 200px;
+    position: relative;
+    left: -84px;
+  }
+
   .card {
-    width: 80px;
-    height: 80px;
+    width: 85px;
+    height: 85px;
   }
 
   .card > div {
-    font-size: 1.5em;
+    font-size: 2.5em;
   }
 
   .win-message, .completion-time, .time-adjustment-message {
@@ -204,7 +418,8 @@
   }
 
   .main-time {
-    font-size: 1.5rem;
+    font-size: 2.5rem;
+    color: #5ED88D;
   }
 
   .milliseconds {
@@ -213,5 +428,420 @@
 
   .ghost-time {
     font-size: 0.8rem;
+  }
+}
+
+.logo {
+  width: 500px;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .logo {
+    width: 300px; /* Adjust the width for smaller screens */
+  }
+}
+
+.landing-subheader {
+  font-family: 'Groteska-Book', sans-serif;
+  font-weight: 400;
+}
+
+@media (max-width: 768px) {
+  .landing-subheader {
+    font-size: 18px; /* Adjust for mobile screens */
+  }
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  border: none;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  outline: none; /* Remove unwanted outlines */
+  box-shadow: none; /* Disable extra shadows */
+}
+
+.modal-content {
+  background: rgb(0, 0, 0);
+  padding: 45px 90px;
+  border: #5ED88D 1px solid;
+  border-radius: 20px;
+  position: relative;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Modal container */
+.modal-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Modal header */
+.modal-container h2 {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .modal-content {
+    padding: 30px; /* Reduce padding for smaller screens */
+    max-width: 70%; /* Make it more responsive */
+  }
+
+  .modal-container {
+    padding: 15px;
+  }
+
+  .modal-container h2 {
+    font-size: 1.25rem; /* Slightly smaller heading for mobile */
+  }
+
+  .close-button {
+    font-size: 1.2rem; /* Adjust close button size */
+    top: 5px;
+    right: 5px;
+  }
+}
+
+/* Memory grid selection */
+.memory-grid-selection {
+  margin-bottom: 20px;
+}
+
+.memory-grid-selection label {
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.memory-grid-selection select {
+  margin-left: 10px;
+  padding: 5px;
+  background: #000000;
+  color: rgb(255, 255, 255);
+  border: #5ED88D 1px solid;
+  padding: 10px 193px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  font-family: 'Groteska-Book', sans-serif;
+  font-weight: 400;
+  margin: 20px;
+}
+
+/* Start memory game button */
+.start-memory-game-btn {
+  padding: 10px 20px;
+  font-size: 1.1rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.start-memory-game-btn:hover {
+  background-color: #45a049;
+}
+
+.memory-mode-btn {
+  background: #000000;
+  color: rgb(255, 255, 255);
+  border: #5ED88D 1px solid;
+  padding: 10px 193px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  font-family: 'Groteska-Book', sans-serif;
+  font-weight: 400;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .memory-mode-btn {
+    padding: 10px 50px; /* Reduce padding for smaller screens */
+    font-size: 0.9rem; /* Slightly smaller text */
+    width: 100%; /* Make the button adapt to screen size */
+    max-width: 300px; /* Prevent it from stretching too much */
+  }
+}
+
+.memory-mode-btn:hover {
+  transform: scale(1.02);
+  background: #5ED88D;
+  color: #000000;
+}
+
+.memory-grid-selection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.memory-grid-btn {
+  background: #000000;
+  color: rgb(255, 255, 255);
+  border: #5ED88D 1px solid;
+  padding: 10px 193px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  font-family: 'Groteska-Book', sans-serif;
+  font-weight: 400;
+}
+
+/* Mobile Optimization */
+@media (max-width: 768px) {
+  .memory-grid-btn {
+    padding: 20px 50px; /* Reduce padding for smaller screens */
+    font-size: 1.2rem; /* Slightly smaller text */
+    width: 100%; /* Make it responsive */
+    max-width: 300px; /* Prevent it from being too wide */
+    text-align: center;
+  }
+}
+
+.memory-grid-btn:hover {
+  background: #5ED88D;
+  color: #000000;
+}
+
+.game-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  position: relative; /* Add this line */
+}
+
+/* Mobile Styling */
+@media (max-width: 768px) {
+  .game-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 30vh; 
+    justify-content: flex-end;
+    position: relative;
+    top: 150px;
+    align-items: flex-end;
+  }
+}
+
+.win-message-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #5ED88D;
+  color: rgb(0, 0, 0);
+  padding-left: 80px;
+  padding-right: 80px;
+  padding-top: 40px;
+  padding-bottom: 30px;
+  border-radius: 40px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000; /* Ensure it is above other elements */
+}
+
+.win-message-container h2 {
+  font-size: 3rem;
+  margin-bottom: 30px;
+  margin-top: 0px;
+  font-family: 'Sf-Pro-Display', sans-serif;
+  color: #000000;
+}
+
+.win-message-container .subheader {
+  margin-bottom: 20px;
+}
+
+.win-message-container .completion-time {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  font-family: 'Groteska-Book', sans-serif;
+
+}
+
+.win-message-container .best-time {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  opacity: 0.6;
+  font-family: 'Groteska-Book', sans-serif;
+}
+
+.win-message-container .play-again-btn {
+  background: #000000;
+  color: #5ED88D;
+  border: none;
+  padding: 30px 80px; /* Increased padding for larger size */
+  font-size: 1.2rem; /* Increased font size */
+  border-radius: 75px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  margin-top: 0rem;
+  margin-bottom: 1rem;
+  font-family: 'Groteska', sans-serif;
+  font-weight:500;
+}
+
+.win-message-container .play-again-btn:hover {
+  transform: scale(1.02);
+  background: #ffffff;
+  color: rgb(0, 0, 0);
+}
+
+.time-container {
+  display: flex;
+  flex-direction: column-reverse; /* Moves the label above the time */
+  align-items: center;
+  text-align: center;
+  margin-bottom: 0px;
+  margin-top: 10px;
+}
+
+.time-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 2px; /* Slight spacing above the time */
+}
+
+.time-label-best {
+  font-size: 0.8rem;
+  font-weight: 500;
+  opacity: 0.6;
+  color: rgba(0, 0, 0, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 2px; /* Slight spacing above the time */
+}
+
+.time-value {
+  font-size: 5rem; /* Larger for emphasis */
+  font-weight: bold;
+  color: black;
+  font-family: 'Groteska-Book', sans-serif;
+  font-weight: 400;
+}
+
+.time-value-best {
+  font-size: 2rem; /* Larger for emphasis */
+  font-weight: bold;
+  color: black;
+  opacity: 0.6;
+  font-family: 'Groteska-Book', sans-serif;
+  font-weight: 400;
+}
+
+.fire-emoji {
+  font-size: 50px; /* Increase size */
+  margin-bottom: 0px; /* Add spacing */
+}
+
+
+@media (max-width: 768px) {
+  .win-message-container {
+    width: 80vw; /* Ensure it fits within the screen */
+    max-width: 350px; /* Limit maximum width */
+    padding: 25px; /* Reduce padding for better fit */
+    border-radius: 20px; /* Slightly smaller radius for a balanced look */
+  }
+
+  .win-message-container h2 {
+    font-size: 2rem; /* Reduce heading size for mobile */
+    margin-bottom: 20px;
+  }
+
+  .win-message-container .subheader {
+    font-size: 1rem; /* Adjust for readability */
+  }
+
+  .win-message-container .completion-time,
+  .win-message-container .best-time {
+    font-size: 0.9rem; /* Reduce text size for better fit */
+  }
+
+  .win-message-container .play-again-btn {
+    padding: 15px 40px; /* Adjust padding for better mobile interaction */
+    font-size: 1rem; /* Make it more proportionate */
+    border-radius: 50px; /* Maintain rounded look but scale down */
+  }
+
+  .time-value {
+    font-size: 3rem; /* Scale down main time value */
+  }
+
+  .time-value-best {
+    font-size: 1.5rem; /* Adjust for consistency */
+  }
+
+  .fire-emoji {
+    font-size: 40px; /* Adjust emoji size */
+  }
+
+  .instructions-list, .game-modes-list {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin-bottom: 15px;
+  }
+  
+  .instructions-list li {
+    margin-bottom: 10px; /* Adjust spacing between each bullet point */
+  }
+  
+  .game-modes-list {
+    list-style-type: none; /* Remove default bullets */
+  }
+  
+  .instructions-container {
+    text-align: left;
+    max-width: 400px; /* Adjust width as needed */
+    margin: 0 auto;
+  }
+  
+  .instructions-list, .game-modes-list {
+    list-style-type: disc;
+    padding-left: 0px;
+    margin-bottom: 15px;
+  }
+  
+  .game-modes-list {
+    list-style-type: none; /* Remove default bullets */
+  }
+  
+  .game-modes-list li {
+    margin-bottom: 9px;
   }
 }
