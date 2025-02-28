@@ -1,0 +1,75 @@
+.navbar {
+    position: fixed;
+    top: 10px; 
+    left: 10px; 
+    right: 10px; 
+    width: calc(100% - 60px); 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    z-index: 1000;
+    border-radius: 5px;
+}
+
+/* Logo adjustments */
+.navbar-logo img {
+    height: 30px;
+}
+
+/* Navbar icons */
+.navbar-icons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.navbar-icons svg {
+    height: 25px; 
+    margin-left: 12px; 
+    fill: white;
+    cursor: pointer;
+    filter: invert(100%);
+}
+
+.desktop-logo {
+  display: block;
+}
+
+.mobile-logo {
+  display: none;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .navbar {
+        top: 6px; /* Reduce gap from the top */
+        left: 5px; /* Reduce gap from the left */
+        right: 5px; /* Reduce gap from the right */
+        width: calc(100% - 30px); /* Adjust for smaller margins */
+        padding: 10px 15px; /* Reduce padding */
+    }
+
+    .navbar-logo img {
+        height: 40px; /* Scale down the logo */
+    }
+
+    .navbar-icons svg {
+        height: 20px; /* Reduce icon size */
+        margin-left: 8px; /* Adjust spacing */
+    }
+    /* Mobile Optimization */
+@media (max-width: 768px) {
+    .navbar-icon {
+      width: 40px;  /* Smaller size for mobile */
+      height: 40px;
+    }
+  }
+  .desktop-logo {
+    display: none;
+  }
+
+  .mobile-logo {
+    display: block;
+  }
+}
