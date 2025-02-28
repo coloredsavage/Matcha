@@ -2,7 +2,11 @@ import { useRef, useState, useEffect, useCallback } from "react"
 import Card from "./Card"
 import Modal from "./Modal"
 import NavBar from "./NavBar"
-import Confetti from "react-confetti"
+import confetti from "canvas-confetti";
+
+const handleWin = () => {
+  confetti(); // Simple confetti burst
+};
 import "./App.css"
 import logo from "./MATCHA.svg"
 
