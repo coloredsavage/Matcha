@@ -270,6 +270,7 @@ footer {
   position: absolute;
   top: 10px;
   right: 10px;
+  font-family: 'Groteska', sans-serif;
   /* Add any additional styling you need */
 }
 
@@ -278,6 +279,7 @@ footer {
   .timer {
     top: -150px;
     right: 16px;
+    font-family: 'Groteska', sans-serif;
     /* Adjust any other properties if needed */
   }
 }
@@ -745,6 +747,7 @@ footer {
   font-weight: 500;
   color: rgba(0, 0, 0, 0.6);
   text-transform: uppercase;
+  font-family: 'Groteska', sans-serif;
   letter-spacing: 1px;
   margin-bottom: 2px; /* Slight spacing above the time */
 }
@@ -753,6 +756,7 @@ footer {
   font-size: 0.8rem;
   font-weight: 500;
   opacity: 0.6;
+  font-family: 'Groteska', sans-serif;
   color: rgba(0, 0, 0, 0.6);
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -800,6 +804,7 @@ footer {
   .win-message-container h2 {
     font-size: 2rem; /* Reduce heading size for mobile */
     margin-bottom: 20px;
+    font-family: 'Sf-Pro-Display', sans-serif;
   }
 
   .win-message-container .subheader {
@@ -833,6 +838,7 @@ footer {
     list-style-type: disc;
     padding-left: 20px;
     margin-bottom: 15px;
+    font-family: 'Groteska', sans-serif;
   }
   
   .instructions-list li {
@@ -841,6 +847,7 @@ footer {
   
   .game-modes-list {
     list-style-type: none; /* Remove default bullets */
+    font-family: 'Groteska', sans-serif;
   }
   
   .instructions-container {
