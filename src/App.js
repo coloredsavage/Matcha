@@ -6,6 +6,7 @@ import Confetti from 'react-confetti';
 import "./App.css"
 import logo from "./MATCHA.svg"
 
+
 const ConfettiEffect = ({ confettiRunning }) => {
   const confettiAnchorRef = useRef(null)
   const [anchorPosition, setAnchorPosition] = useState({ x: 0, y: 0 })
