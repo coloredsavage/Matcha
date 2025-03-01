@@ -192,11 +192,19 @@ function App() {
     return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.<span class="milliseconds">${milliseconds.toString().padStart(3, "0")}</span>`
   }
 
+  const handleIcon1Click = () => {
+    setShowInstructions(true);
+  };
+
+  const handleIcon2Click = () => {
+    setShowModal(true);
+  };
+
   return (
     <div className="App">
       <ConfettiEffect confettiRunning={confettiRunning} />
       
-      {gameStarted && <NavBar />}
+      {gameStarted && <NavBar onIcon1Click={handleIcon1Click} onIcon2Click={handleIcon2Click} />}
       {!gameStarted && <img src={logo || "/placeholder.svg"} alt="Matcha Logo" className="logo" />}
       {!gameStarted && <h2 className="landing-subheader">A Pretty Simple Matching Game</h2>}
       

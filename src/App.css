@@ -500,6 +500,7 @@ footer {
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
+  display: none;
 }
 
 /* Modal container */
@@ -540,6 +541,7 @@ footer {
     font-size: 1.2rem; /* Adjust close button size */
     top: 5px;
     right: 5px;
+    display: none;
   }
 }
 
@@ -839,6 +841,7 @@ footer {
     padding-left: 20px;
     margin-bottom: 15px;
     font-family: 'Groteska', sans-serif;
+    font-size: 0.5em;
   }
   
   .instructions-list li {

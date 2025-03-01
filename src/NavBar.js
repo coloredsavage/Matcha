@@ -6,7 +6,7 @@ import icon2 from './assets/settings.svg'; // Import the second icon
 import icon3 from './assets/music.svg'; // Import the third icon
 import './NavBar.css'; // Import the CSS for the NavBar
 
-const NavBar = () => {
+const NavBar = ({ onIcon1Click, onIcon2Click }) => {
   return (
     <nav className="navbar">
       <div className="navbar-logo">
@@ -18,8 +18,8 @@ const NavBar = () => {
         </a>
       </div>
       <div className="navbar-icons">
-        <img src={icon1} alt="Icon 1" className="navbar-icon" />
-        <img src={icon2} alt="Icon 2" className="navbar-icon" />
+        <img src={icon1} alt="Icon 1" className="navbar-icon" onClick={onIcon1Click} />
+        <img src={icon2} alt="Icon 2" className="navbar-icon" onClick={onIcon2Click} />
         <img src={icon3} alt="Icon 3" className="navbar-icon" />
       </div>
     </nav>
