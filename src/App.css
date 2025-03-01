@@ -1,20 +1,20 @@
 @font-face {
   font-family: 'Groteska';
-  src: url('/fonts/Groteska-Book.otf') format('opentype');
+  src: url('/public/fonts/Groteska-Book.otf') format('opentype');
   font-weight: 300;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Groteska';
-  src: url('/fonts/Groteska-Medium.otf') format('opentype');
+  src: url('/public/fonts/Groteska-Medium.otf') format('opentype');
   font-weight: 500;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Sf-Pro-Display';
-  src: url('/fonts/SF-Pro-Display-Regular.otf') format('opentype');
+  src: url('/public/fonts/SF-Pro-Display-Regular.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
 }
