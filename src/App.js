@@ -2,15 +2,10 @@ import { useRef, useState, useEffect, useCallback } from "react"
 import Card from "./Card"
 import Modal from "./Modal"
 import NavBar from "./NavBar"
-import confetti from "canvas-confetti";
-
-const handleWin = () => {
-  confetti(); // Simple confetti burst
-};
+import Confetti from 'react-confetti';
 import "./App.css"
 import logo from "./MATCHA.svg"
 
-// Moved ConfettiEffect component outside main App component
 const ConfettiEffect = ({ confettiRunning }) => {
   const confettiAnchorRef = useRef(null)
   const [anchorPosition, setAnchorPosition] = useState({ x: 0, y: 0 })
@@ -23,7 +18,7 @@ const ConfettiEffect = ({ confettiRunning }) => {
         y: rect.top,
       })
     }
-  }, []) // Empty dependency array for one-time calculation
+  }, [])
 
   return (
     <>
@@ -40,9 +35,6 @@ const ConfettiEffect = ({ confettiRunning }) => {
           height={window.innerHeight}
           numberOfPieces={1000}
           gravity={0.05}
-          wind={0}
-          initialVelocityX={{ min: -5, max: 5 }}
-          initialVelocityY={{ min: 3, max: 10 }}
           recycle={false}
           confettiSource={{
             x: anchorPosition.x,
@@ -57,7 +49,6 @@ const ConfettiEffect = ({ confettiRunning }) => {
 }
 
 function App() {
-  // Game State (keep all existing state variables)
   const [cards, setCards] = useState([])
   const [flipped, setFlipped] = useState([])
   const [matched, setMatched] = useState([])
@@ -75,9 +66,8 @@ function App() {
   const [showModal, setShowModal] = useState(false)
   const [showMemoryModal, setShowMemoryModal] = useState(false)
   const [confettiRunning, setConfettiRunning] = useState(false)
-  const [showInstructions, setShowInstructions] = useState(false) // New state variable for instructions modal
+  const [showInstructions, setShowInstructions] = useState(false)
 
-  // Create cards on start/reset
   const initializeGame = useCallback(() => {
     let symbols
     let gridSize
@@ -102,7 +92,7 @@ function App() {
     } else {
       switch (difficulty) {
         case "easy":
-          symbols = ["🎨", "🖌️", "🎭", "🖼️", "📐", "✏️"] // 6 unique symbols for Easy mode (12 cards total)
+          symbols = ["🎨", "🖌️", "🎭", "🖼️", "📐", "✏️"]
           break
         case "medium":
           symbols = ["🎨", "🖌️", "🎭", "🖼️", "📐", "✏️", "🖋️", "📏"]
@@ -117,33 +107,31 @@ function App() {
     const pairs = [...symbols, ...symbols]
     const shuffled = pairs.sort(() => Math.random() - 0.5)
     setCards(shuffled)
-    setFlipped(memoryMode || difficulty === "easy" ? [...Array(shuffled.length).keys()] : []) // Flip all cards initially for Easy and Memory modes
+    setFlipped(memoryMode || difficulty === "easy" ? [...Array(shuffled.length).keys()] : [])
     setMatched([])
     setCompletionTime(null)
     setElapsedTime(0)
     setGameStarted(true)
     setGameLost(false)
     setTimeRemaining(hardModeTimeLimit * 1000)
-    setStartTime(null) // Reset startTime to null
+    setStartTime(null)
 
     if (memoryMode || difficulty === "easy") {
       setTimeout(() => {
         setFlipped([])
-        setStartTime(new Date()) // Start the timer after flipping back
-      }, 1000) // Change this value to your desired duration in milliseconds
+        setStartTime(new Date())
+      }, 1000)
     } else {
       setStartTime(new Date())
     }
   }, [difficulty, memoryMode, memoryGrid, hardModeTimeLimit])
 
-  // Initial game setup
   useEffect(() => {
     if (gameStarted) {
       initializeGame()
     }
   }, [gameStarted, initializeGame])
 
-  // Update elapsed time every 10 milliseconds
   useEffect(() => {
     let timer
     if (startTime && matched.length < cards.length) {
@@ -166,14 +154,12 @@ function App() {
     return () => clearInterval(timer)
   }, [startTime, matched.length, cards.length, difficulty, hardModeTimeLimit])
 
-  // Handle card click
   const handleClick = (index) => {
     if (flipped.length < 2 && !flipped.includes(index)) {
       setFlipped([...flipped, index])
     }
   }
 
-  // Check matches
   useEffect(() => {
     if (flipped.length === 2) {
       const [first, second] = flipped
@@ -184,22 +170,20 @@ function App() {
     }
   }, [flipped, cards])
 
-  // Check win condition
   useEffect(() => {
     if (matched.length === cards.length && cards.length > 0) {
       const endTime = new Date()
-      const timeTaken = (endTime - startTime) / 1000 // Time in seconds
+      const timeTaken = (endTime - startTime) / 1000
       setCompletionTime(timeTaken)
-      const roundedTimeTaken = Math.ceil(timeTaken) // Round up to the nearest second
+      const roundedTimeTaken = Math.ceil(timeTaken)
       if (bestTime === null || roundedTimeTaken < bestTime) {
         setBestTime(roundedTimeTaken)
       }
-      setConfettiRunning(true) // Start confetti
-      setTimeout(() => setConfettiRunning(false), 4000) // Stop confetti after 3 seconds
+      setConfettiRunning(true)
+      setTimeout(() => setConfettiRunning(false), 4000)
     }
   }, [matched, cards.length, startTime, bestTime])
 
-  // Format elapsed time
   const formatElapsedTime = (time) => {
     const minutes = Math.floor(time / 60000)
     const seconds = Math.floor((time % 60000) / 1000)
@@ -209,70 +193,46 @@ function App() {
 
   return (
     <div className="App">
-      {/* Confetti at root level */}
       <ConfettiEffect confettiRunning={confettiRunning} />
       
       {gameStarted && <NavBar />}
       {!gameStarted && <img src={logo || "/placeholder.svg"} alt="Matcha Logo" className="logo" />}
       {!gameStarted && <h2 className="landing-subheader">A Pretty Simple Matching Game</h2>}
-      {/* Conditionally render the subheader */}
+      
       {!gameStarted && !gameLost && (
-        <>
-          <button
-            onClick={() => setShowModal(true)} // Open the modal
-            className="start-game-btn"
-          >
-            Play
-          </button>
-        </>
+        <button
+          onClick={() => setShowModal(true)}
+          className="start-game-btn"
+        >
+          Play
+        </button>
       )}
+
       {gameStarted && !completionTime && (
-        <>
-          <div className="game-container">
-            <div className={`grid ${memoryMode ? `memory-grid-${memoryGrid}` : `${difficulty}-grid`}`}>
-              {cards.map((value, index) => {
-                // Determine card status
-                let status = ""
-
-                // If card is matched
-                if (matched.includes(index)) {
-                  status = "matched"
+        <div className="game-container">
+          <div className={`grid ${memoryMode ? `memory-grid-${memoryGrid}` : `${difficulty}-grid`}`}>
+            {cards.map((value, index) => (
+              <Card
+                key={index}
+                value={value}
+                isFlipped={flipped.includes(index) || matched.includes(index)}
+                onClick={() => !matched.includes(index) && !flipped.includes(index) && handleClick(index)}
+                status={
+                  matched.includes(index) ? "matched" :
+                  flipped.includes(index) && flipped.length === 2 && cards[flipped[0]] !== cards[flipped[1]] ? "unmatched" : ""
                 }
-                // If card is part of current flipped pair and they don't match
-                else if (flipped.includes(index) && flipped.length === 2) {
-                  const [first, second] = flipped
-                  if (cards[first] !== cards[second]) {
-                    status = "unmatched"
-                  }
-                }
-
-                return (
-                  <Card
-                    key={index}
-                    value={value}
-                    isFlipped={flipped.includes(index) || matched.includes(index)}
-                    onClick={() => !matched.includes(index) && !flipped.includes(index) && handleClick(index)}
-                    status={status}
-                  />
-                )
-              })}
-            </div>
-            <div className="timer">
-              <h2>
-                <span className="main-time" dangerouslySetInnerHTML={{ __html: formatElapsedTime(elapsedTime) }} />
-              </h2>
-              {bestTime !== null && (
-                <h2>
-                  <span
-                    className="best-time"
-                    dangerouslySetInnerHTML={{ __html: formatElapsedTime(Math.ceil(bestTime * 1000)) }}
-                  />
-                </h2>
-              )}
-            </div>
+              />
+            ))}
           </div>
-        </>
+          <div className="timer">
+            <h2 dangerouslySetInnerHTML={{ __html: formatElapsedTime(elapsedTime) }} />
+            {bestTime !== null && (
+              <h2 dangerouslySetInnerHTML={{ __html: formatElapsedTime(Math.ceil(bestTime * 1000)) }} />
+            )}
+          </div>
+        </div>
       )}
+
       {completionTime !== null && (
         <div className="completion-time">
           <h2 className="time-container">
@@ -281,17 +241,18 @@ function App() {
           </h2>
         </div>
       )}
+
       {matched.length === cards.length && cards.length > 0 && (
         <div className="win-message-container">
           <div className="fire-emoji">🔥</div>
           <h2>You're on Fire!</h2>
           <div className="subheader">
             <p className="time-container">
-              <span className="time-value">{completionTime !== null ? completionTime.toFixed(2) : "N/A"}s</span>
+              <span className="time-value">{completionTime?.toFixed(2) || "N/A"}s</span>
               <span className="time-label">Completion Time</span>
             </p>
             <p className="time-container">
-              <span className="time-value-best">{bestTime !== null ? bestTime.toFixed(2) : "N/A"}s</span>
+              <span className="time-value-best">{bestTime?.toFixed(2) || "N/A"}s</span>
               <span className="time-label-best">Best Time</span>
             </p>
           </div>
@@ -300,162 +261,104 @@ function App() {
           </button>
         </div>
       )}
+
       {gameLost && (
         <div className="lose-message">
           <h2>😢 You Lost! 😢</h2>
-          <button
-            onClick={initializeGame}
-            style={{
-              padding: "10px 25px",
-              fontSize: "1.1rem",
-              background: "#4CAF50",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-              marginTop: "15px",
-            }}
-          >
+          <button onClick={initializeGame} className="try-again-btn">
             Try Again
           </button>
         </div>
       )}
+
       {showModal && (
         <Modal onClose={() => setShowModal(false)}>
           <div>
-            <img src={logo || "/placeholder.svg"} alt="Matcha Logo" className="logo" />
-            <h2 style={{ fontFamily: "Groteska-Book, sans-serif", fontWeight: "400" }}>Select Your Difficulty</h2>
+            <img src={logo} alt="Matcha Logo" className="logo" />
+            <h2>Select Your Difficulty</h2>
             <div className="difficulty-buttons">
-              <button
-                className="difficulty-btn"
-                onClick={() => {
-                  setDifficulty("easy")
-                  setShowModal(false)
-                  setShowInstructions(true) // Show instructions modal
-                }}
-              >
-                Easy
-              </button>
-              <button
-                className="difficulty-btn"
-                onClick={() => {
-                  setDifficulty("medium")
-                  setShowModal(false)
-                  setShowInstructions(true) // Show instructions modal
-                }}
-              >
-                Medium
-              </button>
-              <button
-                className="difficulty-btn"
-                onClick={() => {
-                  setDifficulty("hard")
-                  setShowModal(false)
-                  setShowInstructions(true) // Show instructions modal
-                }}
-              >
-                Hard
-              </button>
+              {["easy", "medium", "hard"].map((level) => (
+                <button
+                  key={level}
+                  className="difficulty-btn"
+                  onClick={() => {
+                    setDifficulty(level)
+                    setShowModal(false)
+                    setShowInstructions(true)
+                  }}
+                >
+                  {level.charAt(0).toUpperCase() + level.slice(1)}
+                </button>
+              ))}
             </div>
             <hr className="divider" />
-            <div className="memory-mode">
-              <button
-                className="memory-mode-btn"
-                onClick={() => {
-                  setShowModal(false)
-                  setShowMemoryModal(true)
-                }}
-              >
-                Memory Mode
-              </button>
-            </div>
+            <button
+              className="memory-mode-btn"
+              onClick={() => {
+                setShowModal(false)
+                setShowMemoryModal(true)
+              }}
+            >
+              Memory Mode
+            </button>
           </div>
         </Modal>
       )}
+
       {showMemoryModal && (
         <Modal onClose={() => setShowMemoryModal(false)}>
           <div>
-            <h2 style={{ fontFamily: "Groteska-Book, sans-serif", fontWeight: "400" }}>Select Your Difficulty</h2>
+            <h2>Select Grid Size</h2>
             <div className="memory-grid-selection">
-              <button
-                className="memory-grid-btn"
-                onClick={() => {
-                  setMemoryGrid("4x4")
-                  setMemoryMode(true)
-                  setShowMemoryModal(false)
-                  setShowInstructions(true) // Show instructions modal
-                }}
-              >
-                4x4
-              </button>
-              <button
-                className="memory-grid-btn"
-                onClick={() => {
-                  setMemoryGrid("4x5")
-                  setMemoryMode(true)
-                  setShowMemoryModal(false)
-                  setShowInstructions(true) // Show instructions modal
-                }}
-              >
-                4x5
-              </button>
-              <button
-                className="memory-grid-btn"
-                onClick={() => {
-                  setMemoryGrid("4x6")
-                  setMemoryMode(true)
-                  setShowMemoryModal(false)
-                  setShowInstructions(true) // Show instructions modal
-                }}
-              >
-                4x6
-              </button>
-              <button
-                className="memory-grid-btn"
-                onClick={() => {
-                  setMemoryGrid("4x7")
-                  setMemoryMode(true)
-                  setShowMemoryModal(false)
-                  setShowInstructions(true) // Show instructions modal
-                }}
-              >
-                4x7
-              </button>
+              {["4x4", "4x5", "4x6", "4x7"].map((size) => (
+                <button
+                  key={size}
+                  className="memory-grid-btn"
+                  onClick={() => {
+                    setMemoryGrid(size)
+                    setMemoryMode(true)
+                    setShowMemoryModal(false)
+                    setShowInstructions(true)
+                  }}
+                >
+                  {size}
+                </button>
+              ))}
             </div>
           </div>
         </Modal>
       )}
+
       {showInstructions && (
         <Modal onClose={() => setShowInstructions(false)}>
-         <div className="instructions-container">
-  <h2>How to Play</h2>
-  <ul className="instructions-list">
-    <li>Flip two cards to reveal their emojis.</li>
-    <li>Match the pairs—if they match, they stay flipped!</li>
-    <li>If they don’t match, they flip back after a second.</li>
-    <li>Clear the board as fast as you can to win!</li>
-  </ul>
-
-  <h3>Game Modes:</h3>
-  <ul className="game-modes-list">
-    <li>🟢 <strong>Easy:</strong> Cards are briefly shown before the game starts.</li>
-    <li>🟡 <strong>Medium:</strong> No preview—just pure memory skills!</li>
-    <li>🔴 <strong>Hard:</strong> Timed mode—beat the clock!</li>
-    <li>🔥 <strong>Insane Levels:</strong> Bigger grids, lesser time!</li>
-  </ul>
-
-  <button
-    onClick={() => {
-      setShowInstructions(false)
-      setGameStarted(true)
-    }}
-    className="start-game-btn"
-  >
-    Start Game
-  </button>
-</div>
+          <div className="instructions-container">
+            <h2>How to Play</h2>
+            <ul className="instructions-list">
+              <li>Flip two cards to reveal their emojis.</li>
+              <li>Match the pairs—if they match, they stay flipped!</li>
+              <li>If they don’t match, they flip back after a second.</li>
+              <li>Clear the board as fast as you can to win!</li>
+            </ul>
+            <h3>Game Modes:</h3>
+            <ul className="game-modes-list">
+              <li>🟢 <strong>Easy:</strong> Cards preview before starting</li>
+              <li>🟡 <strong>Medium:</strong> No preview</li>
+              <li>🔴 <strong>Hard:</strong> Timed challenge</li>
+              <li>🔥 <strong>Memory Mode:</strong> Larger grids</li>
+            </ul>
+            <button
+              onClick={() => {
+                setShowInstructions(false)
+                setGameStarted(true)
+              }}
+              className="start-game-btn"
+            >
+              Start Game
+            </button>
+          </div>
         </Modal>
       )}
+
       <footer>
         <p>© 2025 Matcha Game. All rights reserved.</p>
       </footer>
