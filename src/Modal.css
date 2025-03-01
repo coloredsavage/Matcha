@@ -18,9 +18,10 @@
       margin-bottom: 15px; /* Reduce margin for better spacing */
     }
   }
-  
+
   .modal-content h2 {
     margin-bottom: 20px;
+    font-family: 'groteska', sans-serif;
   }
   .difficulty-buttons {
     display: flex;
@@ -39,7 +40,7 @@
     border-radius: 5px;
     cursor: pointer;
     transition: transform 0.2s;
-    font-family: 'Groteska-Book', sans-serif;
+    font-family: 'Groteska', sans-serif;
     font-weight: 400;
   }
   
@@ -62,4 +63,8 @@
   
   .memory-grid-selection {
     margin-top: 10px;
+  }
+
+  .h2 {
+    font-family: 'Groteska', sans-serif;
   }

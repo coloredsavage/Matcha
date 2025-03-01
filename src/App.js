@@ -276,7 +276,9 @@ function App() {
         <Modal onClose={() => setShowModal(false)}>
           <div>
             <img src={logo} alt="Matcha Logo" className="logo" />
-            <h2>Select Your Difficulty</h2>
+            <h2 className="difficulty-heading">
+  Select Your Difficulty
+</h2>
             <div className="difficulty-buttons">
               {["easy", "medium", "hard"].map((level) => (
                 <button

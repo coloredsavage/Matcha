@@ -781,6 +781,13 @@ footer {
   margin-bottom: 0px; /* Add spacing */
 }
 
+.h2 {
+  font-family: 'Groteska', sans-serif;
+}
+
+.difficulty-heading {
+  font-family: 'Groteska`, sans-serif;';
+}
 
 @media (max-width: 768px) {
   .win-message-container {
