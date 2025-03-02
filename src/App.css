@@ -879,3 +879,96 @@ footer {
     margin-bottom: 9px;
   }
 }
+
+.lose-message-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #f44336; /* Red background for losing */
+  color: white;
+  padding-left: 80px;
+  padding-right: 80px;
+  padding-top: 40px;
+  padding-bottom: 30px;
+  border-radius: 40px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000; /* Ensure it is above other elements */
+}
+
+.lose-message-container h2 {
+  font-size: 3rem;
+  margin-bottom: 30px;
+  margin-top: 0px;
+  font-family: 'Sf-Pro-Display', sans-serif;
+  color: white;
+}
+
+.lose-message-container .subheader {
+  margin-bottom: 20px;
+}
+
+.lose-message-container .completion-time {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  font-family: 'Groteska', sans-serif;
+}
+
+.lose-message-container .best-time {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  opacity: 0.6;
+  font-family: 'Groteska', sans-serif;
+}
+
+.lose-message-container .try-again-btn {
+  background: white;
+  color: #f44336;
+  border: none;
+  padding: 30px 80px; /* Increased padding for larger size */
+  font-size: 1.2rem; /* Increased font size */
+  border-radius: 75px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  margin-top: 0rem;
+  margin-bottom: 1rem;
+  font-family: 'Groteska', sans-serif;
+  font-weight: 500;
+}
+
+.lose-message-container .try-again-btn:hover {
+  transform: scale(1.02);
+  background: #ffffff;
+  color: #f44336;
+}
+
+@media (max-width: 768px) {
+  .lose-message-container {
+    width: 80vw; /* Ensure it fits within the screen */
+    max-width: 350px; /* Limit maximum width */
+    padding: 25px; /* Reduce padding for better fit */
+    border-radius: 20px; /* Slightly smaller radius for a balanced look */
+  }
+
+  .lose-message-container h2 {
+    font-size: 2rem; /* Reduce heading size for mobile */
+    margin-bottom: 20px;
+    font-family: 'Sf-Pro-Display', sans-serif;
+  }
+
+  .lose-message-container .subheader {
+    font-size: 1rem; /* Adjust for readability */
+  }
+
+  .lose-message-container .completion-time,
+  .lose-message-container .best-time {
+    font-size: 0.9rem; /* Reduce text size for better fit */
+  }
+
+  .lose-message-container .try-again-btn {
+    padding: 15px 40px; /* Adjust padding for better mobile interaction */
+    font-size: 1rem; /* Make it more proportionate */
+    border-radius: 50px; /* Maintain rounded look but scale down */
+  }
+}

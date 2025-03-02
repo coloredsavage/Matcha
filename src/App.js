@@ -298,10 +298,14 @@ function App() {
       )}
 
       {gameLost && (
-        <div className="lose-message">
+        <div className="lose-message-container">
           <h2>😢 You Lost! 😢</h2>
+          <div className="subheader">
+            
+          </div>
           <button onClick={initializeGame} className="try-again-btn">
             Try Again
+            <h2>Give it another shot!</h2>
           </button>
         </div>
       )}
