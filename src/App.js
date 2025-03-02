@@ -1,11 +1,12 @@
+"use client"
+
 import { useRef, useState, useEffect, useCallback } from "react"
 import Card from "./Card"
 import Modal from "./Modal"
 import NavBar from "./NavBar"
-import Confetti from 'react-confetti';
+import Confetti from "react-confetti"
 import "./App.css"
 import logo from "./MATCHA.svg"
-
 
 const ConfettiEffect = ({ confettiRunning }) => {
   const confettiAnchorRef = useRef(null)
@@ -23,13 +24,16 @@ const ConfettiEffect = ({ confettiRunning }) => {
 
   return (
     <>
-      <div ref={confettiAnchorRef} style={{ 
-        position: "absolute", 
-        top: 0, 
-        left: 0, 
-        width: "100vw", 
-        height: "1px" 
-      }} />
+      <div
+        ref={confettiAnchorRef}
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "1px",
+        }}
+      />
       {confettiRunning && (
         <Confetti
           width={window.innerWidth}
@@ -68,8 +72,14 @@ function App() {
   const [showMemoryModal, setShowMemoryModal] = useState(false)
   const [confettiRunning, setConfettiRunning] = useState(false)
   const [showInstructions, setShowInstructions] = useState(false)
+  const [gamePaused, setGamePaused] = useState(false)
+  const [pauseStartTime, setPauseStartTime] = useState(null)
+  const [totalPausedTime, setTotalPausedTime] = useState(0)
 
   const initializeGame = useCallback(() => {
+    setTotalPausedTime(0)
+    setPauseStartTime(null)
+
     let symbols
     let gridSize
     if (memoryMode) {
@@ -114,7 +124,13 @@ function App() {
     setElapsedTime(0)
     setGameStarted(true)
     setGameLost(false)
-    setTimeRemaining(hardModeTimeLimit * 1000)
+
+    if (difficulty === "hard") {
+      setTimeRemaining(hardModeTimeLimit * 1000)
+    } else {
+      setTimeRemaining(0)
+    }
+
     setStartTime(null)
 
     if (memoryMode || difficulty === "easy") {
@@ -135,10 +151,10 @@ function App() {
 
   useEffect(() => {
     let timer
-    if (startTime && matched.length < cards.length) {
+    if (startTime && matched.length < cards.length && !gamePaused) {
       timer = setInterval(() => {
         const currentTime = new Date()
-        const elapsed = currentTime - startTime
+        const elapsed = currentTime - startTime - totalPausedTime
         setElapsedTime(elapsed)
 
         if (difficulty === "hard") {
@@ -153,10 +169,10 @@ function App() {
       }, 10)
     }
     return () => clearInterval(timer)
-  }, [startTime, matched.length, cards.length, difficulty, hardModeTimeLimit])
+  }, [startTime, matched.length, cards.length, difficulty, hardModeTimeLimit, gamePaused, totalPausedTime])
 
   const handleClick = (index) => {
-    if (flipped.length < 2 && !flipped.includes(index)) {
+    if (flipped.length < 2 && !flipped.includes(index) && !gamePaused) {
       setFlipped([...flipped, index])
     }
   }
@@ -169,55 +185,67 @@ function App() {
       }
       setTimeout(() => setFlipped([]), 500)
     }
-  }, [flipped, cards])
+  }, [flipped, cards, matched])
 
   useEffect(() => {
     if (matched.length === cards.length && cards.length > 0) {
       const endTime = new Date()
-      const timeTaken = (endTime - startTime) / 1000
+      let timeTaken
+      if (difficulty === "hard") {
+        timeTaken = (hardModeTimeLimit * 1000 - timeRemaining) / 1000
+      } else {
+        timeTaken = (endTime - startTime - totalPausedTime) / 1000
+      }
       setCompletionTime(timeTaken)
       const roundedTimeTaken = Math.ceil(timeTaken)
-      if (bestTime === null || roundedTimeTaken < bestTime) {
+      if (difficulty !== "hard" && (bestTime === null || roundedTimeTaken < bestTime)) {
         setBestTime(roundedTimeTaken)
       }
       setConfettiRunning(true)
       setTimeout(() => setConfettiRunning(false), 4000)
     }
-  }, [matched, cards.length, startTime, bestTime])
+  }, [matched, cards.length, startTime, bestTime, difficulty, hardModeTimeLimit, timeRemaining, totalPausedTime])
 
-  const formatElapsedTime = (time) => {
-    const minutes = Math.floor(time / 60000)
-    const seconds = Math.floor((time % 60000) / 1000)
-    const milliseconds = time % 1000
-    return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.<span class="milliseconds">${milliseconds.toString().padStart(3, "0")}</span>`
+  const formatTime = (time, isHardMode = false) => {
+    const totalSeconds = Math.floor(time / 1000)
+    const minutes = Math.floor(totalSeconds / 60)
+    const seconds = totalSeconds % 60
+    const milliseconds = Math.floor((time % 1000) / 10)
+    const timeString = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.<span class="milliseconds">${milliseconds.toString().padStart(2, "0")}</span>`
+
+    if (isHardMode && totalSeconds <= 10) {
+      return `<span class="text-red-500">${timeString}</span>`
+    }
+    return timeString
   }
 
   const handleIcon1Click = () => {
-    setShowInstructions(true);
-  };
+    setShowInstructions(true)
+    setGamePaused(true)
+    setPauseStartTime(new Date())
+  }
 
   const handleIcon2Click = () => {
-    setShowModal(true);
-  };
+    setShowModal(true)
+    setGamePaused(true)
+    setPauseStartTime(new Date())
+  }
 
   return (
     <div className="App">
       <ConfettiEffect confettiRunning={confettiRunning} />
-      
+
       {gameStarted && <NavBar onIcon1Click={handleIcon1Click} onIcon2Click={handleIcon2Click} />}
       {!gameStarted && <img src={logo || "/placeholder.svg"} alt="Matcha Logo" className="logo" />}
       {!gameStarted && <h2 className="landing-subheader">A Pretty Simple Matching Game</h2>}
-      
+
       {!gameStarted && !gameLost && (
-        <button
-          onClick={() => setShowModal(true)}
-          className="start-game-btn"
-        >
+        <button onClick={() => setShowModal(true)} className="start-game-btn">
           Play
         </button>
       )}
 
-      {gameStarted && !completionTime && (
+      {gameStarted && !completionTime && !gamePaused && (
         <div className="game-container">
           <div className={`grid ${memoryMode ? `memory-grid-${memoryGrid}` : `${difficulty}-grid`}`}>
             {cards.map((value, index) => (
@@ -227,16 +255,23 @@ function App() {
                 isFlipped={flipped.includes(index) || matched.includes(index)}
                 onClick={() => !matched.includes(index) && !flipped.includes(index) && handleClick(index)}
                 status={
-                  matched.includes(index) ? "matched" :
-                  flipped.includes(index) && flipped.length === 2 && cards[flipped[0]] !== cards[flipped[1]] ? "unmatched" : ""
+                  matched.includes(index)
+                    ? "matched"
+                    : flipped.includes(index) && flipped.length === 2 && cards[flipped[0]] !== cards[flipped[1]]
+                      ? "unmatched"
+                      : ""
                 }
               />
             ))}
           </div>
           <div className="timer">
-            <h2 dangerouslySetInnerHTML={{ __html: formatElapsedTime(elapsedTime) }} />
-            {bestTime !== null && (
-              <h2 dangerouslySetInnerHTML={{ __html: formatElapsedTime(Math.ceil(bestTime * 1000)) }} />
+            <h2
+              dangerouslySetInnerHTML={{
+                __html: difficulty === "hard" ? formatTime(timeRemaining, true) : formatTime(elapsedTime),
+              }}
+            />
+            {bestTime !== null && difficulty !== "hard" && (
+              <h2 dangerouslySetInnerHTML={{ __html: formatTime(Math.ceil(bestTime * 1000)) }} />
             )}
           </div>
         </div>
@@ -281,12 +316,19 @@ function App() {
       )}
 
       {showModal && (
-        <Modal onClose={() => setShowModal(false)}>
+        <Modal
+          onClose={() => {
+            setShowModal(false)
+            if (gamePaused) {
+              const pauseDuration = new Date() - pauseStartTime
+              setTotalPausedTime((prev) => prev + pauseDuration)
+              setGamePaused(false)
+            }
+          }}
+        >
           <div>
-            <img src={logo} alt="Matcha Logo" className="logo" />
-            <h2 className="difficulty-heading">
-  Select Your Difficulty
-</h2>
+            <img src={logo || "/placeholder.svg"} alt="Matcha Logo" className="logo" />
+            <h2 className="difficulty-heading">Select Your Difficulty</h2>
             <div className="difficulty-buttons">
               {["easy", "medium", "hard"].map((level) => (
                 <button
@@ -317,7 +359,16 @@ function App() {
       )}
 
       {showMemoryModal && (
-        <Modal onClose={() => setShowMemoryModal(false)}>
+        <Modal
+          onClose={() => {
+            setShowMemoryModal(false)
+            if (gamePaused) {
+              const pauseDuration = new Date() - pauseStartTime
+              setTotalPausedTime((prev) => prev + pauseDuration)
+              setGamePaused(false)
+            }
+          }}
+        >
           <div>
             <h2>Select Grid Size</h2>
             <div className="memory-grid-selection">
@@ -341,7 +392,16 @@ function App() {
       )}
 
       {showInstructions && (
-        <Modal onClose={() => setShowInstructions(false)}>
+        <Modal
+          onClose={() => {
+            setShowInstructions(false)
+            if (gamePaused) {
+              const pauseDuration = new Date() - pauseStartTime
+              setTotalPausedTime((prev) => prev + pauseDuration)
+              setGamePaused(false)
+            }
+          }}
+        >
           <div className="instructions-container">
             <h2>How to Play</h2>
             <ul className="instructions-list">
@@ -352,15 +412,24 @@ function App() {
             </ul>
             <h3>Game Modes:</h3>
             <ul className="game-modes-list">
-              <li>🟢 <strong>Easy:</strong> Cards preview before starting</li>
-              <li>🟡 <strong>Medium:</strong> No preview</li>
-              <li>🔴 <strong>Hard:</strong> Timed challenge</li>
-              <li>🔥 <strong>Memory Mode:</strong> Larger grids</li>
+              <li>
+                🟢 <strong>Easy:</strong> Cards preview before starting
+              </li>
+              <li>
+                🟡 <strong>Medium:</strong> No preview
+              </li>
+              <li>
+                🔴 <strong>Hard:</strong> Timed challenge
+              </li>
+              <li>
+                🔥 <strong>Memory Mode:</strong> Larger grids
+              </li>
             </ul>
             <button
               onClick={() => {
                 setShowInstructions(false)
                 setGameStarted(true)
+                setGamePaused(false)
               }}
               className="start-game-btn"
             >
