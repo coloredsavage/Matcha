@@ -846,7 +846,7 @@ footer {
     padding-left: 20px;
     margin-bottom: 15px;
     font-family: 'Groteska', sans-serif;
-    font-size: 0.5em;
+    font-size: 0.8em;
   }
   
   .instructions-list li {
@@ -860,6 +860,7 @@ footer {
   
   .instructions-container {
     text-align: left;
+    font-family: 'Groteska', sans-serif;
     max-width: 400px; /* Adjust width as needed */
     margin: 0 auto;
   }
