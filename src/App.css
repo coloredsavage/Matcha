@@ -282,14 +282,6 @@ footer {
   text-align: center;
 }
 
-.timer {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-family: 'Groteska', sans-serif;
-  /* Add any additional styling you need */
-}
-
 
 
 .text-red-500 {
@@ -300,65 +292,83 @@ footer {
   font-weight: bold;
   font-size: 2rem;
   font-family: 'Groteska', sans-serif;
+  position: absolute;
+  top: 377px;
+  right: -160px;
 }
 
-.best-time {
-  position: relative;
-  top: 10px;
-  left: 20px;
-  font-size: 1.5rem;
+
+.medium-mode-timer {
+  color: #ffffff; /* Orange color for medium mode timer */
+  font-weight: bold;
+  font-size: 2rem;
   font-family: 'Groteska', sans-serif;
-  /* Add any additional styling you need */
+  position: absolute;
+  top: 366px;
+  right: -200px;
 }
+
+.easy-mode-timer {
+  color: #ffffff; /* Deep Sky Blue color for easy mode timer */
+  font-weight: bold;
+  font-size: 2rem;
+  position: absolute;
+  top: 255px;
+  right: -200px;
+  font-family: 'Groteska', sans-serif;
+}
+
 
 .memory-mode-timer {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 375px;
+  right: -190px;
   font-family: 'Groteska', sans-serif;
   /* Add any additional styling you need */
 }
 
 
-/* Media query for mobile devices */
-@media (max-width: 768px) {
-  .timer {
-    top: -140px;
-    right: 10px;
-    font-family: 'Groteska', sans-serif;
-    font-weight: 100;
-    font-size: 1.5rem;
-    /* Adjust any other properties if needed */
-  }
-}
+
 
 @media (max-width: 768px) {
-  .hard-mode-timer {
-    top: -140px;
-    right: -23px;
+  .hard-mode-timer,
+  .best-time,
+  .memory-mode-timer,
+  .easy-mode-timer,
+  .medium-mode-timer{
     font-family: 'Groteska', sans-serif;
-    font-weight: 100;
     font-size: 1.5rem;
   }
-}  
 
-@media (max-width: 768px) {
+  .hard-mode-timer,
+  .memory-mode-timer {
+    font-weight: 100;
+  }
+
   .best-time {
     top: -10px;
     left: 100px;
-    font-family: 'Groteska', sans-serif;
-    font-size: 1.5rem;
-    
   }
-}
 
-@media (max-width: 768px) {
+  .hard-mode-timer {
+    top: -90px;
+    left: 50px;
+  }
+
+
   .memory-mode-timer {
     top: -140px;
     right: -82px;
-    font-family: 'Groteska', sans-serif;
-    font-weight: 100;
-    font-size: 1.5rem;
+  }
+  
+  .easy-mode-timer {
+    top: -90px;
+    right: 10px;
+  }
+  
+  .medium-mode-timer {
+    top: -105px;
+    right: 10px;
   }
 }
 
@@ -367,6 +377,7 @@ footer {
   align-items: baseline;
   justify-content: center;
   font-weight: 200;
+  font-size: 2.5rem;
   
 }
 
@@ -386,7 +397,8 @@ footer {
   opacity: 0.5;
   margin-top: -25px; 
   position: relative;
-  left: 30px;
+  left: -7px;
+  top: -112px;
 }
 
 .milliseconds {
@@ -400,6 +412,18 @@ footer {
   opacity: 0.5;
   font-size: 1rem;
   margin-top: 10px;
+}
+
+.time-remaining {
+  color: #ffffff; /* Gold color for the text */
+  font-weight: 200;
+  font-size: 0.7rem;
+  font-family: 'Groteska', sans-serif;
+  text-align: left;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  letter-spacing: 0.6px;
 }
 
 @media (max-width: 768px) {
@@ -423,6 +447,18 @@ footer {
   .ghost-time {
     font-size: 0.9rem; /* Reduce slightly for better spacing */
     margin-top: 5px;
+  }
+
+  .time-remaining {
+    color: #ffffff; /* Gold color for the text */
+    font-weight: 200;
+    font-size: 0.7rem;
+    font-family: 'Groteska', sans-serif;
+    text-align: left;
+    position: absolute;
+    top: 0px;
+    left: 135px;
+    letter-spacing: 0.6px;
   }
 }
 
@@ -602,6 +638,7 @@ footer {
   font-size: 1.5rem;
   color: #333;
 }
+
 
 /* Mobile adjustments */
 @media (max-width: 768px) {
@@ -884,6 +921,41 @@ footer {
   font-family: 'Groteska`, sans-serif;';
 }
 
+.instructions-list {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin-bottom: 15px;
+  font-family: 'Groteska', sans-serif;
+  font-size: 0.8em;
+  text-align: left;
+}
+
+.instructions-list li {
+  margin-bottom: 10px; /* Adjust spacing between each bullet point */
+}
+
+.instructions-list, .game-modes-list {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin-bottom: 15px;
+  font-family: 'Groteska', sans-serif;
+  font-size: 0.8em;
+  text-align: left;
+}
+
+.game-modes-list {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin-bottom: 15px;
+  font-family: 'Groteska', sans-serif;
+  font-size: 0.8em;
+  text-align: left;
+}
+
+.game-modes-list li {
+  margin-bottom: 9px;
+}
+
 @media (max-width: 768px) {
   .win-message-container {
     width: 80vw; /* Ensure it fits within the screen */
@@ -986,8 +1058,8 @@ footer {
 }
 
 .lose-message-container h2 {
-  font-size: 5rem;
-  margin-bottom: 30px;
+  font-size: 3rem;
+  margin-bottom: 15px;
   margin-top: 0px;
   font-family: 'Sf-Pro-Display', sans-serif;
   color: rgb(0, 0, 0);

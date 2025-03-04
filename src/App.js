@@ -1,8 +1,10 @@
+"use client"
+
 import { useRef, useState, useEffect, useCallback } from "react"
 import Card from "./Card"
 import Modal from "./Modal"
 import NavBar from "./NavBar"
-import Confetti from 'react-confetti';
+import Confetti from "react-confetti"
 import "./App.css"
 import logo from "./MATCHA.svg"
 
@@ -22,13 +24,16 @@ const ConfettiEffect = ({ confettiRunning }) => {
 
   return (
     <>
-      <div ref={confettiAnchorRef} style={{ 
-        position: "absolute", 
-        top: 0, 
-        left: 0, 
-        width: "100vw", 
-        height: "1px" 
-      }} />
+      <div
+        ref={confettiAnchorRef}
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "1px",
+        }}
+      />
       {confettiRunning && (
         <Confetti
           width={window.innerWidth}
@@ -69,9 +74,9 @@ function App() {
   const [showInstructions, setShowInstructions] = useState(false)
 
   // State variables for pausing
-  const [gamePaused, setGamePaused] = useState(false);
-  const [pauseStartTime, setPauseStartTime] = useState(null);
-  const [totalPausedTime, setTotalPausedTime] = useState(0);
+  const [gamePaused, setGamePaused] = useState(false)
+  const [pauseStartTime, setPauseStartTime] = useState(null)
+  const [totalPausedTime, setTotalPausedTime] = useState(0)
 
   const initializeGame = useCallback(() => {
     let symbols
@@ -138,11 +143,17 @@ function App() {
   }, [gameStarted, initializeGame])
 
   const formatTime = (time, isHardMode = false) => {
-    const minutes = Math.floor(time / 60000)
+    const hours = Math.floor(time / 3600000)
+    const minutes = Math.floor((time % 3600000) / 60000)
     const seconds = Math.floor((time % 60000) / 1000)
     const milliseconds = time % 1000
-    const timeString = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.<span class="milliseconds">${milliseconds.toString().padStart(3, "0")}</span>`
-  
+
+    let timeString = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.<span class="milliseconds">${milliseconds.toString().padStart(3, "0")}</span>`
+
+    if (hours > 0) {
+      timeString = `${hours.toString().padStart(2, "0")}:${timeString}`
+    }
+
     if (isHardMode && Math.floor(time / 1000) <= 10) {
       return `<span class="text-red-500">${timeString}</span>`
     }
@@ -209,30 +220,27 @@ function App() {
   }
 
   const handleIcon1Click = () => {
-    setShowInstructions(true);
-    setGamePaused(true);
-    setPauseStartTime(new Date());
-  };
+    setShowInstructions(true)
+    setGamePaused(true)
+    setPauseStartTime(new Date())
+  }
 
   const handleIcon2Click = () => {
-    setShowModal(true);
-    setGamePaused(true);
-    setPauseStartTime(new Date());
-  };
+    setShowModal(true)
+    setGamePaused(true)
+    setPauseStartTime(new Date())
+  }
 
   return (
     <div className="App">
       <ConfettiEffect confettiRunning={confettiRunning} />
-      
+
       {gameStarted && <NavBar onIcon1Click={handleIcon1Click} onIcon2Click={handleIcon2Click} />}
       {!gameStarted && <img src={logo || "/placeholder.svg"} alt="Matcha Logo" className="logo" />}
       {!gameStarted && <h2 className="landing-subheader">A Pretty Simple Matching Game</h2>}
-      
+
       {!gameStarted && !gameLost && (
-        <button
-          onClick={() => setShowModal(true)}
-          className="start-game-btn"
-        >
+        <button onClick={() => setShowModal(true)} className="start-game-btn">
           Play
         </button>
       )}
@@ -247,18 +255,22 @@ function App() {
                 isFlipped={flipped.includes(index) || matched.includes(index)}
                 onClick={() => !matched.includes(index) && !flipped.includes(index) && handleClick(index)}
                 status={
-                  matched.includes(index) ? "matched" :
-                  flipped.includes(index) && flipped.length === 2 && cards[flipped[0]] !== cards[flipped[1]] ? "unmatched" : ""
+                  matched.includes(index)
+                    ? "matched"
+                    : flipped.includes(index) && flipped.length === 2 && cards[flipped[0]] !== cards[flipped[1]]
+                      ? "unmatched"
+                      : ""
                 }
               />
             ))}
           </div>
-          <div className={`timer ${memoryMode ? "memory-mode-timer" : difficulty === "hard" ? "hard-mode-timer" : ""}`}>
+          <div
+            className={`timer ${memoryMode ? "memory-mode-timer" : difficulty === "hard" ? "hard-mode-timer" : difficulty === "medium" ? "medium-mode-timer" : "easy-mode-timer"}`}
+          >
+            {difficulty === "hard" && <h3 className="time-remaining">TIME REMAINING</h3>}
             <h2
               dangerouslySetInnerHTML={{
-                __html: difficulty === "hard" 
-                  ? formatTime(timeRemaining, true) 
-                  : formatTime(elapsedTime)
+                __html: difficulty === "hard" ? formatTime(timeRemaining, true) : formatTime(elapsedTime),
               }}
             />
             {bestTime !== null && (
@@ -271,7 +283,7 @@ function App() {
       {completionTime !== null && (
         <div className="completion-time">
           <h2 className="time-container">
-            <span className="time-value">{completionTime.toFixed(2)}s</span>
+            <span className="time-value" dangerouslySetInnerHTML={{ __html: formatTime(completionTime * 1000) }} />
             <span className="time-label">Completion Time</span>
           </h2>
         </div>
@@ -283,11 +295,11 @@ function App() {
           <h2>You're on Fire!</h2>
           <div className="subheader">
             <p className="time-container">
-              <span className="time-value">{completionTime?.toFixed(2) || "N/A"}s</span>
+              <span className="time-value" dangerouslySetInnerHTML={{ __html: formatTime(completionTime * 1000) }} />
               <span className="time-label">Completion Time</span>
             </p>
             <p className="time-container">
-              <span className="time-value-best">{bestTime?.toFixed(2) || "N/A"}s</span>
+              <span className="time-value-best" dangerouslySetInnerHTML={{ __html: formatTime(bestTime * 1000) }} />
               <span className="time-label-best">Best Time</span>
             </p>
           </div>
@@ -301,28 +313,27 @@ function App() {
         <div className="lose-message-container">
           <div className="loser-emoji">😢</div>
           <h2>You Lost.</h2>
-          <h3 style={{ fontFamily: 'Groteska, sans-serif', fontSize: '12px' }}>Give it another shot!</h3>
+          <h3 style={{ fontFamily: "Groteska, sans-serif", fontSize: "12px" }}>Give it another shot!</h3>
           <button onClick={initializeGame} className="try-again-btn">
             Try Again
-   
           </button>
         </div>
       )}
 
       {showModal && (
-        <Modal onClose={() => {
-          setShowModal(false);
-          if (gamePaused) {
-            const pauseDuration = new Date() - pauseStartTime;
-            setTotalPausedTime((prev) => prev + pauseDuration);
-            setGamePaused(false);
-          }
-        }}>
+        <Modal
+          onClose={() => {
+            setShowModal(false)
+            if (gamePaused) {
+              const pauseDuration = new Date() - pauseStartTime
+              setTotalPausedTime((prev) => prev + pauseDuration)
+              setGamePaused(false)
+            }
+          }}
+        >
           <div>
-            <img src={logo} alt="Matcha Logo" className="logo" />
-            <h2 className="difficulty-heading">
-  Select Your Difficulty
-</h2>
+            <img src={logo || "/placeholder.svg"} alt="Matcha Logo" className="logo" />
+            <h2 className="difficulty-heading">Select Your Difficulty</h2>
             <div className="difficulty-buttons">
               {["easy", "medium", "hard"].map((level) => (
                 <button
@@ -353,14 +364,16 @@ function App() {
       )}
 
       {showMemoryModal && (
-        <Modal onClose={() => {
-          setShowMemoryModal(false);
-          if (gamePaused) {
-            const pauseDuration = new Date() - pauseStartTime;
-            setTotalPausedTime((prev) => prev + pauseDuration);
-            setGamePaused(false);
-          }
-        }}>
+        <Modal
+          onClose={() => {
+            setShowMemoryModal(false)
+            if (gamePaused) {
+              const pauseDuration = new Date() - pauseStartTime
+              setTotalPausedTime((prev) => prev + pauseDuration)
+              setGamePaused(false)
+            }
+          }}
+        >
           <div>
             <h2>Select Grid Size</h2>
             <div className="memory-grid-selection">
@@ -384,14 +397,16 @@ function App() {
       )}
 
       {showInstructions && (
-        <Modal onClose={() => {
-          setShowInstructions(false);
-          if (gamePaused) {
-            const pauseDuration = new Date() - pauseStartTime;
-            setTotalPausedTime((prev) => prev + pauseDuration);
-            setGamePaused(false);
-          }
-        }}>
+        <Modal
+          onClose={() => {
+            setShowInstructions(false)
+            if (gamePaused) {
+              const pauseDuration = new Date() - pauseStartTime
+              setTotalPausedTime((prev) => prev + pauseDuration)
+              setGamePaused(false)
+            }
+          }}
+        >
           <div className="instructions-container">
             <h2>How to Play</h2>
             <ul className="instructions-list">
@@ -400,12 +415,20 @@ function App() {
               <li>If they don’t match, they flip back after a second.</li>
               <li>Clear the board as fast as you can to win!</li>
             </ul>
-            <h3>Game Modes:</h3>
+            <h2>Game Modes:</h2>
             <ul className="game-modes-list">
-              <li>🟢 <strong>Easy:</strong> Cards preview before starting</li>
-              <li>🟡 <strong>Medium:</strong> No preview</li>
-              <li>🔴 <strong>Hard:</strong> Timed challenge</li>
-              <li>🔥 <strong>Memory Mode:</strong> Larger grids</li>
+              <li>
+                🟢 <strong>Easy:</strong> Cards preview before starting
+              </li>
+              <li>
+                🟡 <strong>Medium:</strong> No preview
+              </li>
+              <li>
+                🔴 <strong>Hard:</strong> Timed challenge
+              </li>
+              <li>
+                🔥 <strong>Memory Mode:</strong> Larger grids
+              </li>
             </ul>
             <button
               onClick={() => {
@@ -428,3 +451,4 @@ function App() {
 }
 
 export default App
+
