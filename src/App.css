@@ -347,7 +347,6 @@ footer {
     top: -10px;
     left: 100px;
     font-family: 'Groteska', sans-serif;
-    font-weight: 100;
     font-size: 1.5rem;
     
   }
@@ -384,7 +383,7 @@ footer {
   font-family: 'Groteska', sans-serif;
   font-weight: 400;
   color: #f0f0f0;
-  opacity: 0.3;
+  opacity: 0.5;
   margin-top: -25px; 
   position: relative;
   left: 30px;
@@ -412,6 +411,7 @@ footer {
   .best-time {
     font-size: 1.8rem; /* Match with main-time for consistency */
     margin-top: -15px; /* Reduce negative margin for better spacing */
+    font-weight: 200;
     left: 10px; /* Adjust position for better alignment */
   }
 
