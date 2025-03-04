@@ -423,7 +423,7 @@ footer {
   font-family: 'Groteska', sans-serif;
   text-align: left;
   position: absolute;
-  top: 0px;
+  top: -25px;
   left: 0px;
   letter-spacing: 0.6px;
 }
@@ -458,7 +458,7 @@ footer {
     font-family: 'Groteska', sans-serif;
     text-align: left;
     position: absolute;
-    top: 0px;
+    top: -25px;
     left: 135px;
     letter-spacing: 0.6px;
   }
