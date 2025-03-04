@@ -90,6 +90,11 @@ function App() {
   const [pauseStartTime, setPauseStartTime] = useState(null)
   const [totalPausedTime, setTotalPausedTime] = useState(0)
 
+  // Add this helper function inside the App component
+  const isMobileDevice = () => {
+    return window.innerWidth <= 768 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+  }
+
   const initializeGame = useCallback(() => {
     let symbols
     let gridSize
@@ -194,29 +199,32 @@ function App() {
     return () => clearInterval(timer)
   }, [startTime, matched.length, cards.length, difficulty, hardModeTimeLimit, gamePaused, totalPausedTime])
 
+  // Update all audio playback instances to include mobile check
   const handleClick = (index) => {
     if (flipped.length < 2 && !flipped.includes(index)) {
-      flipAudio.play()
+      if (!isMobileDevice()) flipAudio.play() // Modified
       setFlipped([...flipped, index])
     }
   }
 
+  // In the useEffect for flipped cards
   useEffect(() => {
     if (flipped.length === 2) {
       const [first, second] = flipped
       if (cards[first] === cards[second]) {
-        matchAudio.play()
+        if (!isMobileDevice()) matchAudio.play() // Modified
         setMatched([...matched, first, second])
       } else {
-        wrongMatchAudio.play()
+        if (!isMobileDevice()) wrongMatchAudio.play() // Modified
       }
       setTimeout(() => setFlipped([]), 500)
     }
   }, [flipped, cards])
 
+  // In the useEffect for matched cards
   useEffect(() => {
     if (matched.length === cards.length && cards.length > 0) {
-      winAudio.play()
+      if (!isMobileDevice()) winAudio.play() // Modified
       const endTime = new Date()
       const timeTaken = (endTime - startTime) / 1000
       setCompletionTime(timeTaken)
@@ -229,9 +237,10 @@ function App() {
     }
   }, [matched, cards.length, startTime, bestTime])
 
+  // In the useEffect for game lost
   useEffect(() => {
     if (gameLost) {
-      loseAudio.play()
+      if (!isMobileDevice()) loseAudio.play() // Modified
     }
   }, [gameLost])
 
@@ -532,3 +541,4 @@ function App() {
 }
 
 export default App
+

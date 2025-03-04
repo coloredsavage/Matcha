@@ -346,7 +346,7 @@ footer {
   }
 
   .best-time {
-    top: -10px;
+    top: -100px;
     left: 100px;
   }
 
@@ -362,8 +362,9 @@ footer {
   }
   
   .easy-mode-timer {
-    top: -90px;
+    top: -70px;
     right: 10px;
+    margin: 0px;
   }
   
   .medium-mode-timer {
@@ -378,6 +379,7 @@ footer {
   justify-content: center;
   font-weight: 200;
   font-size: 2.5rem;
+  margin: 0px;
   
 }
 
@@ -436,7 +438,7 @@ footer {
     font-size: 1.8rem; /* Match with main-time for consistency */
     margin-top: -15px; /* Reduce negative margin for better spacing */
     font-weight: 200;
-    left: 10px; /* Adjust position for better alignment */
+    left: 0px; /* Adjust position for better alignment */
   }
 
   .milliseconds {
