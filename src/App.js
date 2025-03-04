@@ -246,25 +246,46 @@ function App() {
     const newMutedState = !isMuted
     setIsMuted(newMutedState)
 
+    // Create an array of all audio elements for easier management
+    const audioElements = [flipAudio, matchAudio, wrongMatchAudio, winAudio, loseAudio]
+
     // Set volume for all audio elements
-    flipAudio.volume = newMutedState ? 0 : 1
-    matchAudio.volume = newMutedState ? 0 : 1
-    wrongMatchAudio.volume = newMutedState ? 0 : 1
-    winAudio.volume = newMutedState ? 0 : 1
-    loseAudio.volume = newMutedState ? 0 : 1
+    audioElements.forEach((audio) => {
+      if (audio) {
+        audio.volume = newMutedState ? 0 : 1
+
+        // For iOS, we need to play and immediately pause to enable audio
+        if (!newMutedState && /iPhone|iPad|iPod/.test(navigator.userAgent)) {
+          const playPromise = audio.play()
+          if (playPromise !== undefined) {
+            playPromise
+              .then(() => {
+                audio.pause()
+                audio.currentTime = 0
+              })
+              .catch((error) => {
+                // Auto-play was prevented, which is expected
+                console.log("Audio play prevented:", error)
+              })
+          }
+        }
+      }
+    })
   }, [isMuted])
 
   useEffect(() => {
     const handleTouchToggleSound = (event) => {
-      if (event.target.closest('.sound-toggle-button')) {
+      const target = event.target.closest(".sound-toggle-button")
+      if (target) {
+        event.preventDefault() // Prevent any default behavior
         toggleSound()
       }
     }
 
-    document.addEventListener('touchstart', handleTouchToggleSound)
+    document.addEventListener("touchstart", handleTouchToggleSound, { passive: false })
 
     return () => {
-      document.removeEventListener('touchstart', handleTouchToggleSound)
+      document.removeEventListener("touchstart", handleTouchToggleSound)
     }
   }, [toggleSound])
 
