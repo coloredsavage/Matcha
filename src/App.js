@@ -244,34 +244,25 @@ function App() {
   }
 
   const toggleSound = useCallback(() => {
-    const newMutedState = !isMuted
-    setIsMuted(newMutedState)
+    setIsMuted(prev => !prev); // Use functional update
+    const newMutedState = !isMuted;
   
-    // Create an array of all audio elements
-    const audioElements = [flipAudio, matchAudio, wrongMatchAudio, winAudio, loseAudio]
+    // Update audio volumes
+    [flipAudio, matchAudio, wrongMatchAudio, winAudio, loseAudio].forEach(audio => {
+      audio.volume = newMutedState ? 0 : 1;
+    });
   
-    // Set volume for all audio elements
-    audioElements.forEach((audio) => {
-      if (audio) {
-        audio.volume = newMutedState ? 0 : 1
-      }
-    })
-  
-    // iOS audio priming
+    // iOS audio priming (optional - only if needed)
     if (!newMutedState && /iPhone|iPad|iPod/.test(navigator.userAgent)) {
       const primeAudio = () => {
         flipAudio.play().then(() => {
-          flipAudio.pause()
-          flipAudio.currentTime = 0
-        }).catch((error) => {
-          console.log("Audio priming failed:", error)
-        })
-      }
-  
-      // Prime during the user interaction
-      primeAudio()
+          flipAudio.pause();
+          flipAudio.currentTime = 0;
+        }).catch(console.error);
+      };
+      primeAudio();
     }
-  }, [isMuted])
+  }, [isMuted]);
 
   const handleIcon1Click = () => {
     setShowInstructions(true)

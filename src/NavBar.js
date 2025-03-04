@@ -37,7 +37,6 @@ const NavBar = ({ onIcon1Click, onIcon2Click, onIcon3Click, isMuted }) => {
           alt={isMuted ? "Music Muted" : "Music"}
           className="navbar-icon"
           onClick={onIcon3Click}
-          onTouchEnd={onIcon3Click} // Add this line
           title={isMuted ? "Unmute Music" : "Mute Music"}
         />
       </div>
