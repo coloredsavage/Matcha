@@ -3,9 +3,10 @@ import mobileLogo from "./MOBILE_MATCHA.svg" // Import the mobile logo image
 import icon1 from "./assets/ask.svg" // Import the first icon
 import icon2 from "./assets/settings.svg" // Import the second icon
 import icon3 from "./assets/music.svg" // Import the third icon
+import icon4 from "./assets/music-mute.svg" // Import the fourth icon
 import "./NavBar.css" // Import the CSS for the NavBar
 
-const NavBar = ({ onIcon1Click, onIcon2Click }) => {
+const NavBar = ({ onIcon1Click, onIcon2Click, onIcon3Click, isMuted }) => {
   return (
     <nav className="navbar">
       <div className="navbar-logo">
@@ -31,7 +32,13 @@ const NavBar = ({ onIcon1Click, onIcon2Click }) => {
           onClick={onIcon2Click}
           title="Select Difficulty"
         />
-        <img src={icon3 || "/placeholder.svg"} alt="Music" className="navbar-icon" title="Music" />
+        <img
+          src={(isMuted ? icon4 : icon3) || "/placeholder.svg"}
+          alt={isMuted ? "Music Muted" : "Music"}
+          className="navbar-icon"
+          onClick={onIcon3Click}
+          title={isMuted ? "Unmute Music" : "Mute Music"}
+        />
       </div>
     </nav>
   )

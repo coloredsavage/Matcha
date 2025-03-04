@@ -7,6 +7,11 @@ import NavBar from "./NavBar"
 import Confetti from "react-confetti"
 import "./App.css"
 import logo from "./MATCHA.svg"
+import flipSound from "./sounds/card-flip.mp3"
+import matchSound from "./sounds/right-card.mp3"
+import wrongMatchSound from "./sounds/wrong-card.mp3"
+import winSound from "./sounds/game-win.mp3"
+import loseSound from "./sounds/game-lost.mp3"
 
 const ConfettiEffect = ({ confettiRunning }) => {
   const confettiAnchorRef = useRef(null)
@@ -53,6 +58,12 @@ const ConfettiEffect = ({ confettiRunning }) => {
   )
 }
 
+const flipAudio = new Audio(flipSound)
+const matchAudio = new Audio(matchSound)
+const wrongMatchAudio = new Audio(wrongMatchSound)
+const winAudio = new Audio(winSound)
+const loseAudio = new Audio(loseSound)
+
 function App() {
   const [cards, setCards] = useState([])
   const [flipped, setFlipped] = useState([])
@@ -72,6 +83,7 @@ function App() {
   const [showMemoryModal, setShowMemoryModal] = useState(false)
   const [confettiRunning, setConfettiRunning] = useState(false)
   const [showInstructions, setShowInstructions] = useState(false)
+  const [isMuted, setIsMuted] = useState(false)
 
   // State variables for pausing
   const [gamePaused, setGamePaused] = useState(false)
@@ -184,6 +196,7 @@ function App() {
 
   const handleClick = (index) => {
     if (flipped.length < 2 && !flipped.includes(index)) {
+      flipAudio.play()
       setFlipped([...flipped, index])
     }
   }
@@ -192,7 +205,10 @@ function App() {
     if (flipped.length === 2) {
       const [first, second] = flipped
       if (cards[first] === cards[second]) {
+        matchAudio.play()
         setMatched([...matched, first, second])
+      } else {
+        wrongMatchAudio.play()
       }
       setTimeout(() => setFlipped([]), 500)
     }
@@ -200,6 +216,7 @@ function App() {
 
   useEffect(() => {
     if (matched.length === cards.length && cards.length > 0) {
+      winAudio.play()
       const endTime = new Date()
       const timeTaken = (endTime - startTime) / 1000
       setCompletionTime(timeTaken)
@@ -212,12 +229,30 @@ function App() {
     }
   }, [matched, cards.length, startTime, bestTime])
 
+  useEffect(() => {
+    if (gameLost) {
+      loseAudio.play()
+    }
+  }, [gameLost])
+
   const formatElapsedTime = (time) => {
     const minutes = Math.floor(time / 60000)
     const seconds = Math.floor((time % 60000) / 1000)
     const milliseconds = time % 1000
     return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.<span class="milliseconds">${milliseconds.toString().padStart(3, "0")}</span>`
   }
+
+  const toggleSound = useCallback(() => {
+    const newMutedState = !isMuted
+    setIsMuted(newMutedState)
+
+    // Set volume for all audio elements
+    flipAudio.volume = newMutedState ? 0 : 1
+    matchAudio.volume = newMutedState ? 0 : 1
+    wrongMatchAudio.volume = newMutedState ? 0 : 1
+    winAudio.volume = newMutedState ? 0 : 1
+    loseAudio.volume = newMutedState ? 0 : 1
+  }, [isMuted])
 
   const handleIcon1Click = () => {
     setShowInstructions(true)
@@ -231,11 +266,27 @@ function App() {
     setPauseStartTime(new Date())
   }
 
+  useEffect(() => {
+    // Set initial volume for all audio elements
+    flipAudio.volume = isMuted ? 0 : 1
+    matchAudio.volume = isMuted ? 0 : 1
+    wrongMatchAudio.volume = isMuted ? 0 : 1
+    winAudio.volume = isMuted ? 0 : 1
+    loseAudio.volume = isMuted ? 0 : 1
+  }, [isMuted])
+
   return (
     <div className="App">
       <ConfettiEffect confettiRunning={confettiRunning} />
 
-      {gameStarted && <NavBar onIcon1Click={handleIcon1Click} onIcon2Click={handleIcon2Click} />}
+      {gameStarted && (
+        <NavBar
+          onIcon1Click={handleIcon1Click}
+          onIcon2Click={handleIcon2Click}
+          onIcon3Click={toggleSound}
+          isMuted={isMuted}
+        />
+      )}
       {!gameStarted && <img src={logo || "/placeholder.svg"} alt="Matcha Logo" className="logo" />}
       {!gameStarted && <h2 className="landing-subheader">A Pretty Simple Matching Game</h2>}
 
