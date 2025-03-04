@@ -194,15 +194,9 @@ function App() {
     return () => clearInterval(timer)
   }, [startTime, matched.length, cards.length, difficulty, hardModeTimeLimit, gamePaused, totalPausedTime])
 
-  // Modify the handleClick function to handle mobile audio constraints
   const handleClick = (index) => {
     if (flipped.length < 2 && !flipped.includes(index)) {
-      // Only try to play if not muted
-      if (!isMuted) {
-        flipAudio.play().catch((err) => {
-          console.log("Could not play audio: ", err)
-        })
-      }
+      flipAudio.play()
       setFlipped([...flipped, index])
     }
   }
@@ -211,30 +205,18 @@ function App() {
     if (flipped.length === 2) {
       const [first, second] = flipped
       if (cards[first] === cards[second]) {
-        if (!isMuted) {
-          matchAudio.play().catch((err) => {
-            console.log("Could not play match audio: ", err)
-          })
-        }
+        matchAudio.play()
         setMatched([...matched, first, second])
       } else {
-        if (!isMuted) {
-          wrongMatchAudio.play().catch((err) => {
-            console.log("Could not play wrong match audio: ", err)
-          })
-        }
+        wrongMatchAudio.play()
       }
       setTimeout(() => setFlipped([]), 500)
     }
-  }, [flipped, cards, matched, isMuted])
+  }, [flipped, cards])
 
   useEffect(() => {
     if (matched.length === cards.length && cards.length > 0) {
-      if (!isMuted) {
-        winAudio.play().catch((err) => {
-          console.log("Could not play win audio: ", err)
-        })
-      }
+      winAudio.play()
       const endTime = new Date()
       const timeTaken = (endTime - startTime) / 1000
       setCompletionTime(timeTaken)
@@ -245,15 +227,13 @@ function App() {
       setConfettiRunning(true)
       setTimeout(() => setConfettiRunning(false), 8000)
     }
-  }, [matched, cards.length, startTime, bestTime, isMuted])
+  }, [matched, cards.length, startTime, bestTime])
 
   useEffect(() => {
-    if (gameLost && !isMuted) {
-      loseAudio.play().catch((err) => {
-        console.log("Could not play lose audio: ", err)
-      })
+    if (gameLost) {
+      loseAudio.play()
     }
-  }, [gameLost, isMuted])
+  }, [gameLost])
 
   const formatElapsedTime = (time) => {
     const minutes = Math.floor(time / 60000)
@@ -262,92 +242,16 @@ function App() {
     return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.<span class="milliseconds">${milliseconds.toString().padStart(3, "0")}</span>`
   }
 
-  // Add this function after the toggleSound function to handle mobile audio constraints
-  const initializeAudio = useCallback(() => {
-    // Create an array of all audio elements
-    const audioElements = [flipAudio, matchAudio, wrongMatchAudio, winAudio, loseAudio]
-
-    // For mobile browsers that require user interaction before playing audio
-    const setupAudio = () => {
-      audioElements.forEach((audio) => {
-        // Set initial muted state
-        audio.muted = isMuted
-
-        // Preload audio for faster playback
-        audio.preload = "auto"
-
-        // Some mobile browsers need a play/pause sequence to "unlock" audio
-        audio
-          .play()
-          .then(() => {
-            audio.pause()
-            audio.currentTime = 0
-          })
-          .catch((err) => {
-            console.log("Audio setup: User interaction needed before playing audio")
-          })
-      })
-    }
-
-    // Call setup on first user interaction
-    const handleFirstInteraction = () => {
-      setupAudio()
-      // Remove event listeners after first interaction
-      document.removeEventListener("click", handleFirstInteraction)
-      document.removeEventListener("touchstart", handleFirstInteraction)
-    }
-
-    // Add event listeners for first interaction
-    document.addEventListener("click", handleFirstInteraction)
-    document.addEventListener("touchstart", handleFirstInteraction)
-
-    // Return cleanup function
-    return () => {
-      document.removeEventListener("click", handleFirstInteraction)
-      document.removeEventListener("touchstart", handleFirstInteraction)
-    }
-  }, [isMuted])
-
-  // Modify the toggleSound function to use the muted property in addition to volume
   const toggleSound = useCallback(() => {
     const newMutedState = !isMuted
     setIsMuted(newMutedState)
 
-    // Set both volume and muted property for all audio elements
-    // This provides better compatibility across devices
-    flipAudio.muted = newMutedState
-    matchAudio.muted = newMutedState
-    wrongMatchAudio.muted = newMutedState
-    winAudio.muted = newMutedState
-    loseAudio.muted = newMutedState
-
-    // Still set volume to 0 as a fallback
+    // Set volume for all audio elements
     flipAudio.volume = newMutedState ? 0 : 1
     matchAudio.volume = newMutedState ? 0 : 1
     wrongMatchAudio.volume = newMutedState ? 0 : 1
     winAudio.volume = newMutedState ? 0 : 1
     loseAudio.volume = newMutedState ? 0 : 1
-  }, [isMuted])
-
-  // Add this useEffect to initialize audio
-  useEffect(() => {
-    return initializeAudio()
-  }, [initializeAudio])
-
-  // Replace the existing useEffect for setting volume with this one
-  useEffect(() => {
-    // Set both muted property and volume for all audio elements
-    flipAudio.muted = isMuted
-    matchAudio.muted = isMuted
-    wrongMatchAudio.muted = isMuted
-    winAudio.muted = isMuted
-    loseAudio.muted = isMuted
-
-    flipAudio.volume = isMuted ? 0 : 1
-    matchAudio.volume = isMuted ? 0 : 1
-    wrongMatchAudio.volume = isMuted ? 0 : 1
-    winAudio.volume = isMuted ? 0 : 1
-    loseAudio.volume = isMuted ? 0 : 1
   }, [isMuted])
 
   const handleIcon1Click = () => {
@@ -361,6 +265,15 @@ function App() {
     setGamePaused(true)
     setPauseStartTime(new Date())
   }
+
+  useEffect(() => {
+    // Set initial volume for all audio elements
+    flipAudio.volume = isMuted ? 0 : 1
+    matchAudio.volume = isMuted ? 0 : 1
+    wrongMatchAudio.volume = isMuted ? 0 : 1
+    winAudio.volume = isMuted ? 0 : 1
+    loseAudio.volume = isMuted ? 0 : 1
+  }, [isMuted])
 
   return (
     <div className="App">
