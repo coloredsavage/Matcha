@@ -254,6 +254,20 @@ function App() {
     loseAudio.volume = newMutedState ? 0 : 1
   }, [isMuted])
 
+  useEffect(() => {
+    const handleTouchToggleSound = (event) => {
+      if (event.target.closest('.sound-toggle-button')) {
+        toggleSound()
+      }
+    }
+
+    document.addEventListener('touchstart', handleTouchToggleSound)
+
+    return () => {
+      document.removeEventListener('touchstart', handleTouchToggleSound)
+    }
+  }, [toggleSound])
+
   const handleIcon1Click = () => {
     setShowInstructions(true)
     setGamePaused(true)
