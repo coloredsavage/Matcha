@@ -58,11 +58,21 @@ const ConfettiEffect = ({ confettiRunning }) => {
   )
 }
 
+// Initialize audio with volume 0 on mobile
+const isMobileDevice = () =>
+  window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+const initialVolume = isMobileDevice() ? 0 : 1
+
 const flipAudio = new Audio(flipSound)
+flipAudio.volume = initialVolume
 const matchAudio = new Audio(matchSound)
+matchAudio.volume = initialVolume
 const wrongMatchAudio = new Audio(wrongMatchSound)
+wrongMatchAudio.volume = initialVolume
 const winAudio = new Audio(winSound)
+winAudio.volume = initialVolume
 const loseAudio = new Audio(loseSound)
+loseAudio.volume = initialVolume
 
 function App() {
   const [cards, setCards] = useState([])
@@ -114,7 +124,7 @@ function App() {
     } else {
       switch (difficulty) {
         case "easy":
-          symbols = ["🎨", "🖌️", "🎭", "🖼️", "📐", "✏️"]
+          symbols = ["🎨", "🖌��", "🎭", "🖼️", "📐", "✏️"]
           break
         case "medium":
           symbols = ["🎨", "🖌️", "🎭", "🖼️", "📐", "✏️", "🖋️", "📏"]
@@ -194,29 +204,44 @@ function App() {
     return () => clearInterval(timer)
   }, [startTime, matched.length, cards.length, difficulty, hardModeTimeLimit, gamePaused, totalPausedTime])
 
+  // Modify the handleClick function to prevent sound on mobile
   const handleClick = (index) => {
     if (flipped.length < 2 && !flipped.includes(index)) {
-      flipAudio.play()
+      // Only play sound if not on mobile and not muted
+      if (!isMobileDevice() && !isMuted) {
+        flipAudio.play()
+      }
       setFlipped([...flipped, index])
     }
   }
 
+  // Modify the useEffect for card matching to prevent sound on mobile
   useEffect(() => {
     if (flipped.length === 2) {
       const [first, second] = flipped
       if (cards[first] === cards[second]) {
-        matchAudio.play()
+        // Only play sound if not on mobile and not muted
+        if (!isMobileDevice() && !isMuted) {
+          matchAudio.play()
+        }
         setMatched([...matched, first, second])
       } else {
-        wrongMatchAudio.play()
+        // Only play sound if not on mobile and not muted
+        if (!isMobileDevice() && !isMuted) {
+          wrongMatchAudio.play()
+        }
       }
       setTimeout(() => setFlipped([]), 500)
     }
-  }, [flipped, cards])
+  }, [flipped, cards, isMuted, matched])
 
+  // Modify the useEffect for win condition to prevent sound on mobile
   useEffect(() => {
     if (matched.length === cards.length && cards.length > 0) {
-      winAudio.play()
+      // Only play sound if not on mobile and not muted
+      if (!isMobileDevice() && !isMuted) {
+        winAudio.play()
+      }
       const endTime = new Date()
       const timeTaken = (endTime - startTime) / 1000
       setCompletionTime(timeTaken)
@@ -227,13 +252,17 @@ function App() {
       setConfettiRunning(true)
       setTimeout(() => setConfettiRunning(false), 8000)
     }
-  }, [matched, cards.length, startTime, bestTime])
+  }, [matched, cards.length, startTime, bestTime, isMuted])
 
+  // Modify the useEffect for lose condition to prevent sound on mobile
   useEffect(() => {
     if (gameLost) {
-      loseAudio.play()
+      // Only play sound if not on mobile and not muted
+      if (!isMobileDevice() && !isMuted) {
+        loseAudio.play()
+      }
     }
-  }, [gameLost])
+  }, [gameLost, isMuted])
 
   const formatElapsedTime = (time) => {
     const minutes = Math.floor(time / 60000)
@@ -242,10 +271,10 @@ function App() {
     return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.<span class="milliseconds">${milliseconds.toString().padStart(3, "0")}</span>`
   }
 
-  // Modify the toggleSound function to automatically mute on mobile
+  // Replace the toggleSound function with this improved version
   const toggleSound = useCallback(() => {
-    // Check if device is mobile
-    const isMobile = window.innerWidth <= 768
+    // Check if device is mobile with more robust detection
+    const isMobile = isMobileDevice()
 
     // If mobile, always set to muted
     const newMutedState = isMobile ? true : !isMuted
@@ -255,26 +284,14 @@ function App() {
     ;[flipAudio, matchAudio, wrongMatchAudio, winAudio, loseAudio].forEach((audio) => {
       audio.volume = newMutedState ? 0 : 1
     })
-
-    // iOS audio priming (optional - only if needed)
-    if (!newMutedState && /iPhone|iPad|iPod/.test(navigator.userAgent)) {
-      const primeAudio = () => {
-        flipAudio
-          .play()
-          .then(() => {
-            flipAudio.pause()
-            flipAudio.currentTime = 0
-          })
-          .catch(console.error)
-      }
-      primeAudio()
-    }
   }, [isMuted])
 
-  // Also add this effect to automatically mute on mobile when the component mounts
+  // Replace the useEffect for initial muting with this improved version
   useEffect(() => {
-    const isMobile = window.innerWidth <= 768
-    if (isMobile && !isMuted) {
+    // More robust mobile detection
+    const isMobile = isMobileDevice()
+
+    if (isMobile) {
       setIsMuted(true)
 
       // Set volume for all audio elements
@@ -282,7 +299,21 @@ function App() {
         audio.volume = 0
       })
     }
-  }, [])
+
+    // Add event listener to handle window resize
+    const handleResize = () => {
+      const isMobileNow = isMobileDevice()
+      if (isMobileNow && !isMuted) {
+        setIsMuted(true)
+        ;[flipAudio, matchAudio, wrongMatchAudio, winAudio, loseAudio].forEach((audio) => {
+          audio.volume = 0
+        })
+      }
+    }
+
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [isMuted])
 
   const handleIcon1Click = () => {
     setShowInstructions(true)
