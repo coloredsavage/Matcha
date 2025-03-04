@@ -212,7 +212,7 @@ function App() {
       }
       setTimeout(() => setFlipped([]), 500)
     }
-  }, [flipped, cards])
+  }, [flipped, cards, matched])
 
   useEffect(() => {
     if (matched.length === cards.length && cards.length > 0) {
@@ -246,7 +246,7 @@ function App() {
     const newMutedState = !isMuted
     setIsMuted(newMutedState)
 
-    // Create an array of all audio elements for easier management
+    // Create an array of all audio elements
     const audioElements = [flipAudio, matchAudio, wrongMatchAudio, winAudio, loseAudio]
 
     // Set volume for all audio elements
@@ -254,40 +254,65 @@ function App() {
       if (audio) {
         audio.volume = newMutedState ? 0 : 1
 
-        // For iOS, we need to play and immediately pause to enable audio
+        // For iOS, we need to "unlock" audio with user interaction
         if (!newMutedState && /iPhone|iPad|iPod/.test(navigator.userAgent)) {
-          const playPromise = audio.play()
-          if (playPromise !== undefined) {
-            playPromise
-              .then(() => {
-                audio.pause()
-                audio.currentTime = 0
-              })
-              .catch((error) => {
-                // Auto-play was prevented, which is expected
-                console.log("Audio play prevented:", error)
-              })
+          // Play a short silent sound to unlock audio
+          const unlockAudio = () => {
+            const silentPlay = audio.play()
+            if (silentPlay !== undefined) {
+              silentPlay
+                .then(() => {
+                  audio.pause()
+                  audio.currentTime = 0
+                })
+                .catch((error) => {
+                  // Expected error on iOS, can be ignored
+                  console.log("Audio initialization prevented:", error)
+                })
+            }
           }
+          unlockAudio()
         }
       }
     })
   }, [isMuted])
 
+  // Special handler for iOS devices
   useEffect(() => {
-    const handleTouchToggleSound = (event) => {
-      const target = event.target.closest(".sound-toggle-button")
-      if (target) {
-        event.preventDefault() // Prevent any default behavior
-        toggleSound()
+    // Function to initialize audio on first touch (iOS requirement)
+    const initializeAudioOnTouch = () => {
+      if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+        const audioElements = [flipAudio, matchAudio, wrongMatchAudio, winAudio, loseAudio]
+
+        // Try to play and immediately pause all audio elements
+        audioElements.forEach((audio) => {
+          if (audio) {
+            const playPromise = audio.play()
+            if (playPromise !== undefined) {
+              playPromise
+                .then(() => {
+                  audio.pause()
+                  audio.currentTime = 0
+                })
+                .catch((e) => {
+                  // This error is expected and can be ignored
+                })
+            }
+          }
+        })
+
+        // Remove the listener after first touch
+        document.removeEventListener("touchstart", initializeAudioOnTouch)
       }
     }
 
-    document.addEventListener("touchstart", handleTouchToggleSound, { passive: false })
+    // Add the listener
+    document.addEventListener("touchstart", initializeAudioOnTouch)
 
     return () => {
-      document.removeEventListener("touchstart", handleTouchToggleSound)
+      document.removeEventListener("touchstart", initializeAudioOnTouch)
     }
-  }, [toggleSound])
+  }, [])
 
   const handleIcon1Click = () => {
     setShowInstructions(true)

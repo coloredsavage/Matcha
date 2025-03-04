@@ -38,17 +38,11 @@ const NavBar = ({ onIcon1Click, onIcon2Click, onIcon3Click, isMuted }) => {
           className="navbar-icon"
           onClick={onIcon3Click}
           title={isMuted ? "Unmute Music" : "Mute Music"}
-        />
-        <button
-          className="sound-toggle-button"
-          onClick={onIcon3Click}
           role="button"
           tabIndex="0"
           aria-pressed={isMuted}
           aria-label={isMuted ? "Unmute sound" : "Mute sound"}
-        >
-          {isMuted ? "Unmute" : "Mute"}
-        </button>
+        />
       </div>
     </nav>
   )
