@@ -64,6 +64,7 @@ const wrongMatchAudio = new Audio(wrongMatchSound)
 const winAudio = new Audio(winSound)
 const loseAudio = new Audio(loseSound)
 
+
 function App() {
   const [cards, setCards] = useState([])
   const [flipped, setFlipped] = useState([])
@@ -212,7 +213,7 @@ function App() {
       }
       setTimeout(() => setFlipped([]), 500)
     }
-  }, [flipped, cards, matched])
+  }, [flipped, cards])
 
   useEffect(() => {
     if (matched.length === cards.length && cards.length > 0) {
@@ -245,74 +246,32 @@ function App() {
   const toggleSound = useCallback(() => {
     const newMutedState = !isMuted
     setIsMuted(newMutedState)
-
+  
     // Create an array of all audio elements
     const audioElements = [flipAudio, matchAudio, wrongMatchAudio, winAudio, loseAudio]
-
+  
     // Set volume for all audio elements
     audioElements.forEach((audio) => {
       if (audio) {
         audio.volume = newMutedState ? 0 : 1
-
-        // For iOS, we need to "unlock" audio with user interaction
-        if (!newMutedState && /iPhone|iPad|iPod/.test(navigator.userAgent)) {
-          // Play a short silent sound to unlock audio
-          const unlockAudio = () => {
-            const silentPlay = audio.play()
-            if (silentPlay !== undefined) {
-              silentPlay
-                .then(() => {
-                  audio.pause()
-                  audio.currentTime = 0
-                })
-                .catch((error) => {
-                  // Expected error on iOS, can be ignored
-                  console.log("Audio initialization prevented:", error)
-                })
-            }
-          }
-          unlockAudio()
-        }
       }
     })
-  }, [isMuted])
-
-  // Special handler for iOS devices
-  useEffect(() => {
-    // Function to initialize audio on first touch (iOS requirement)
-    const initializeAudioOnTouch = () => {
-      if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
-        const audioElements = [flipAudio, matchAudio, wrongMatchAudio, winAudio, loseAudio]
-
-        // Try to play and immediately pause all audio elements
-        audioElements.forEach((audio) => {
-          if (audio) {
-            const playPromise = audio.play()
-            if (playPromise !== undefined) {
-              playPromise
-                .then(() => {
-                  audio.pause()
-                  audio.currentTime = 0
-                })
-                .catch((e) => {
-                  // This error is expected and can be ignored
-                })
-            }
-          }
+  
+    // iOS audio priming
+    if (!newMutedState && /iPhone|iPad|iPod/.test(navigator.userAgent)) {
+      const primeAudio = () => {
+        flipAudio.play().then(() => {
+          flipAudio.pause()
+          flipAudio.currentTime = 0
+        }).catch((error) => {
+          console.log("Audio priming failed:", error)
         })
-
-        // Remove the listener after first touch
-        document.removeEventListener("touchstart", initializeAudioOnTouch)
       }
+  
+      // Prime during the user interaction
+      primeAudio()
     }
-
-    // Add the listener
-    document.addEventListener("touchstart", initializeAudioOnTouch)
-
-    return () => {
-      document.removeEventListener("touchstart", initializeAudioOnTouch)
-    }
-  }, [])
+  }, [isMuted])
 
   const handleIcon1Click = () => {
     setShowInstructions(true)
