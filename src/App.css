@@ -1,3 +1,19 @@
+
+@font-face {
+  font-family: 'Groteska';
+  src: url('/public/fonts/Groteska-Light.otf') format('opentype');
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Groteska';
+  src: url('/public/fonts/Groteska-Thin.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+
 @font-face {
   font-family: 'Groteska';
   src: url('/public/fonts/Groteska-Book.otf') format('opentype');
@@ -58,7 +74,7 @@ body {
   color: black;
   border: none;
   padding: 20px 80px; /* Increased padding for larger size */
-  font-size: 1.2rem; /* Increased font size */
+  font-size: 1.1rem; /* Increased font size */
   border-radius: 75px;
   cursor: pointer;
   transition: transform 0.2s;
@@ -275,17 +291,75 @@ footer {
 }
 
 
+
 .text-red-500 {
   color: #EE8768;
 }
 
+.hard-mode-timer {
+  font-weight: bold;
+  font-size: 2rem;
+  font-family: 'Groteska', sans-serif;
+}
+
+.best-time {
+  position: relative;
+  top: 10px;
+  left: 20px;
+  font-size: 1.5rem;
+  font-family: 'Groteska', sans-serif;
+  /* Add any additional styling you need */
+}
+
+.memory-mode-timer {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-family: 'Groteska', sans-serif;
+  /* Add any additional styling you need */
+}
+
+
 /* Media query for mobile devices */
 @media (max-width: 768px) {
   .timer {
-    top: -150px;
-    right: 16px;
+    top: -140px;
+    right: 10px;
     font-family: 'Groteska', sans-serif;
+    font-weight: 100;
+    font-size: 1.5rem;
     /* Adjust any other properties if needed */
+  }
+}
+
+@media (max-width: 768px) {
+  .hard-mode-timer {
+    top: -140px;
+    right: -23px;
+    font-family: 'Groteska', sans-serif;
+    font-weight: 100;
+    font-size: 1.5rem;
+  }
+}  
+
+@media (max-width: 768px) {
+  .best-time {
+    top: -10px;
+    left: 100px;
+    font-family: 'Groteska', sans-serif;
+    font-weight: 100;
+    font-size: 1.5rem;
+    
+  }
+}
+
+@media (max-width: 768px) {
+  .memory-mode-timer {
+    top: -140px;
+    right: -82px;
+    font-family: 'Groteska', sans-serif;
+    font-weight: 100;
+    font-size: 1.5rem;
   }
 }
 
@@ -293,6 +367,7 @@ footer {
   display: flex;
   align-items: baseline;
   justify-content: center;
+  font-weight: 200;
   
 }
 
@@ -337,6 +412,7 @@ footer {
   .best-time {
     font-size: 1.8rem; /* Match with main-time for consistency */
     margin-top: -15px; /* Reduce negative margin for better spacing */
+    left: 10px; /* Adjust position for better alignment */
   }
 
   .milliseconds {
@@ -353,7 +429,7 @@ footer {
 .lose-message {
   margin: 20px auto;
   padding: 15px 30px;
-  background: #f44336;
+  background: #EF8667;
   color: white;
   border-radius: 50px;
   text-align: center;
@@ -792,10 +868,18 @@ footer {
   margin-bottom: 0px; /* Add spacing */
 }
 
+.loser-emoji {
+  font-size: 50px; /* Increase size */
+  margin-bottom: 0px; /* Add spacing */
+}
+
 .h2 {
   font-family: 'Groteska', sans-serif;
 }
 
+.h3 {
+  font-family: 'Groteska', sans-serif;
+}
 .difficulty-heading {
   font-family: 'Groteska`, sans-serif;';
 }
@@ -839,6 +923,10 @@ footer {
 
   .fire-emoji {
     font-size: 40px; /* Adjust emoji size */
+  }
+
+  .loser-emoji {
+    font-size: 45px; /* Adjust emoji size */
   }
 
   .instructions-list, .game-modes-list {
@@ -885,8 +973,8 @@ footer {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #f44336; /* Red background for losing */
-  color: white;
+  background: #EF8667; /* Red background for losing */
+  color: rgb(0, 0, 0);
   padding-left: 80px;
   padding-right: 80px;
   padding-top: 40px;
@@ -898,11 +986,11 @@ footer {
 }
 
 .lose-message-container h2 {
-  font-size: 3rem;
+  font-size: 5rem;
   margin-bottom: 30px;
   margin-top: 0px;
   font-family: 'Sf-Pro-Display', sans-serif;
-  color: white;
+  color: rgb(0, 0, 0);
 }
 
 .lose-message-container .subheader {
@@ -923,15 +1011,15 @@ footer {
 }
 
 .lose-message-container .try-again-btn {
-  background: white;
-  color: #f44336;
+  background: rgb(0, 0, 0);
+  color: #5ED88D;
   border: none;
-  padding: 30px 80px; /* Increased padding for larger size */
-  font-size: 1.2rem; /* Increased font size */
+  padding: 40px 90px; /* Increased padding for larger size */
+  font-size: 1rem; /* Increased font size */
   border-radius: 75px;
   cursor: pointer;
   transition: transform 0.2s;
-  margin-top: 0rem;
+  margin-top: 1rem;
   margin-bottom: 1rem;
   font-family: 'Groteska', sans-serif;
   font-weight: 500;
@@ -945,15 +1033,18 @@ footer {
 
 @media (max-width: 768px) {
   .lose-message-container {
-    width: 80vw; /* Ensure it fits within the screen */
+    width: 65vw; /* Ensure it fits within the screen */
     max-width: 350px; /* Limit maximum width */
     padding: 25px; /* Reduce padding for better fit */
+    padding-top: 40px;
+    padding-bottom: 40px;
     border-radius: 20px; /* Slightly smaller radius for a balanced look */
   }
 
   .lose-message-container h2 {
-    font-size: 2rem; /* Reduce heading size for mobile */
-    margin-bottom: 20px;
+    font-size: 2.5rem; /* Reduce heading size for mobile */
+    margin-bottom: 0px;
+    font-weight: 200;
     font-family: 'Sf-Pro-Display', sans-serif;
   }
 
@@ -967,8 +1058,8 @@ footer {
   }
 
   .lose-message-container .try-again-btn {
-    padding: 15px 40px; /* Adjust padding for better mobile interaction */
-    font-size: 1rem; /* Make it more proportionate */
+    padding: 20px 50px; /* Adjust padding for better mobile interaction */
+    font-size: 0.8rem; /* Make it more proportionate */
     border-radius: 50px; /* Maintain rounded look but scale down */
   }
 }

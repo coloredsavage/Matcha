@@ -34,7 +34,7 @@ const ConfettiEffect = ({ confettiRunning }) => {
           width={window.innerWidth}
           height={window.innerHeight}
           numberOfPieces={2000}
-          gravity={0.2}
+          gravity={0.05}
           recycle={false}
           confettiSource={{
             x: anchorPosition.x,
@@ -253,7 +253,7 @@ function App() {
               />
             ))}
           </div>
-          <div className="timer">
+          <div className={`timer ${memoryMode ? "memory-mode-timer" : difficulty === "hard" ? "hard-mode-timer" : ""}`}>
             <h2
               dangerouslySetInnerHTML={{
                 __html: difficulty === "hard" 
@@ -262,7 +262,7 @@ function App() {
               }}
             />
             {bestTime !== null && (
-              <h2 dangerouslySetInnerHTML={{ __html: formatTime(Math.ceil(bestTime * 1000)) }} />
+              <h2 className="best-time" dangerouslySetInnerHTML={{ __html: formatTime(Math.ceil(bestTime * 1000)) }} />
             )}
           </div>
         </div>
@@ -299,13 +299,12 @@ function App() {
 
       {gameLost && (
         <div className="lose-message-container">
-          <h2>😢 You Lost! 😢</h2>
-          <div className="subheader">
-            
-          </div>
+          <div className="loser-emoji">😢</div>
+          <h2>You Lost.</h2>
+          <h3 style={{ fontFamily: 'Groteska, sans-serif', fontSize: '12px' }}>Give it another shot!</h3>
           <button onClick={initializeGame} className="try-again-btn">
             Try Again
-            <h2>Give it another shot!</h2>
+   
           </button>
         </div>
       )}
