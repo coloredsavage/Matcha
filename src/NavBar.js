@@ -7,6 +7,9 @@ import icon4 from "./assets/music-mute.svg" // Import the fourth icon
 import "./NavBar.css" // Import the CSS for the NavBar
 
 const NavBar = ({ onIcon1Click, onIcon2Click, onIcon3Click, isMuted }) => {
+  // Check if device is mobile
+  const isMobile = window.innerWidth <= 768
+
   return (
     <nav className="navbar">
       <div className="navbar-logo">
@@ -45,3 +48,4 @@ const NavBar = ({ onIcon1Click, onIcon2Click, onIcon3Click, isMuted }) => {
 }
 
 export default NavBar
+

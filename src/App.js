@@ -64,7 +64,6 @@ const wrongMatchAudio = new Audio(wrongMatchSound)
 const winAudio = new Audio(winSound)
 const loseAudio = new Audio(loseSound)
 
-
 function App() {
   const [cards, setCards] = useState([])
   const [flipped, setFlipped] = useState([])
@@ -243,26 +242,47 @@ function App() {
     return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.<span class="milliseconds">${milliseconds.toString().padStart(3, "0")}</span>`
   }
 
+  // Modify the toggleSound function to automatically mute on mobile
   const toggleSound = useCallback(() => {
-    setIsMuted(prev => !prev); // Use functional update
-    const newMutedState = !isMuted;
-  
+    // Check if device is mobile
+    const isMobile = window.innerWidth <= 768
+
+    // If mobile, always set to muted
+    const newMutedState = isMobile ? true : !isMuted
+    setIsMuted(newMutedState)
+
     // Update audio volumes
-    [flipAudio, matchAudio, wrongMatchAudio, winAudio, loseAudio].forEach(audio => {
-      audio.volume = newMutedState ? 0 : 1;
-    });
-  
+    ;[flipAudio, matchAudio, wrongMatchAudio, winAudio, loseAudio].forEach((audio) => {
+      audio.volume = newMutedState ? 0 : 1
+    })
+
     // iOS audio priming (optional - only if needed)
     if (!newMutedState && /iPhone|iPad|iPod/.test(navigator.userAgent)) {
       const primeAudio = () => {
-        flipAudio.play().then(() => {
-          flipAudio.pause();
-          flipAudio.currentTime = 0;
-        }).catch(console.error);
-      };
-      primeAudio();
+        flipAudio
+          .play()
+          .then(() => {
+            flipAudio.pause()
+            flipAudio.currentTime = 0
+          })
+          .catch(console.error)
+      }
+      primeAudio()
     }
-  }, [isMuted]);
+  }, [isMuted])
+
+  // Also add this effect to automatically mute on mobile when the component mounts
+  useEffect(() => {
+    const isMobile = window.innerWidth <= 768
+    if (isMobile && !isMuted) {
+      setIsMuted(true)
+
+      // Set volume for all audio elements
+      ;[flipAudio, matchAudio, wrongMatchAudio, winAudio, loseAudio].forEach((audio) => {
+        audio.volume = 0
+      })
+    }
+  }, [])
 
   const handleIcon1Click = () => {
     setShowInstructions(true)
