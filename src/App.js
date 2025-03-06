@@ -179,18 +179,19 @@ function App() {
   }, [gameStarted, initializeGame])
 
   const formatTime = (time, isHardMode = false) => {
-    const hours = Math.floor(time / 3600000)
-    const minutes = Math.floor((time % 3600000) / 60000)
-    const seconds = Math.floor((time % 60000) / 1000)
-    const milliseconds = time % 1000
-
+    const roundedTime = Math.round(time / 1000) * 1000 // Round to the nearest second
+    const hours = Math.floor(roundedTime / 3600000)
+    const minutes = Math.floor((roundedTime % 3600000) / 60000)
+    const seconds = Math.floor((roundedTime % 60000) / 1000)
+    const milliseconds = roundedTime % 1000
+  
     let timeString = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.<span class="milliseconds">${milliseconds.toString().padStart(3, "0")}</span>`
-
+  
     if (hours > 0) {
       timeString = `${hours.toString().padStart(2, "0")}:${timeString}`
     }
-
-    if (isHardMode && Math.floor(time / 1000) <= 10) {
+  
+    if (isHardMode && Math.floor(roundedTime / 1000) <= 10) {
       return `<span class="text-red-500">${timeString}</span>`
     }
     return timeString
@@ -345,12 +346,14 @@ function App() {
   }, [isMuted])
 
   useEffect(() => {
-    // Load daily challenge results from localStorage
     const today = new Date().toISOString().split("T")[0]
     const dailyScores = JSON.parse(localStorage.getItem("dailyScores") || "{}")
     const todayScore = dailyScores[today]
   
-    if (todayScore) {
+    // Check if the user was actively playing before the refresh
+    const wasPlaying = localStorage.getItem("wasPlayingDailyChallenge") === "true"
+  
+    if (todayScore && wasPlaying) {
       setCompletionTime(todayScore.time)
       setMoveCount(todayScore.moves)
   
@@ -363,6 +366,9 @@ function App() {
       setDailyStreak(currentStreak)
   
       setShowDailyResults(true)
+    } else {
+      // Reset the "wasPlayingDailyChallenge" flag
+      localStorage.removeItem("wasPlayingDailyChallenge")
     }
   }, [])
 
@@ -515,10 +521,10 @@ function App() {
   </div>
 ) : null}
 
-      {matched.length === cards.length && cards.length > 0 && !isDailyChallenge && (
-        <div className="win-message-container">
-          <div className="fire-emoji">🔥</div>
-          <h2>You're on Fire!</h2>
+{matched.length === cards.length && cards.length > 0 && !isDailyChallenge && (
+  <div className="win-message-container">
+    <div className="fire-emoji">🔥</div>
+    <h2>{completionTime < bestTime ? "New Best!" : "You're on Fire!"}</h2>
           <div className="subheader">
             <p className="time-container">
               <span className="time-value" dangerouslySetInnerHTML={{ __html: formatTime(completionTime * 1000) }} />
@@ -595,6 +601,7 @@ function App() {
                 if (isDailyChallengeAvailable()) {
                   setDifficulty("medium")
                   setIsDailyChallenge(true)
+                  localStorage.setItem("wasPlayingDailyChallenge", "true")
                   setShowModal(false)
                   setShowInstructions(true)
                 } else {
@@ -725,8 +732,8 @@ function App() {
           <span className="time-label">Time</span>
         </div>
         <div className="time-container">
-          <span className="time-value-streak">{dailyStreak}</span>
-          <span className="time-label">Day Streak 🔥</span>
+          <span className="time-value-streak">{dailyStreak}🔥</span>
+          <span className="time-label">Day Streak </span>
         </div>
       </div>
       <button

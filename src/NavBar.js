@@ -14,11 +14,9 @@ const NavBar = ({ onIcon1Click, onIcon2Click, onIcon3Click, isMuted }) => {
   return (
     <nav className="navbar">
       <div className="navbar-logo">
-        <a href="/">
-          <img src={logo || "/placeholder.svg"} alt="Matcha Logo" className="desktop-logo" />
+      <a href="/" onClick={(e) => { e.preventDefault(); window.location.reload(); }}>          <img src={logo || "/placeholder.svg"} alt="Matcha Logo" className="desktop-logo" />
         </a>
-        <a href="/">
-          <img src={mobileLogo || "/placeholder.svg"} alt="Matcha Mobile Logo" className="mobile-logo" />
+        <a href="/" onClick={(e) => { e.preventDefault(); window.location.reload(); }}>          <img src={mobileLogo || "/placeholder.svg"} alt="Matcha Mobile Logo" className="mobile-logo" />
         </a>
       </div>
       <div className="navbar-icons">
@@ -49,4 +47,3 @@ const NavBar = ({ onIcon1Click, onIcon2Click, onIcon3Click, isMuted }) => {
 }
 
 export default NavBar
-
