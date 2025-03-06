@@ -1,5 +1,5 @@
 "use client"
-
+import React from "react";
 import { useRef, useState, useEffect, useCallback } from "react"
 import Card from "./Card"
 import Modal from "./Modal"
