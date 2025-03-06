@@ -1,3 +1,4 @@
+import React from "react";
 import logo from "./MATCHA.svg" // Import the default logo image
 import mobileLogo from "./MOBILE_MATCHA.svg" // Import the mobile logo image
 import icon1 from "./assets/ask.svg" // Import the first icon
