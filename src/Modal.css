@@ -34,7 +34,7 @@
   .difficulty-btn {
     background: #000000;
     color: rgb(255, 255, 255);
-    border: #5ED88D 1px solid;
+    border: #01C482 1px solid;
     padding: 10px 10px;
     font-size: 1rem;
     border-radius: 5px;
@@ -46,7 +46,7 @@
   
   .difficulty-btn:hover {
     transform: scale(1.02);
-    background: #5ED88D;
+    background: #01C482;
     color: #000000;
   }
   
@@ -68,3 +68,8 @@
   .h2 {
     font-family: 'Groteska', sans-serif;
   }
+
+  .daily-results-active .completion-time,
+.daily-results-active .win-message-container {
+  display: none;
+}

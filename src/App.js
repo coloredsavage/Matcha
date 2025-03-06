@@ -90,6 +90,11 @@ function App() {
   const [pauseStartTime, setPauseStartTime] = useState(null)
   const [totalPausedTime, setTotalPausedTime] = useState(0)
 
+  const [isDailyChallenge, setIsDailyChallenge] = useState(false)
+  const [showDailyResults, setShowDailyResults] = useState(false)
+  const [moveCount, setMoveCount] = useState(0)
+  const [dailyStreak, setDailyStreak] = useState(0)
+
   // Add this helper function inside the App component
   const isMobileDevice = () => {
     return window.innerWidth <= 768 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
@@ -122,19 +127,19 @@ function App() {
           symbols = ["🎨", "🖌️", "🎭", "🖼️", "📐", "✏️"]
           break
         case "medium":
-          symbols = ["🎨", "🖌️", "🎭", "🖼️", "📐", "✏️", "🖋️", "📏"]
+          symbols = ["🎨", "🖌️", "🎭", "🖼️", "📐", "✏️", "💖", "📏"]
           break
         case "hard":
-          symbols = ["🎨", "🖌️", "🎭", "🖼️", "📐", "✏️", "🖋️", "📏"]
+          symbols = ["🎨", "🖌️", "🎭", "🖼️", "📐", "✏️", "💖", "📏"]
           break
         default:
-          symbols = ["🎨", "🖌️", "🎭", "🖼️", "📐", "✏️", "🖋️", "📏"]
+          symbols = ["🎨", "🖌️", "🎭", "🖼️", "📐", "✏️", "💖", "📏"]
       }
     }
     const pairs = [...symbols, ...symbols]
     const shuffled = pairs.sort(() => Math.random() - 0.5)
     setCards(shuffled)
-    setFlipped(memoryMode || difficulty === "easy" ? [...Array(shuffled.length).keys()] : [])
+    setFlipped(memoryMode || difficulty === "easy" || isDailyChallenge ? [...Array(shuffled.length).keys()] : [])
     setMatched([])
     setCompletionTime(null)
     setElapsedTime(0)
@@ -142,8 +147,9 @@ function App() {
     setGameLost(false)
     setTimeRemaining(hardModeTimeLimit * 1000)
     setStartTime(null)
+    setMoveCount(0) // Reset move count
 
-    if (memoryMode || difficulty === "easy") {
+    if (memoryMode || difficulty === "easy" || isDailyChallenge) {
       setTimeout(() => {
         setFlipped([])
         setStartTime(new Date())
@@ -151,7 +157,7 @@ function App() {
     } else {
       setStartTime(new Date())
     }
-  }, [difficulty, memoryMode, memoryGrid, hardModeTimeLimit])
+  }, [difficulty, memoryMode, memoryGrid, hardModeTimeLimit, isDailyChallenge])
 
   useEffect(() => {
     if (gameStarted) {
@@ -210,6 +216,7 @@ function App() {
   // In the useEffect for flipped cards
   useEffect(() => {
     if (flipped.length === 2) {
+      setMoveCount((prevCount) => prevCount + 1) // Increment move count
       const [first, second] = flipped
       if (cards[first] === cards[second]) {
         if (!isMobileDevice()) matchAudio.play() // Modified
@@ -221,21 +228,30 @@ function App() {
     }
   }, [flipped, cards])
 
+
+
   // In the useEffect for matched cards
   useEffect(() => {
     if (matched.length === cards.length && cards.length > 0) {
-      if (!isMobileDevice()) winAudio.play() // Modified
+      if (!isMobileDevice()) winAudio.play()
       const endTime = new Date()
       const timeTaken = (endTime - startTime) / 1000
       setCompletionTime(timeTaken)
-      const roundedTimeTaken = Math.ceil(timeTaken)
-      if (bestTime === null || roundedTimeTaken < bestTime) {
-        setBestTime(roundedTimeTaken)
+
+      if (isDailyChallenge) {
+        setShowDailyResults(true) // Ensures this updates BEFORE any other UI elements
+      } else {
+        // Regular game logic
+        const roundedTimeTaken = Math.ceil(timeTaken)
+        if (bestTime === null || roundedTimeTaken < bestTime) {
+          setBestTime(roundedTimeTaken)
+        }
       }
+
       setConfettiRunning(true)
       setTimeout(() => setConfettiRunning(false), 8000)
     }
-  }, [matched, cards.length, startTime, bestTime])
+  }, [matched, cards.length, startTime, bestTime, isDailyChallenge])
 
   // In the useEffect for game lost
   useEffect(() => {
@@ -314,8 +330,12 @@ function App() {
     loseAudio.volume = isMuted ? 0 : 1
   }, [isMuted])
 
+  const isDailyChallengeAvailable = () => {
+    return true
+  }
+
   return (
-    <div className="App">
+    <div className={`App ${showDailyResults ? "daily-results-active" : ""}`}>
       <ConfettiEffect confettiRunning={confettiRunning} />
 
       {gameStarted && (
@@ -335,51 +355,58 @@ function App() {
         </button>
       )}
 
-      {gameStarted && !completionTime && (
-        <div className="game-container">
-          <div className={`grid ${memoryMode ? `memory-grid-${memoryGrid}` : `${difficulty}-grid`}`}>
-            {cards.map((value, index) => (
-              <Card
-                key={index}
-                value={value}
-                isFlipped={flipped.includes(index) || matched.includes(index)}
-                onClick={() => !matched.includes(index) && !flipped.includes(index) && handleClick(index)}
-                status={
-                  matched.includes(index)
-                    ? "matched"
-                    : flipped.includes(index) && flipped.length === 2 && cards[flipped[0]] !== cards[flipped[1]]
-                      ? "unmatched"
-                      : ""
-                }
-              />
-            ))}
-          </div>
-          <div
-            className={`timer ${memoryMode ? "memory-mode-timer" : difficulty === "hard" ? "hard-mode-timer" : difficulty === "medium" ? "medium-mode-timer" : "easy-mode-timer"}`}
-          >
-            {difficulty === "hard" && <h3 className="time-remaining">TIME REMAINING</h3>}
-            <h2
-              dangerouslySetInnerHTML={{
-                __html: difficulty === "hard" ? formatTime(timeRemaining, true) : formatTime(elapsedTime),
-              }}
-            />
-            {bestTime !== null && (
-              <h2 className="best-time" dangerouslySetInnerHTML={{ __html: formatTime(Math.ceil(bestTime * 1000)) }} />
-            )}
-          </div>
-        </div>
+{gameStarted && !completionTime && (
+  <div className="game-container">
+    <div className={`grid ${memoryMode ? `memory-grid-${memoryGrid}` : `${difficulty}-grid`}`}>
+      {cards.map((value, index) => (
+        <Card
+          key={index}
+          value={value}
+          isFlipped={flipped.includes(index) || matched.includes(index)}
+          onClick={() => !matched.includes(index) && !flipped.includes(index) && handleClick(index)}
+          status={
+            matched.includes(index)
+              ? "matched"
+              : flipped.includes(index) && flipped.length === 2 && cards[flipped[0]] !== cards[flipped[1]]
+                ? "unmatched"
+                : ""
+          }
+        />
+      ))}
+    </div>
+    {isDailyChallenge && (
+      <div className="move-counter">
+        <h3>Moves: {moveCount}</h3>
+      </div>
+    )}
+    <div
+      className={`timer ${memoryMode ? "memory-mode-timer" : difficulty === "hard" ? "hard-mode-timer" : difficulty === "medium" ? "medium-mode-timer" : "easy-mode-timer"}`}
+    >
+      {difficulty === "hard" && <h3 className="time-remaining">TIME REMAINING</h3>}
+      <h2
+        dangerouslySetInnerHTML={{
+          __html: difficulty === "hard" ? formatTime(timeRemaining, true) : formatTime(elapsedTime),
+        }}
+      />
+      {bestTime !== null && (
+        <h2 className="best-time" dangerouslySetInnerHTML={{ __html: formatTime(Math.ceil(bestTime * 1000)) }} />
       )}
-
-      {completionTime !== null && (
+    </div>
+  </div>
+)}
+      {completionTime !== null && !isDailyChallenge && !showDailyResults ? (
         <div className="completion-time">
           <h2 className="time-container">
             <span className="time-value" dangerouslySetInnerHTML={{ __html: formatTime(completionTime * 1000) }} />
             <span className="time-label">Completion Time</span>
           </h2>
+          {bestTime !== null && (
+            <h2 className="best-time" dangerouslySetInnerHTML={{ __html: formatTime(Math.ceil(bestTime * 1000)) }} />
+          )}
         </div>
-      )}
+      ) : null}
 
-      {matched.length === cards.length && cards.length > 0 && (
+      {matched.length === cards.length && cards.length > 0 && !isDailyChallenge && (
         <div className="win-message-container">
           <div className="fire-emoji">🔥</div>
           <h2>You're on Fire!</h2>
@@ -431,6 +458,7 @@ function App() {
                   className="difficulty-btn"
                   onClick={() => {
                     setDifficulty(level)
+                    setIsDailyChallenge(false)
                     setShowModal(false)
                     setShowInstructions(true)
                   }}
@@ -445,9 +473,23 @@ function App() {
               onClick={() => {
                 setShowModal(false)
                 setShowMemoryModal(true)
+                setIsDailyChallenge(false)
               }}
             >
               Memory Mode
+            </button>
+            <hr className="divider" />
+            <button
+              className="daily-challenge-btn"
+              onClick={() => {
+                setDifficulty("medium")
+                setIsDailyChallenge(true) // Set daily challenge state to true
+                setShowModal(false)
+                setShowInstructions(true)
+              }}
+              disabled={!isDailyChallengeAvailable()}
+            >
+              {isDailyChallengeAvailable() ? "Daily Challenge" : "Daily Challenge Completed"}
             </button>
           </div>
         </Modal>
@@ -528,6 +570,39 @@ function App() {
               className="start-game-btn"
             >
               Start Game
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      {showDailyResults && (
+        <Modal
+          onClose={() => {
+            setShowDailyResults(false)
+          }}
+          hideContent={true} // Add this line to hide the modal content
+        >
+          <div className="daily-results-container">
+            <div className="fire-emoji">🏆</div>
+            <h2>Daily Challenge Complete!</h2>
+            <div className="subheader">
+              <div className="time-container">
+                <span className="time-value-moves">{moveCount}</span>
+                <span className="time-label">Moves</span>
+              </div>
+              <div className="time-container">
+                <span className="time-value" dangerouslySetInnerHTML={{ __html: formatTime(completionTime * 1000) }} />
+                <span className="time-label">Time</span>
+              </div>
+            </div>
+            <button
+              onClick={() => {
+                setShowDailyResults(false)
+                setGameStarted(false)
+              }}
+              className="play-again-btn"
+            >
+              Back to Menu
             </button>
           </div>
         </Modal>

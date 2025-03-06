@@ -1,36 +1,34 @@
-
 @font-face {
-  font-family: 'Groteska';
-  src: url('/public/fonts/Groteska-Light.otf') format('opentype');
+  font-family: "Groteska";
+  src: url("/public/fonts/Groteska-Light.otf") format("opentype");
   font-weight: 200;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Groteska';
-  src: url('/public/fonts/Groteska-Thin.otf') format('opentype');
+  font-family: "Groteska";
+  src: url("/public/fonts/Groteska-Thin.otf") format("opentype");
   font-weight: 100;
   font-style: normal;
 }
 
-
 @font-face {
-  font-family: 'Groteska';
-  src: url('/public/fonts/Groteska-Book.otf') format('opentype');
+  font-family: "Groteska";
+  src: url("/public/fonts/Groteska-Book.otf") format("opentype");
   font-weight: 300;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Groteska';
-  src: url('/public/fonts/Groteska-Medium.otf') format('opentype');
+  font-family: "Groteska";
+  src: url("/public/fonts/Groteska-Medium.otf") format("opentype");
   font-weight: 500;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Sf-Pro-Display';
-  src: url('/public/fonts/SF-Pro-Display-Regular.otf') format('opentype');
+  font-family: "Sf-Pro-Display";
+  src: url("/public/fonts/SF-Pro-Display-Regular.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
 }
@@ -38,7 +36,7 @@
 /* Change background color to #000000 */
 body {
   background-color: #000000;
-  color: white; /* Ensure text is readable on dark background */
+  color: #FFFBE8; /* Ensure text is readable on dark background */
 }
 
 /* Center the game landing page UI */
@@ -54,13 +52,13 @@ body {
 }
 
 .App::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('./assets/Gridbg.svg');
+  background-image: url("./assets/Gridbg.svg");
   background-size: cover;
   background-position: center;
   background-repeat: repeat;
@@ -70,7 +68,7 @@ body {
 
 /* Style the start game button */
 .start-game-btn {
-  background: #5ED88D;
+  background: #01C482;
   color: black;
   border: none;
   padding: 20px 80px; /* Increased padding for larger size */
@@ -79,13 +77,13 @@ body {
   cursor: pointer;
   transition: transform 0.2s;
   margin-top: 2rem;
-  font-family: 'Groteska', sans-serif;
-  font-weight:500;
+  font-family: "Groteska", sans-serif;
+  font-weight: 500;
 }
 
 .start-game-btn:hover {
   transform: scale(1.02);
-  background: #ffffff; /* Slightly darker shade on hover */
+  background: #FFFBE8; /* Slightly darker shade on hover */
 }
 
 /* Existing styles */
@@ -96,7 +94,8 @@ body {
   margin: 20px auto;
 }
 
-.easy-grid, .medium-grid {
+.easy-grid,
+.medium-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr); /* 3 columns */
   grid-template-rows: repeat(3, 1fr); /* 4 rows */
@@ -108,7 +107,8 @@ body {
 }
 
 /* Inserted styles */
-body, html {
+body,
+html {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -130,7 +130,7 @@ footer {
   width: 100%;
   position: relative;
   bottom: -140px;
-  font-family: 'Groteska', sans-serif;
+  font-family: "Groteska", sans-serif;
   font-weight: 400;
 }
 /* Mobile Optimization */
@@ -142,7 +142,7 @@ footer {
     position: relative;
     bottom: -135px;
     font-size: 0.7em;
-    font-family: 'Groteska', sans-serif;
+    font-family: "Groteska", sans-serif;
     font-weight: 400;
   }
 }
@@ -204,22 +204,22 @@ footer {
 }
 
 .front {
-  background: #5ED88D;
-  color: white;
+  background: #01C482;
+  color: #FFFBE8;
   transform: rotateY(0deg);
 }
 
 .back {
-  background: white;
+  background: #FFFBE8;
   transform: rotateY(180deg);
 }
 
 .card.matched .card-back {
-  background-color: #FBE64D;
+  background-color: #FEBE00;
 }
 
 .card.unmatched .card-back {
-  background-color: #EE8768;
+  background-color: #ee8768;
 }
 
 .flipped .front {
@@ -233,20 +233,26 @@ footer {
 .win-message {
   margin: 20px auto;
   padding: 15px 30px;
-  background: #4CAF50;
-  color: white;
+  background: #4caf50;
+  color: #FFFBE8;
   border-radius: 50px;
   animation: celebrate 0.5s ease-in-out 3;
 }
 
 @keyframes celebrate {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .win-message {
-  background: white;
+  background: #FFFBE8;
   padding: 2rem;
   border-radius: 15px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -255,20 +261,24 @@ footer {
 }
 
 .play-again-btn {
-  background: #4CAF50;
-  color: white;
+  background: #000000;
+  color: #01C482;
   border: none;
-  padding: 12px 30px;
-  font-size: 1.1rem;
-  border-radius: 25px;
+  padding: 30px 80px; /* Increased padding for larger size */
+  font-size: 1.2rem; /* Increased font size */
+  border-radius: 75px;
   cursor: pointer;
   transition: transform 0.2s;
-  margin-top: 1rem;
+  margin-top: 0rem;
+  margin-bottom: 1rem;
+  font-family: "Groteska", sans-serif;
+  font-weight: 500;
 }
 
 .play-again-btn:hover {
-  transform: scale(1.05);
-  background: #45a049;
+  transform: scale(1.02);
+  background: #FFFBE8;
+  color: rgb(0, 0, 0);
 }
 
 .completion-time {
@@ -282,61 +292,54 @@ footer {
   text-align: center;
 }
 
-
-
 .text-red-500 {
-  color: #EE8768;
+  color: #ee8768;
 }
 
 .hard-mode-timer {
   font-weight: bold;
   font-size: 2rem;
-  font-family: 'Groteska', sans-serif;
+  font-family: "Groteska", sans-serif;
   position: absolute;
   top: 377px;
   right: -160px;
 }
 
-
 .medium-mode-timer {
-  color: #ffffff; /* Orange color for medium mode timer */
+  color: #FFFBE8; /* Orange color for medium mode timer */
   font-weight: bold;
   font-size: 2rem;
-  font-family: 'Groteska', sans-serif;
+  font-family: "Groteska", sans-serif;
   position: absolute;
   top: 366px;
   right: -200px;
 }
 
 .easy-mode-timer {
-  color: #ffffff; /* Deep Sky Blue color for easy mode timer */
+  color: #FFFBE8; /* Deep Sky Blue color for easy mode timer */
   font-weight: bold;
   font-size: 2rem;
   position: absolute;
   top: 255px;
   right: -200px;
-  font-family: 'Groteska', sans-serif;
+  font-family: "Groteska", sans-serif;
 }
-
 
 .memory-mode-timer {
   position: absolute;
   top: 375px;
   right: -190px;
-  font-family: 'Groteska', sans-serif;
+  font-family: "Groteska", sans-serif;
   /* Add any additional styling you need */
 }
-
-
-
 
 @media (max-width: 768px) {
   .hard-mode-timer,
   .best-time,
   .memory-mode-timer,
   .easy-mode-timer,
-  .medium-mode-timer{
-    font-family: 'Groteska', sans-serif;
+  .medium-mode-timer {
+    font-family: "Groteska", sans-serif;
     font-size: 1.5rem;
   }
 
@@ -355,18 +358,17 @@ footer {
     left: 50px;
   }
 
-
   .memory-mode-timer {
     top: -140px;
     right: -82px;
   }
-  
+
   .easy-mode-timer {
     top: -70px;
     right: 10px;
     margin: 0px;
   }
-  
+
   .medium-mode-timer {
     top: -105px;
     right: 10px;
@@ -380,24 +382,23 @@ footer {
   font-weight: 200;
   font-size: 2.5rem;
   margin: 0px;
-  
 }
 
 .main-time {
   font-size: 2.4rem;
   margin-right: 0.2rem;
-  font-family: 'Groteska', sans-serif;
+  font-family: "Groteska", sans-serif;
   font-weight: 400;
 }
 
 .best-time {
   font-size: 2.4rem;
   margin-right: 0.2rem;
-  font-family: 'Groteska', sans-serif;
+  font-family: "Groteska", sans-serif;
   font-weight: 400;
   color: #f0f0f0;
   opacity: 0.5;
-  margin-top: -25px; 
+  margin-top: -25px;
   position: relative;
   left: -7px;
   top: -112px;
@@ -417,10 +418,10 @@ footer {
 }
 
 .time-remaining {
-  color: #ffffff; /* Gold color for the text */
+  color: #FFFBE8; /* Gold color for the text */
   font-weight: 200;
   font-size: 0.7rem;
-  font-family: 'Groteska', sans-serif;
+  font-family: "Groteska", sans-serif;
   text-align: left;
   position: absolute;
   top: -25px;
@@ -452,10 +453,10 @@ footer {
   }
 
   .time-remaining {
-    color: #ffffff; /* Gold color for the text */
+    color: #FFFBE8; /* Gold color for the text */
     font-weight: 200;
     font-size: 0.7rem;
-    font-family: 'Groteska', sans-serif;
+    font-family: "Groteska", sans-serif;
     text-align: left;
     position: absolute;
     top: -25px;
@@ -467,8 +468,8 @@ footer {
 .lose-message {
   margin: 20px auto;
   padding: 15px 30px;
-  background: #EF8667;
-  color: white;
+  background: #ef8667;
+  color: #FFFBE8;
   border-radius: 50px;
   text-align: center;
 }
@@ -485,9 +486,15 @@ footer {
 }
 
 @keyframes shuffle {
-  0% { transform: rotate(0deg); }
-  50% { transform: rotate(10deg); }
-  100% { transform: rotate(0deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
 }
 
 .grid.shuffling {
@@ -496,7 +503,8 @@ footer {
 
 /* Mobile Grid Styling */
 @media (max-width: 768px) {
-  .easy-grid, .medium-grid {
+  .easy-grid,
+  .medium-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
     grid-template-rows: repeat(4, 1fr); /* 4 equal rows */
@@ -523,7 +531,10 @@ footer {
     max-width: 562.5px;
   }
 
-  .memory-grid-4x4, .memory-grid-4x5, .memory-grid-4x6, .memory-grid-4x7 {
+  .memory-grid-4x4,
+  .memory-grid-4x5,
+  .memory-grid-4x6,
+  .memory-grid-4x7 {
     grid-template-columns: repeat(4, 1fr); /* 2 columns on smaller screens */
     max-width: 200px;
     position: relative;
@@ -539,19 +550,21 @@ footer {
     font-size: 2.5em;
   }
 
-  .win-message, .completion-time, .time-adjustment-message {
+  .win-message,
+  .completion-time,
+  .time-adjustment-message {
     max-width: 300px;
     font-size: 1rem;
   }
 
   .play-again-btn {
-    padding: 10px 20px;
+    padding: 20px 30px;
     font-size: 1rem;
   }
 
   .main-time {
     font-size: 2.5rem;
-    color: #5ED88D;
+    color: #01C482;
   }
 
   .milliseconds {
@@ -575,7 +588,7 @@ footer {
 }
 
 .landing-subheader {
-  font-family: 'Groteska', sans-serif;
+  font-family: "Groteska", sans-serif;
   font-weight: 400;
 }
 
@@ -603,7 +616,7 @@ footer {
 .modal-content {
   background: rgb(0, 0, 0);
   padding: 45px 90px;
-  border: #5ED88D 1px solid;
+  border: #01C482 1px solid;
   border-radius: 20px;
   position: relative;
   max-width: 500px;
@@ -629,7 +642,7 @@ footer {
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background-color: white;
+  background-color: #FFFBE8;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -640,7 +653,6 @@ footer {
   font-size: 1.5rem;
   color: #333;
 }
-
 
 /* Mobile adjustments */
 @media (max-width: 768px) {
@@ -680,13 +692,13 @@ footer {
   padding: 5px;
   background: #000000;
   color: rgb(255, 255, 255);
-  border: #5ED88D 1px solid;
+  border: #01C482 1px solid;
   padding: 10px 193px;
   font-size: 1rem;
   border-radius: 5px;
   cursor: pointer;
   transition: transform 0.2s;
-  font-family: 'Groteska', sans-serif;
+  font-family: "Groteska", sans-serif;
   font-weight: 400;
   margin: 20px;
 }
@@ -695,8 +707,8 @@ footer {
 .start-memory-game-btn {
   padding: 10px 20px;
   font-size: 1.1rem;
-  background-color: #4CAF50;
-  color: white;
+  background-color: #4caf50;
+  color: #FFFBE8;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -709,13 +721,13 @@ footer {
 .memory-mode-btn {
   background: #000000;
   color: rgb(255, 255, 255);
-  border: #5ED88D 1px solid;
+  border: #01C482 1px solid;
   padding: 10px 192px;
   font-size: 1rem;
   border-radius: 5px;
   cursor: pointer;
   transition: transform 0.2s;
-  font-family: 'Groteska', sans-serif;
+  font-family: "Groteska", sans-serif;
   font-weight: 400;
 }
 
@@ -731,7 +743,7 @@ footer {
 
 .memory-mode-btn:hover {
   transform: scale(1.02);
-  background: #5ED88D;
+  background: #01C482;
   color: #000000;
 }
 
@@ -745,13 +757,13 @@ footer {
 .memory-grid-btn {
   background: #000000;
   color: rgb(255, 255, 255);
-  border: #5ED88D 1px solid;
+  border: #01C482 1px solid;
   padding: 10px 193px;
   font-size: 1rem;
   border-radius: 5px;
   cursor: pointer;
   transition: transform 0.2s;
-  font-family: 'Groteska', sans-serif;
+  font-family: "Groteska", sans-serif;
   font-weight: 400;
 }
 
@@ -767,7 +779,7 @@ footer {
 }
 
 .memory-grid-btn:hover {
-  background: #5ED88D;
+  background: #01C482;
   color: #000000;
 }
 
@@ -783,7 +795,7 @@ footer {
   .game-container {
     display: flex;
     flex-direction: column;
-    min-height: 30vh; 
+    min-height: 30vh;
     justify-content: flex-end;
     position: relative;
     top: 150px;
@@ -796,7 +808,7 @@ footer {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #5ED88D;
+  background: #01C482;
   color: rgb(0, 0, 0);
   padding-left: 80px;
   padding-right: 80px;
@@ -812,7 +824,7 @@ footer {
   font-size: 3rem;
   margin-bottom: 30px;
   margin-top: 0px;
-  font-family: 'Sf-Pro-Display', sans-serif;
+  font-family: "Sf-Pro-Display", sans-serif;
   color: #000000;
 }
 
@@ -823,20 +835,19 @@ footer {
 .win-message-container .completion-time {
   font-size: 1rem;
   margin-bottom: 10px;
-  font-family: 'Groteska', sans-serif;
-
+  font-family: "Groteska", sans-serif;
 }
 
 .win-message-container .best-time {
   font-size: 1.2rem;
   margin-bottom: 20px;
   opacity: 0.6;
-  font-family: 'Groteska', sans-serif;
+  font-family: "Groteska", sans-serif;
 }
 
 .win-message-container .play-again-btn {
   background: #000000;
-  color: #5ED88D;
+  color: #01C482;
   border: none;
   padding: 30px 80px; /* Increased padding for larger size */
   font-size: 1.2rem; /* Increased font size */
@@ -845,13 +856,14 @@ footer {
   transition: transform 0.2s;
   margin-top: 0rem;
   margin-bottom: 1rem;
-  font-family: 'Groteska', sans-serif;
-  font-weight:500;
+  font-family: "Groteska", sans-serif;
+  font-weight: 500;
+  
 }
 
 .win-message-container .play-again-btn:hover {
   transform: scale(1.02);
-  background: #ffffff;
+  background: #FFFBE8;
   color: rgb(0, 0, 0);
 }
 
@@ -869,7 +881,7 @@ footer {
   font-weight: 500;
   color: rgba(0, 0, 0, 0.6);
   text-transform: uppercase;
-  font-family: 'Groteska', sans-serif;
+  font-family: "Groteska", sans-serif;
   letter-spacing: 1px;
   margin-bottom: 2px; /* Slight spacing above the time */
 }
@@ -878,7 +890,7 @@ footer {
   font-size: 0.8rem;
   font-weight: 500;
   opacity: 0.6;
-  font-family: 'Groteska', sans-serif;
+  font-family: "Groteska", sans-serif;
   color: rgba(0, 0, 0, 0.6);
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -889,7 +901,7 @@ footer {
   font-size: 5rem; /* Larger for emphasis */
   font-weight: bold;
   color: black;
-  font-family: 'Groteska', sans-serif;
+  font-family: "Groteska", sans-serif;
   font-weight: 400;
 }
 
@@ -898,7 +910,7 @@ footer {
   font-weight: bold;
   color: black;
   opacity: 0.6;
-  font-family: 'Groteska', sans-serif;
+  font-family: "Groteska", sans-serif;
   font-weight: 400;
 }
 
@@ -913,21 +925,21 @@ footer {
 }
 
 .h2 {
-  font-family: 'Groteska', sans-serif;
+  font-family: "Groteska", sans-serif;
 }
 
 .h3 {
-  font-family: 'Groteska', sans-serif;
+  font-family: "Groteska", sans-serif;
 }
 .difficulty-heading {
-  font-family: 'Groteska`, sans-serif;';
+  font-family: "Groteska`, sans-serif;";
 }
 
 .instructions-list {
   list-style-type: disc;
   padding-left: 20px;
   margin-bottom: 15px;
-  font-family: 'Groteska', sans-serif;
+  font-family: "Groteska", sans-serif;
   font-size: 0.8em;
   text-align: left;
 }
@@ -936,11 +948,12 @@ footer {
   margin-bottom: 10px; /* Adjust spacing between each bullet point */
 }
 
-.instructions-list, .game-modes-list {
+.instructions-list,
+.game-modes-list {
   list-style-type: disc;
   padding-left: 20px;
   margin-bottom: 15px;
-  font-family: 'Groteska', sans-serif;
+  font-family: "Groteska", sans-serif;
   font-size: 0.8em;
   text-align: left;
 }
@@ -949,7 +962,7 @@ footer {
   list-style-type: disc;
   padding-left: 20px;
   margin-bottom: 15px;
-  font-family: 'Groteska', sans-serif;
+  font-family: "Groteska", sans-serif;
   font-size: 0.8em;
   text-align: left;
 }
@@ -969,7 +982,7 @@ footer {
   .win-message-container h2 {
     font-size: 2rem; /* Reduce heading size for mobile */
     margin-bottom: 20px;
-    font-family: 'Sf-Pro-Display', sans-serif;
+    font-family: "Sf-Pro-Display", sans-serif;
   }
 
   .win-message-container .subheader {
@@ -1003,40 +1016,42 @@ footer {
     font-size: 45px; /* Adjust emoji size */
   }
 
-  .instructions-list, .game-modes-list {
+  .instructions-list,
+  .game-modes-list {
     list-style-type: disc;
     padding-left: 20px;
     margin-bottom: 15px;
-    font-family: 'Groteska', sans-serif;
+    font-family: "Groteska", sans-serif;
     font-size: 0.8em;
   }
-  
+
   .instructions-list li {
     margin-bottom: 10px; /* Adjust spacing between each bullet point */
   }
-  
+
   .game-modes-list {
     list-style-type: none; /* Remove default bullets */
-    font-family: 'Groteska', sans-serif;
+    font-family: "Groteska", sans-serif;
   }
-  
+
   .instructions-container {
     text-align: left;
-    font-family: 'Groteska', sans-serif;
+    font-family: "Groteska", sans-serif;
     max-width: 400px; /* Adjust width as needed */
     margin: 0 auto;
   }
-  
-  .instructions-list, .game-modes-list {
+
+  .instructions-list,
+  .game-modes-list {
     list-style-type: disc;
     padding-left: 0px;
     margin-bottom: 15px;
   }
-  
+
   .game-modes-list {
     list-style-type: none; /* Remove default bullets */
   }
-  
+
   .game-modes-list li {
     margin-bottom: 9px;
   }
@@ -1047,7 +1062,7 @@ footer {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #EF8667; /* Red background for losing */
+  background: #ef8667; /* Red background for losing */
   color: rgb(0, 0, 0);
   padding-left: 80px;
   padding-right: 80px;
@@ -1063,7 +1078,7 @@ footer {
   font-size: 3rem;
   margin-bottom: 15px;
   margin-top: 0px;
-  font-family: 'Sf-Pro-Display', sans-serif;
+  font-family: "Sf-Pro-Display", sans-serif;
   color: rgb(0, 0, 0);
 }
 
@@ -1074,19 +1089,19 @@ footer {
 .lose-message-container .completion-time {
   font-size: 1rem;
   margin-bottom: 10px;
-  font-family: 'Groteska', sans-serif;
+  font-family: "Groteska", sans-serif;
 }
 
 .lose-message-container .best-time {
   font-size: 1.2rem;
   margin-bottom: 20px;
   opacity: 0.6;
-  font-family: 'Groteska', sans-serif;
+  font-family: "Groteska", sans-serif;
 }
 
 .lose-message-container .try-again-btn {
   background: rgb(0, 0, 0);
-  color: #5ED88D;
+  color: #01C482;
   border: none;
   padding: 40px 90px; /* Increased padding for larger size */
   font-size: 1rem; /* Increased font size */
@@ -1095,13 +1110,13 @@ footer {
   transition: transform 0.2s;
   margin-top: 1rem;
   margin-bottom: 1rem;
-  font-family: 'Groteska', sans-serif;
+  font-family: "Groteska", sans-serif;
   font-weight: 500;
 }
 
 .lose-message-container .try-again-btn:hover {
   transform: scale(1.02);
-  background: #ffffff;
+  background: #FFFBE8;
   color: #f44336;
 }
 
@@ -1119,7 +1134,7 @@ footer {
     font-size: 2.5rem; /* Reduce heading size for mobile */
     margin-bottom: 0px;
     font-weight: 200;
-    font-family: 'Sf-Pro-Display', sans-serif;
+    font-family: "Sf-Pro-Display", sans-serif;
   }
 
   .lose-message-container .subheader {
@@ -1137,3 +1152,167 @@ footer {
     border-radius: 50px; /* Maintain rounded look but scale down */
   }
 }
+
+.daily-challenge-btn {
+  background: #000000;
+  color: rgb(255, 255, 255);
+  border: #FEBE00 1px solid; /* Yellow border for daily challenge */
+  padding: 10px 192px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  font-family: "Groteska", sans-serif;
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+.daily-challenge-btn:hover {
+  transform: scale(1.02);
+  background: #FEBE00;
+  color: #000000;
+}
+
+/* Mobile Optimization */
+@media (max-width: 768px) {
+  .daily-challenge-btn {
+    padding: 10px 50px;
+    font-size: 0.9rem;
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+.daily-results-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #FEBE00; /* Yellow background for daily challenge */
+  color: rgb(0, 0, 0);
+  padding-left: 80px;
+  padding-right: 80px;
+  padding-top: 40px;
+  padding-bottom: 30px;
+  border-radius: 40px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.daily-results-container h2 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  margin-top: 0px;
+  font-family: "Sf-Pro-Display", sans-serif;
+  color: #000000;
+}
+
+.daily-results-container .subheader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.time-value-moves,
+.time-value-streak {
+  font-size: 3rem;
+  font-weight: bold;
+  color: black;
+  font-family: "Groteska", sans-serif;
+  font-weight: 400;
+}
+
+@media (max-width: 768px) {
+  .daily-results-container {
+    width: 50vw;
+    max-width: 350px;
+    padding: 25px;
+    border-radius: 20px;
+  }
+
+  .daily-results-container h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+
+  .time-value-moves,
+  .time-value-streak {
+    font-size: 2rem;
+  }
+}
+
+.divider {
+  border: none;
+  height: 1px;
+  background-color: #01C482;
+  margin: 15px 0;
+  opacity: 0.5;
+}
+
+.move-counter {
+  position: absolute;
+  top: 315px;
+  right: -150px;
+  font-family: "Groteska", sans-serif;
+  /* Add any additional styling you need */
+}
+
+@media (max-width: 768px) {
+  .move-counter {
+    top: -155px;
+    left: 15px;
+  }
+}
+
+.daily-results-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #FEBE00;
+  color: rgb(0, 0, 0);
+  padding-left: 80px;
+  padding-right: 80px;
+  padding-top: 40px;
+  padding-bottom: 30px;
+  border-radius: 40px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000; /* Ensure it is above other elements */
+}
+
+.daily-results-container .time-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.daily-results-container .time-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.6);
+  text-transform: uppercase;
+  font-family: "Groteska", sans-serif;
+  letter-spacing: 1px;
+  margin-bottom: 2px;
+}
+
+.daily-results-container .time-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: black;
+  font-family: "Groteska", sans-serif;
+  font-weight: 400;
+}
+
+.daily-results-container .time-value-moves {
+  font-size: 2rem;
+  font-weight: bold;
+  color: black;
+  font-family: "Groteska", sans-serif;
+  font-weight: 400;
+}
+
