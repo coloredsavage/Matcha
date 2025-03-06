@@ -12,6 +12,7 @@ import matchSound from "./sounds/right-card.mp3"
 import wrongMatchSound from "./sounds/wrong-card.mp3"
 import winSound from "./sounds/game-win.mp3"
 import loseSound from "./sounds/game-lost.mp3"
+import seedrandom from "seedrandom"
 
 const ConfettiEffect = ({ confettiRunning }) => {
   const confettiAnchorRef = useRef(null)
@@ -84,6 +85,8 @@ function App() {
   const [confettiRunning, setConfettiRunning] = useState(false)
   const [showInstructions, setShowInstructions] = useState(false)
   const [isMuted, setIsMuted] = useState(false)
+  const [copied, setCopied] = useState(false)
+  const [moveHistory, setMoveHistory] = useState([])
 
   // State variables for pausing
   const [gamePaused, setGamePaused] = useState(false)
@@ -137,7 +140,17 @@ function App() {
       }
     }
     const pairs = [...symbols, ...symbols]
-    const shuffled = pairs.sort(() => Math.random() - 0.5)
+
+    // Use seedrandom for daily challenge
+    let shuffled
+    if (isDailyChallenge) {
+      const today = new Date().toISOString().split("T")[0] // Get today's date in YYYY-MM-DD format
+      const rng = seedrandom(today)
+      shuffled = pairs.sort(() => rng() - 0.5)
+    } else {
+      shuffled = pairs.sort(() => Math.random() - 0.5)
+    }
+
     setCards(shuffled)
     setFlipped(memoryMode || difficulty === "easy" || isDailyChallenge ? [...Array(shuffled.length).keys()] : [])
     setMatched([])
@@ -218,28 +231,62 @@ function App() {
     if (flipped.length === 2) {
       setMoveCount((prevCount) => prevCount + 1) // Increment move count
       const [first, second] = flipped
+  
       if (cards[first] === cards[second]) {
-        if (!isMobileDevice()) matchAudio.play() // Modified
         setMatched([...matched, first, second])
+        setMoveHistory((prev) => [...prev, "✅"]) // Add success move
+        if (!isMuted && !isMobileDevice()) matchAudio.play() // Play match sound
       } else {
-        if (!isMobileDevice()) wrongMatchAudio.play() // Modified
+        setMoveHistory((prev) => [...prev, "❌"]) // Add wrong move
+        if (!isMuted && !isMobileDevice()) wrongMatchAudio.play() // Play wrong match sound
       }
+  
       setTimeout(() => setFlipped([]), 500)
     }
-  }, [flipped, cards])
-
-
+  }, [flipped, cards, isMuted])
 
   // In the useEffect for matched cards
   useEffect(() => {
     if (matched.length === cards.length && cards.length > 0) {
-      if (!isMobileDevice()) winAudio.play()
+      if (!isMuted && !isMobileDevice()) winAudio.play() // Modified
       const endTime = new Date()
-      const timeTaken = (endTime - startTime) / 1000
+      const timeTaken = (endTime - startTime - totalPausedTime) / 1000
       setCompletionTime(timeTaken)
-
+  
       if (isDailyChallenge) {
-        setShowDailyResults(true) // Ensures this updates BEFORE any other UI elements
+        // Save daily challenge completion
+        try {
+          const today = new Date().toISOString().split("T")[0]
+          const dailyScores = JSON.parse(localStorage.getItem("dailyScores") || "{}")
+  
+          // Save today's score
+          dailyScores[today] = { time: timeTaken, moves: moveCount }
+          localStorage.setItem("dailyScores", JSON.stringify(dailyScores))
+  
+          // Save move history
+          localStorage.setItem("dailyMoveHistory", JSON.stringify(moveHistory))
+  
+          // Update streak
+          let streak = Number(localStorage.getItem("dailyStreak") || "0")
+  
+          // Check if yesterday's challenge was completed
+          const yesterday = new Date()
+          yesterday.setDate(yesterday.getDate() - 1)
+          const yesterdayStr = yesterday.toISOString().split("T")[0]
+  
+          if (dailyScores[yesterdayStr]) {
+            streak += 1
+          } else {
+            streak = 1 // Reset streak if there was a gap
+          }
+  
+          localStorage.setItem("dailyStreak", streak.toString())
+          setDailyStreak(streak)
+        } catch (error) {
+          console.error("Error saving daily challenge completion:", error)
+        }
+  
+        setShowDailyResults(true)
       } else {
         // Regular game logic
         const roundedTimeTaken = Math.ceil(timeTaken)
@@ -247,18 +294,19 @@ function App() {
           setBestTime(roundedTimeTaken)
         }
       }
-
+  
       setConfettiRunning(true)
       setTimeout(() => setConfettiRunning(false), 8000)
     }
-  }, [matched, cards.length, startTime, bestTime, isDailyChallenge])
-
+  }, [matched, cards.length, startTime, bestTime, isDailyChallenge, moveCount, totalPausedTime, isMuted])
+  
+  
   // In the useEffect for game lost
   useEffect(() => {
     if (gameLost) {
-      if (!isMobileDevice()) loseAudio.play() // Modified
+      if (!isMuted && !isMobileDevice()) loseAudio.play() // Modified
     }
-  }, [gameLost])
+  }, [gameLost, isMuted])
 
   const formatElapsedTime = (time) => {
     const minutes = Math.floor(time / 60000)
@@ -296,6 +344,29 @@ function App() {
     }
   }, [isMuted])
 
+  useEffect(() => {
+    // Load daily challenge results from localStorage
+    const today = new Date().toISOString().split("T")[0]
+    const dailyScores = JSON.parse(localStorage.getItem("dailyScores") || "{}")
+    const todayScore = dailyScores[today]
+  
+    if (todayScore) {
+      setCompletionTime(todayScore.time)
+      setMoveCount(todayScore.moves)
+  
+      // Load move history
+      const savedMoveHistory = JSON.parse(localStorage.getItem("dailyMoveHistory") || "[]")
+      setMoveHistory(savedMoveHistory)
+  
+      // Load streak
+      const currentStreak = Number.parseInt(localStorage.getItem("dailyStreak") || "0")
+      setDailyStreak(currentStreak)
+  
+      setShowDailyResults(true)
+    }
+  }, [])
+
+  
   // Also add this effect to automatically mute on mobile when the component mounts
   useEffect(() => {
     const isMobile = window.innerWidth <= 768
@@ -330,10 +401,48 @@ function App() {
     loseAudio.volume = isMuted ? 0 : 1
   }, [isMuted])
 
+  // Replace the isDailyChallengeAvailable function with this implementation
   const isDailyChallengeAvailable = () => {
-    return true
+    const today = new Date().toISOString().split("T")[0]
+    try {
+      const dailyScores = JSON.parse(localStorage.getItem("dailyScores") || "{}")
+      return !dailyScores[today]
+    } catch (error) {
+      console.error("Error checking daily challenge availability:", error)
+      return true
+    }
   }
 
+  const handleShare = async () => {
+    if (completionTime === null) return
+  
+    // Format time as "Xm Ys"
+    const minutes = Math.floor(completionTime / 60)
+    const seconds = Math.floor(completionTime % 60)
+    const formattedTime = `${minutes}m ${seconds}s`
+  
+    // Convert move history array to a formatted string
+    let matchSequence = moveHistory.join(" ")
+  
+    // If player lost in Hard Mode, add ⏳ at the end
+    if (gameLost) matchSequence += " ⏳"
+  
+    // Construct the share message
+    const shareText = `MATCHA ❇️  
+  Moves: ${moveCount} | Time: ${formattedTime}  
+  ${matchSequence}  
+  Can you beat my score? Play here: https://matcha-game.com`
+  
+    try {
+      await navigator.clipboard.writeText(shareText)
+  
+      // Show "Copied!" message
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000) // Hide message after 2s
+    } catch (error) {
+      console.error("Failed to copy:", error)
+    }
+  }
   return (
     <div className={`App ${showDailyResults ? "daily-results-active" : ""}`}>
       <ConfettiEffect confettiRunning={confettiRunning} />
@@ -355,56 +464,56 @@ function App() {
         </button>
       )}
 
-{gameStarted && !completionTime && (
-  <div className="game-container">
-    <div className={`grid ${memoryMode ? `memory-grid-${memoryGrid}` : `${difficulty}-grid`}`}>
-      {cards.map((value, index) => (
-        <Card
-          key={index}
-          value={value}
-          isFlipped={flipped.includes(index) || matched.includes(index)}
-          onClick={() => !matched.includes(index) && !flipped.includes(index) && handleClick(index)}
-          status={
-            matched.includes(index)
-              ? "matched"
-              : flipped.includes(index) && flipped.length === 2 && cards[flipped[0]] !== cards[flipped[1]]
-                ? "unmatched"
-                : ""
-          }
-        />
-      ))}
-    </div>
-    {isDailyChallenge && (
-      <div className="move-counter">
-        <h3>Moves: {moveCount}</h3>
-      </div>
-    )}
-    <div
-      className={`timer ${memoryMode ? "memory-mode-timer" : difficulty === "hard" ? "hard-mode-timer" : difficulty === "medium" ? "medium-mode-timer" : "easy-mode-timer"}`}
-    >
-      {difficulty === "hard" && <h3 className="time-remaining">TIME REMAINING</h3>}
-      <h2
-        dangerouslySetInnerHTML={{
-          __html: difficulty === "hard" ? formatTime(timeRemaining, true) : formatTime(elapsedTime),
-        }}
-      />
-      {bestTime !== null && (
-        <h2 className="best-time" dangerouslySetInnerHTML={{ __html: formatTime(Math.ceil(bestTime * 1000)) }} />
-      )}
-    </div>
-  </div>
-)}
-      {completionTime !== null && !isDailyChallenge && !showDailyResults ? (
-        <div className="completion-time">
-          <h2 className="time-container">
-            <span className="time-value" dangerouslySetInnerHTML={{ __html: formatTime(completionTime * 1000) }} />
-            <span className="time-label">Completion Time</span>
-          </h2>
-          {bestTime !== null && (
-            <h2 className="best-time" dangerouslySetInnerHTML={{ __html: formatTime(Math.ceil(bestTime * 1000)) }} />
+      {gameStarted && !completionTime && (
+        <div className="game-container">
+          <div className={`grid ${memoryMode ? `memory-grid-${memoryGrid}` : `${difficulty}-grid`}`}>
+            {cards.map((value, index) => (
+              <Card
+                key={index}
+                value={value}
+                isFlipped={flipped.includes(index) || matched.includes(index)}
+                onClick={() => !matched.includes(index) && !flipped.includes(index) && handleClick(index)}
+                status={
+                  matched.includes(index)
+                    ? "matched"
+                    : flipped.includes(index) && flipped.length === 2 && cards[flipped[0]] !== cards[flipped[1]]
+                      ? "unmatched"
+                      : ""
+                }
+              />
+            ))}
+          </div>
+          {isDailyChallenge && (
+            <div className="move-counter">
+              <h3>Moves: {moveCount}</h3>
+            </div>
           )}
+          <div
+            className={`timer ${memoryMode ? "memory-mode-timer" : difficulty === "hard" ? "hard-mode-timer" : difficulty === "medium" ? "medium-mode-timer" : "easy-mode-timer"}`}
+          >
+            {difficulty === "hard" && <h3 className="time-remaining">TIME REMAINING</h3>}
+            <h2
+              dangerouslySetInnerHTML={{
+                __html: difficulty === "hard" ? formatTime(timeRemaining, true) : formatTime(elapsedTime),
+              }}
+            />
+            {bestTime !== null && (
+              <h2 className="best-time" dangerouslySetInnerHTML={{ __html: formatTime(Math.ceil(bestTime * 1000)) }} />
+            )}
+          </div>
         </div>
-      ) : null}
+      )}
+     {completionTime !== null && !isDailyChallenge && !showDailyResults ? (
+  <div className="completion-time">
+    <h2 className="time-container">
+      <span className="time-value" dangerouslySetInnerHTML={{ __html: formatTime(Math.ceil(completionTime * 1000)) }} />
+      <span className="time-label">Completion Time</span>
+    </h2>
+    {bestTime !== null && (
+      <h2 className="best-time" dangerouslySetInnerHTML={{ __html: formatTime(Math.ceil(bestTime * 1000)) }} />
+    )}
+  </div>
+) : null}
 
       {matched.length === cards.length && cards.length > 0 && !isDailyChallenge && (
         <div className="win-message-container">
@@ -482,14 +591,35 @@ function App() {
             <button
               className="daily-challenge-btn"
               onClick={() => {
-                setDifficulty("medium")
-                setIsDailyChallenge(true) // Set daily challenge state to true
-                setShowModal(false)
-                setShowInstructions(true)
+                // Check if player has already played today
+                if (isDailyChallengeAvailable()) {
+                  setDifficulty("medium")
+                  setIsDailyChallenge(true)
+                  setShowModal(false)
+                  setShowInstructions(true)
+                } else {
+                  // Show previous results instead of starting a new game
+                  setShowModal(false)
+
+                  // Load today's score data from localStorage
+                  const today = new Date().toISOString().split("T")[0]
+                  const dailyScores = JSON.parse(localStorage.getItem("dailyScores") || "{}")
+                  const todayScore = dailyScores[today]
+
+                  if (todayScore) {
+                    setCompletionTime(todayScore.time)
+                    setMoveCount(todayScore.moves)
+
+                    // Load streak
+                    const currentStreak = Number.parseInt(localStorage.getItem("dailyStreak") || "0")
+                    setDailyStreak(currentStreak)
+
+                    setShowDailyResults(true)
+                  }
+                }
               }}
-              disabled={!isDailyChallengeAvailable()}
             >
-              {isDailyChallengeAvailable() ? "Daily Challenge" : "Daily Challenge Completed"}
+              {isDailyChallengeAvailable() ? "Daily Challenge" : "View Today's Results"}
             </button>
           </div>
         </Modal>
@@ -575,38 +705,48 @@ function App() {
         </Modal>
       )}
 
-      {showDailyResults && (
-        <Modal
-          onClose={() => {
-            setShowDailyResults(false)
-          }}
-          hideContent={true} // Add this line to hide the modal content
-        >
-          <div className="daily-results-container">
-            <div className="fire-emoji">🏆</div>
-            <h2>Daily Challenge Complete!</h2>
-            <div className="subheader">
-              <div className="time-container">
-                <span className="time-value-moves">{moveCount}</span>
-                <span className="time-label">Moves</span>
-              </div>
-              <div className="time-container">
-                <span className="time-value" dangerouslySetInnerHTML={{ __html: formatTime(completionTime * 1000) }} />
-                <span className="time-label">Time</span>
-              </div>
-            </div>
-            <button
-              onClick={() => {
-                setShowDailyResults(false)
-                setGameStarted(false)
-              }}
-              className="play-again-btn"
-            >
-              Back to Menu
-            </button>
-          </div>
-        </Modal>
-      )}
+{showDailyResults && (
+  <Modal
+    onClose={() => {
+      setShowDailyResults(false)
+    }}
+    hideContent={true}
+  >
+    <div className="daily-results-container">
+      <div className="fire-emoji">🏆</div>
+      <h2>Daily Challenge Complete!</h2>
+      <div className="subheader">
+        <div className="time-container">
+          <span className="time-value-moves">{moveCount}</span>
+          <span className="time-label">Moves</span>
+        </div>
+        <div className="time-container">
+          <span className="time-value" dangerouslySetInnerHTML={{ __html: formatTime(completionTime * 1000) }} />
+          <span className="time-label">Time</span>
+        </div>
+        <div className="time-container">
+          <span className="time-value-streak">{dailyStreak}</span>
+          <span className="time-label">Day Streak 🔥</span>
+        </div>
+      </div>
+      <button
+        onClick={() => {
+          setShowDailyResults(false)
+          setGameStarted(false)
+          setCompletionTime(null) // Reset the completion time
+        }}
+        className="play-again-btn"
+      >
+        Back to Menu
+      </button>
+
+      {/* Share Results button */}
+      <button onClick={handleShare} className="share-btn">
+  {copied ? "Copied!" : "Share Results"}
+</button>
+    </div>
+  </Modal>
+)}
 
       <footer>
         <p>© 2025 Matcha Game. All rights reserved.</p>

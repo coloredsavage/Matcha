@@ -36,7 +36,7 @@
 /* Change background color to #000000 */
 body {
   background-color: #000000;
-  color: #FFFBE8; /* Ensure text is readable on dark background */
+  color: #fffbe8; /* Ensure text is readable on dark background */
 }
 
 /* Center the game landing page UI */
@@ -68,7 +68,7 @@ body {
 
 /* Style the start game button */
 .start-game-btn {
-  background: #01C482;
+  background: #01c482;
   color: black;
   border: none;
   padding: 20px 80px; /* Increased padding for larger size */
@@ -83,7 +83,7 @@ body {
 
 .start-game-btn:hover {
   transform: scale(1.02);
-  background: #FFFBE8; /* Slightly darker shade on hover */
+  background: #fffbe8; /* Slightly darker shade on hover */
 }
 
 /* Existing styles */
@@ -204,18 +204,18 @@ footer {
 }
 
 .front {
-  background: #01C482;
-  color: #FFFBE8;
+  background: #01c482;
+  color: #fffbe8;
   transform: rotateY(0deg);
 }
 
 .back {
-  background: #FFFBE8;
+  background: #fffbe8;
   transform: rotateY(180deg);
 }
 
 .card.matched .card-back {
-  background-color: #FEBE00;
+  background-color: #febe00;
 }
 
 .card.unmatched .card-back {
@@ -234,7 +234,7 @@ footer {
   margin: 20px auto;
   padding: 15px 30px;
   background: #4caf50;
-  color: #FFFBE8;
+  color: #fffbe8;
   border-radius: 50px;
   animation: celebrate 0.5s ease-in-out 3;
 }
@@ -252,7 +252,7 @@ footer {
 }
 
 .win-message {
-  background: #FFFBE8;
+  background: #fffbe8;
   padding: 2rem;
   border-radius: 15px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -262,7 +262,7 @@ footer {
 
 .play-again-btn {
   background: #000000;
-  color: #01C482;
+  color: #01c482;
   border: none;
   padding: 30px 80px; /* Increased padding for larger size */
   font-size: 1.2rem; /* Increased font size */
@@ -277,7 +277,7 @@ footer {
 
 .play-again-btn:hover {
   transform: scale(1.02);
-  background: #FFFBE8;
+  background: #fffbe8;
   color: rgb(0, 0, 0);
 }
 
@@ -306,7 +306,7 @@ footer {
 }
 
 .medium-mode-timer {
-  color: #FFFBE8; /* Orange color for medium mode timer */
+  color: #fffbe8; /* Orange color for medium mode timer */
   font-weight: bold;
   font-size: 2rem;
   font-family: "Groteska", sans-serif;
@@ -316,7 +316,7 @@ footer {
 }
 
 .easy-mode-timer {
-  color: #FFFBE8; /* Deep Sky Blue color for easy mode timer */
+  color: #fffbe8; /* Deep Sky Blue color for easy mode timer */
   font-weight: bold;
   font-size: 2rem;
   position: absolute;
@@ -418,7 +418,7 @@ footer {
 }
 
 .time-remaining {
-  color: #FFFBE8; /* Gold color for the text */
+  color: #fffbe8; /* Gold color for the text */
   font-weight: 200;
   font-size: 0.7rem;
   font-family: "Groteska", sans-serif;
@@ -453,7 +453,7 @@ footer {
   }
 
   .time-remaining {
-    color: #FFFBE8; /* Gold color for the text */
+    color: #fffbe8; /* Gold color for the text */
     font-weight: 200;
     font-size: 0.7rem;
     font-family: "Groteska", sans-serif;
@@ -469,7 +469,7 @@ footer {
   margin: 20px auto;
   padding: 15px 30px;
   background: #ef8667;
-  color: #FFFBE8;
+  color: #fffbe8;
   border-radius: 50px;
   text-align: center;
 }
@@ -564,7 +564,7 @@ footer {
 
   .main-time {
     font-size: 2.5rem;
-    color: #01C482;
+    color: #01c482;
   }
 
   .milliseconds {
@@ -616,7 +616,7 @@ footer {
 .modal-content {
   background: rgb(0, 0, 0);
   padding: 45px 90px;
-  border: #01C482 1px solid;
+  border: #01c482 1px solid;
   border-radius: 20px;
   position: relative;
   max-width: 500px;
@@ -642,7 +642,7 @@ footer {
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background-color: #FFFBE8;
+  background-color: #fffbe8;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -692,7 +692,7 @@ footer {
   padding: 5px;
   background: #000000;
   color: rgb(255, 255, 255);
-  border: #01C482 1px solid;
+  border: #01c482 1px solid;
   padding: 10px 193px;
   font-size: 1rem;
   border-radius: 5px;
@@ -708,7 +708,7 @@ footer {
   padding: 10px 20px;
   font-size: 1.1rem;
   background-color: #4caf50;
-  color: #FFFBE8;
+  color: #fffbe8;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -721,7 +721,7 @@ footer {
 .memory-mode-btn {
   background: #000000;
   color: rgb(255, 255, 255);
-  border: #01C482 1px solid;
+  border: #01c482 1px solid;
   padding: 10px 192px;
   font-size: 1rem;
   border-radius: 5px;
@@ -743,7 +743,7 @@ footer {
 
 .memory-mode-btn:hover {
   transform: scale(1.02);
-  background: #01C482;
+  background: #01c482;
   color: #000000;
 }
 
@@ -757,7 +757,7 @@ footer {
 .memory-grid-btn {
   background: #000000;
   color: rgb(255, 255, 255);
-  border: #01C482 1px solid;
+  border: #01c482 1px solid;
   padding: 10px 193px;
   font-size: 1rem;
   border-radius: 5px;
@@ -779,7 +779,7 @@ footer {
 }
 
 .memory-grid-btn:hover {
-  background: #01C482;
+  background: #01c482;
   color: #000000;
 }
 
@@ -808,7 +808,7 @@ footer {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #01C482;
+  background: #01c482;
   color: rgb(0, 0, 0);
   padding-left: 80px;
   padding-right: 80px;
@@ -847,7 +847,7 @@ footer {
 
 .win-message-container .play-again-btn {
   background: #000000;
-  color: #01C482;
+  color: #01c482;
   border: none;
   padding: 30px 80px; /* Increased padding for larger size */
   font-size: 1.2rem; /* Increased font size */
@@ -858,12 +858,11 @@ footer {
   margin-bottom: 1rem;
   font-family: "Groteska", sans-serif;
   font-weight: 500;
-  
 }
 
 .win-message-container .play-again-btn:hover {
   transform: scale(1.02);
-  background: #FFFBE8;
+  background: #fffbe8;
   color: rgb(0, 0, 0);
 }
 
@@ -1031,7 +1030,6 @@ footer {
 
   .game-modes-list {
     list-style-type: none; /* Remove default bullets */
-    font-family: "Groteska", sans-serif;
   }
 
   .instructions-container {
@@ -1101,7 +1099,7 @@ footer {
 
 .lose-message-container .try-again-btn {
   background: rgb(0, 0, 0);
-  color: #01C482;
+  color: #01c482;
   border: none;
   padding: 40px 90px; /* Increased padding for larger size */
   font-size: 1rem; /* Increased font size */
@@ -1116,7 +1114,7 @@ footer {
 
 .lose-message-container .try-again-btn:hover {
   transform: scale(1.02);
-  background: #FFFBE8;
+  background: #fffbe8;
   color: #f44336;
 }
 
@@ -1156,7 +1154,7 @@ footer {
 .daily-challenge-btn {
   background: #000000;
   color: rgb(255, 255, 255);
-  border: #FEBE00 1px solid; /* Yellow border for daily challenge */
+  border: #febe00 1px solid; /* Yellow border for daily challenge */
   padding: 10px 192px;
   font-size: 1rem;
   border-radius: 5px;
@@ -1169,7 +1167,7 @@ footer {
 
 .daily-challenge-btn:hover {
   transform: scale(1.02);
-  background: #FEBE00;
+  background: #febe00;
   color: #000000;
 }
 
@@ -1188,7 +1186,7 @@ footer {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #FEBE00; /* Yellow background for daily challenge */
+  background: #febe00; /* Yellow background for daily challenge */
   color: rgb(0, 0, 0);
   padding-left: 80px;
   padding-right: 80px;
@@ -1246,7 +1244,7 @@ footer {
 .divider {
   border: none;
   height: 1px;
-  background-color: #01C482;
+  background-color: #01c482;
   margin: 15px 0;
   opacity: 0.5;
 }
@@ -1271,7 +1269,7 @@ footer {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #FEBE00;
+  background: #febe00;
   color: rgb(0, 0, 0);
   padding-left: 80px;
   padding-right: 80px;
@@ -1314,5 +1312,149 @@ footer {
   color: black;
   font-family: "Groteska", sans-serif;
   font-weight: 400;
+}
+
+/* Add styles for the streak display in the daily results container */
+.time-value-streak {
+  font-size: 3rem;
+  font-weight: bold;
+  color: black;
+  font-family: "Groteska", sans-serif;
+  font-weight: 400;
+}
+
+.streak-container {
+  margin-top: 15px;
+  margin-bottom: 20px;
+  font-family: "Groteska", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.streak-value {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 8px 16px;
+  border-radius: 20px;
+}
+
+@media (max-width: 768px) {
+  .time-value-streak {
+    font-size: 2rem;
+  }
+
+  .streak-container {
+    font-size: 1rem;
+  }
+}
+
+.reset-daily-btn {
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  font-family: "Groteska", sans-serif;
+  font-weight: 400;
+}
+
+.reset-daily-btn:hover {
+  background: #ff3333;
+}
+
+/* Add these styles to your App.css file */
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin-top: 2rem;
+}
+
+.stats-nav-button {
+  background: #febe00;
+  color: black;
+  border: none;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stats-nav-button:hover {
+  transform: scale(1.1);
+  background: #ffca3a;
+}
+
+.stats-page-container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.stats-header h1 {
+  font-size: 24px;
+  font-weight: bold;
+  font-family: "Groteska", sans-serif;
+  color: #fffbe8;
+}
+
+@media (max-width: 768px) {
+  .stats-page-container {
+    padding: 15px;
+  }
+
+  .stats-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+}
+
+/* Add styles for the Share button */
+.share-btn {
+  background: #000000;
+  color: #febe00;
+  border: 1px solid #febe00;
+  padding: 30px 80px; /* Increased padding for larger size */
+  font-size: 1.2rem; /* Increased font size */
+  border-radius: 75px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  margin-top: 0rem;
+  margin-bottom: 1rem;
+  font-family: "Groteska", sans-serif;
+  font-weight: 500;
+}
+
+.share-btn:hover {
+  transform: scale(1.02);
+  background: #ffffff;
+  color: #000000;
+}
+
+/* Mobile optimization for the share button */
+@media (max-width: 768px) {
+  .share-btn {
+    padding: 12px 30px;
+    font-size: 0.9rem;
+    margin-top: 10px;
+  }
 }
 
