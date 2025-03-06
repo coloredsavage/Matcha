@@ -1,3 +1,4 @@
+import React from "react";
 import "./Card.css"
 import logo from './assets/matcha-logo.svg'; // Update the path to your logo image
 
