@@ -1545,3 +1545,31 @@ p a {
 p a:hover {
   color: #01c482;  /* Slight fade effect on hover */
 }
+
+.signup-link-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.signup-link {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-family: "Groteska", sans-serif;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.2s;
+  padding: 0;
+}
+
+.signup-link:hover {
+  color: #01c482;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .signup-link {
+    font-size: 0.7rem;
+  }
+}

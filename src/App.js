@@ -117,6 +117,11 @@ function App() {
     setShowMailchimpModal(true)
   }
 
+  const handleDifficultyModalSignupClick = () => {
+    setShowModal(false)
+    setShowMailchimpModal(true)
+  }
+
   // Modify the initializeGame function to check if the user has played a game before
   const initializeGame = useCallback(() => {
     // If the user has already played a game, show the Mailchimp modal
@@ -590,85 +595,94 @@ Can you beat my score? Play here: https://matcha-game.com`}
         </div>
       )}
 
-      {showModal && (
-        <Modal
-          onClose={() => {
+{
+  showModal && (
+    <Modal
+      onClose={() => {
+        setShowModal(false)
+        if (gamePaused) {
+          const pauseDuration = new Date() - pauseStartTime
+          setTotalPausedTime((prev) => prev + pauseDuration)
+          setGamePaused(false)
+        }
+      }}
+    >
+      <div>
+        <img src={logo || "/placeholder.svg"} alt="Matcha Logo" className="logo" />
+        <h2 className="difficulty-heading">Select Your Difficulty</h2>
+        <div className="difficulty-buttons">
+          {["easy", "medium", "hard"].map((level) => (
+            <button
+              key={level}
+              className="difficulty-btn"
+              onClick={() => {
+                setDifficulty(level)
+                setIsDailyChallenge(false)
+                setShowModal(false)
+                setShowInstructions(true)
+              }}
+            >
+              {level.charAt(0).toUpperCase() + level.slice(1)}
+            </button>
+          ))}
+        </div>
+        <hr className="divider" />
+        <button
+          className="memory-mode-btn"
+          onClick={() => {
             setShowModal(false)
-            if (gamePaused) {
-              const pauseDuration = new Date() - pauseStartTime
-              setTotalPausedTime((prev) => prev + pauseDuration)
-              setGamePaused(false)
+            setShowMemoryModal(true)
+            setIsDailyChallenge(false)
+          }}
+        >
+          Memory Mode
+        </button>
+        <hr className="divider" />
+        <button
+          className="daily-challenge-btn"
+          onClick={() => {
+            // Check if player has already played today
+            if (isDailyChallengeAvailable()) {
+              setDifficulty("medium")
+              setIsDailyChallenge(true)
+              localStorage.setItem("wasPlayingDailyChallenge", "true")
+              setShowModal(false)
+              setShowInstructions(true)
+            } else {
+              // Show previous results instead of starting a new game
+              setShowModal(false)
+
+              // Load today's score data from localStorage
+              const today = new Date().toISOString().split("T")[0]
+              const dailyScores = JSON.parse(localStorage.getItem("dailyScores") || "{}")
+              const todayScore = dailyScores[today]
+
+              if (todayScore) {
+                setCompletionTime(todayScore.time)
+                setMoveCount(todayScore.moves)
+
+                // Load streak
+                const currentStreak = Number.parseInt(localStorage.getItem("dailyStreak") || "0")
+                setDailyStreak(currentStreak)
+
+                setShowDailyResults(true)
+              }
             }
           }}
         >
-          <div>
-            <img src={logo || "/placeholder.svg"} alt="Matcha Logo" className="logo" />
-            <h2 className="difficulty-heading">Select Your Difficulty</h2>
-            <div className="difficulty-buttons">
-              {["easy", "medium", "hard"].map((level) => (
-                <button
-                  key={level}
-                  className="difficulty-btn"
-                  onClick={() => {
-                    setDifficulty(level)
-                    setIsDailyChallenge(false)
-                    setShowModal(false)
-                    setShowInstructions(true)
-                  }}
-                >
-                  {level.charAt(0).toUpperCase() + level.slice(1)}
-                </button>
-              ))}
-            </div>
-            <hr className="divider" />
-            <button
-              className="memory-mode-btn"
-              onClick={() => {
-                setShowModal(false)
-                setShowMemoryModal(true)
-                setIsDailyChallenge(false)
-              }}
-            >
-              Memory Mode
-            </button>
-            <hr className="divider" />
-            <button
-              className="daily-challenge-btn"
-              onClick={() => {
-                // Check if player has already played today
-                if (isDailyChallengeAvailable()) {
-                  setDifficulty("medium")
-                  setIsDailyChallenge(true)
-                  localStorage.setItem("wasPlayingDailyChallenge", "true")
-                  setShowModal(false)
-                  setShowInstructions(true)
-                } else {
-                  // Show previous results instead of starting a new game
-                  setShowModal(false)
+          {isDailyChallengeAvailable() ? "Daily Challenge" : "View Today's Results"}
+        </button>
 
-                  // Load today's score data from localStorage
-                  const today = new Date().toISOString().split("T")[0]
-                  const dailyScores = JSON.parse(localStorage.getItem("dailyScores") || "{}")
-                  const todayScore = dailyScores[today]
-
-                  if (todayScore) {
-                    setCompletionTime(todayScore.time)
-                    setMoveCount(todayScore.moves)
-
-                    // Load streak
-                    const currentStreak = Number.parseInt(localStorage.getItem("dailyStreak") || "0")
-                    setDailyStreak(currentStreak)
-
-                    setShowDailyResults(true)
-                  }
-                }
-              }}
-            >
-              {isDailyChallengeAvailable() ? "Daily Challenge" : "View Today's Results"}
-            </button>
-          </div>
-        </Modal>
-      )}
+        {/* Add signup link */}
+        <div className="signup-link-container">
+              <button className="signup-link" onClick={handleDifficultyModalSignupClick}>
+                Signup to know when there's a new daily challenge
+              </button>
+        </div>
+      </div>
+    </Modal>
+  )
+}
 
       {showMemoryModal && (
         <Modal
