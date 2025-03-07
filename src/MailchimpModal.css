@@ -152,8 +152,19 @@
     justify-content: center;
     cursor: pointer;
     z-index: 5000; /* Ensure it appears above other elements */
-    transition: transform 0.2s, background-color 0.2s;
+    transition: transform 0.
+    2s, background-color 0.2s;
   }
+
+  @media (max-width: 480px) {
+    .close-button {
+        top: 10VH;
+        right: 10px;
+        width: 26px;
+        height: 26px;
+        font-size: 12px;
+    }
+}
   
   .close-button:hover {
     transform: scale(1.1);
