@@ -1,0 +1,164 @@
+.mailchimp-container {
+    font-family: "Groteska", sans-serif;
+    color: #fffbe8;
+    text-align: center;
+  }
+  
+  .mailchimp-header {
+    margin-bottom: 20px;
+  }
+  
+  .mailchimp-header h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    font-family: "Groteska", sans-serif;
+  }
+  
+  .mailchimp-header p {
+    font-size: 1rem;
+    opacity: 0.8;
+  }
+  
+  .mailchimp-footer {
+    margin-top: 15px;
+    font-size: 0.8rem;
+    opacity: 0.7;
+  }
+  
+  /* Mailchimp form styling */
+  #mc_embed_signup {
+    background: transparent !important;
+    clear: left;
+    font-family: "Groteska", sans-serif !important;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  #mc_embed_signup .indicates-required {
+    text-align: right;
+    font-size: 0.8rem;
+    margin-right: 4%;
+    color: #fffbe8;
+    opacity: 0.7;
+    margin-bottom: 10px;
+  }
+  
+  #mc_embed_signup .asterisk {
+    color: #01c482;
+    font-size: 1.2em;
+  }
+  
+  #mc_embed_signup .mc-field-group {
+    width: 96%;
+    padding-bottom: 3%;
+    min-height: 50px;
+  }
+  
+  #mc_embed_signup .mc-field-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    color: #fffbe8;
+    text-align: left;
+  }
+  
+  #mc_embed_signup .mc-field-group input {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid rgba(255, 251, 232, 0.3);
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: #fffbe8;
+    font-size: 1rem;
+    font-family: "Groteska", sans-serif;
+  }
+  
+  #mc_embed_signup .mc-field-group input:focus {
+    outline: none;
+    border-color: #01c482;
+  }
+  
+  #mc_embed_signup .button {
+    background-color: #01c482;
+    color: black;
+    border: none;
+    border-radius: 75px;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0px 50px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    font-family: "Groteska", sans-serif;
+    margin-top: 10px;
+  }
+  
+  #mc_embed_signup .button:hover {
+    transform: scale(1.02);
+    background-color: #fffbe8;
+  }
+  
+  #mc_embed_signup div.response {
+    margin: 1em 0;
+    padding: 1em;
+    font-weight: bold;
+    float: left;
+    top: -1.5em;
+    z-index: 1;
+    width: 80%;
+    color: #fffbe8;
+  }
+  
+  #mc_embed_signup #mce-error-response {
+    background-color: rgba(239, 134, 103, 0.2);
+    border-radius: 8px;
+  }
+  
+  #mc_embed_signup #mce-success-response {
+    background-color: rgba(1, 196, 130, 0.2);
+    border-radius: 8px;
+  }
+  
+  /* Mobile responsiveness */
+  @media (max-width: 768px) {
+    .mailchimp-header h2 {
+      font-size: 1.5rem;
+    }
+  
+    .mailchimp-header p {
+      font-size: 0.9rem;
+    }
+  
+    #mc_embed_signup .button {
+      padding: 0px 30px;
+      font-size: 0.9rem;
+    }
+  }
+  
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: #000000; /* Match the app's primary color */
+    color: #ffffff; /* Black text on colored background */
+    border: none;
+    border-radius: 50%; /* Make it a circle */
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 5000; /* Ensure it appears above other elements */
+    transition: transform 0.2s, background-color 0.2s;
+  }
+  
+  .close-button:hover {
+    transform: scale(1.1);
+    background: #ffffff;
+    color: #000000;
+  }
+  
+  

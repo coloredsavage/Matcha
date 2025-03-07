@@ -1,4 +1,4 @@
-import React from "react";
+"use client"
 import logo from "./MATCHA.svg" // Import the default logo image
 import mobileLogo from "./MOBILE_MATCHA.svg" // Import the mobile logo image
 import icon1 from "./assets/ask.svg" // Import the first icon
@@ -14,9 +14,27 @@ const NavBar = ({ onIcon1Click, onIcon2Click, onIcon3Click, isMuted }) => {
   return (
     <nav className="navbar">
       <div className="navbar-logo">
-      <a href="/" onClick={(e) => { e.preventDefault(); window.location.reload(); }}>          <img src={logo || "/placeholder.svg"} alt="Matcha Logo" className="desktop-logo" />
+        <a
+          href="/"
+          onClick={(e) => {
+            e.preventDefault()
+            // Instead of reloading, we'll reset the game state
+            localStorage.removeItem("wasPlayingDailyChallenge")
+            window.location.reload()
+          }}
+        >
+          <img src={logo || "/placeholder.svg"} alt="Matcha Logo" className="desktop-logo" />
         </a>
-        <a href="/" onClick={(e) => { e.preventDefault(); window.location.reload(); }}>          <img src={mobileLogo || "/placeholder.svg"} alt="Matcha Mobile Logo" className="mobile-logo" />
+        <a
+          href="/"
+          onClick={(e) => {
+            e.preventDefault()
+            // Instead of reloading, we'll reset the game state
+            localStorage.removeItem("wasPlayingDailyChallenge")
+            window.location.reload()
+          }}
+        >
+          <img src={mobileLogo || "/placeholder.svg"} alt="Matcha Mobile Logo" className="mobile-logo" />
         </a>
       </div>
       <div className="navbar-icons">
@@ -24,21 +42,30 @@ const NavBar = ({ onIcon1Click, onIcon2Click, onIcon3Click, isMuted }) => {
           src={icon1 || "/placeholder.svg"}
           alt="How to Play"
           className="navbar-icon"
-          onClick={onIcon1Click}
+          onClick={(e) => {
+            e.preventDefault()
+            onIcon1Click()
+          }}
           title="How to Play"
         />
         <img
           src={icon2 || "/placeholder.svg"}
           alt="Select Difficulty"
           className="navbar-icon"
-          onClick={onIcon2Click}
+          onClick={(e) => {
+            e.preventDefault()
+            onIcon2Click()
+          }}
           title="Select Difficulty"
         />
         <img
           src={(isMuted ? icon4 : icon3) || "/placeholder.svg"}
           alt={isMuted ? "Music Muted" : "Music"}
           className="navbar-icon"
-          onClick={onIcon3Click}
+          onClick={(e) => {
+            e.preventDefault()
+            onIcon3Click()
+          }}
           title={isMuted ? "Unmute Music" : "Mute Music"}
         />
       </div>
@@ -47,3 +74,4 @@ const NavBar = ({ onIcon1Click, onIcon2Click, onIcon3Click, isMuted }) => {
 }
 
 export default NavBar
+

@@ -1,5 +1,4 @@
 "use client"
-import React from "react";
 import { useRef, useState, useEffect, useCallback } from "react"
 import Card from "./Card"
 import Modal from "./Modal"
@@ -13,6 +12,8 @@ import wrongMatchSound from "./sounds/wrong-card.mp3"
 import winSound from "./sounds/game-win.mp3"
 import loseSound from "./sounds/game-lost.mp3"
 import seedrandom from "seedrandom"
+import SharePanel from "./SharePanel"
+import MailchimpModal from "./MailchimpModal"
 
 const ConfettiEffect = ({ confettiRunning }) => {
   const confettiAnchorRef = useRef(null)
@@ -98,12 +99,33 @@ function App() {
   const [moveCount, setMoveCount] = useState(0)
   const [dailyStreak, setDailyStreak] = useState(0)
 
+  // Update the state variable for share panel
+  const [showSharePanel, setShowSharePanel] = useState(false)
+
+  // Add this state variable at the top of the App component
+  const [showMailchimpModal, setShowMailchimpModal] = useState(false)
+  const [hasPlayedGame, setHasPlayedGame] = useState(false)
+
   // Add this helper function inside the App component
   const isMobileDevice = () => {
     return window.innerWidth <= 768 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
   }
 
+  // Add this function to handle the signup button click in the footer
+  const handleSignupClick = (e) => {
+    e.preventDefault()
+    setShowMailchimpModal(true)
+  }
+
+  // Modify the initializeGame function to check if the user has played a game before
   const initializeGame = useCallback(() => {
+    // If the user has already played a game, show the Mailchimp modal
+    if (hasPlayedGame && !localStorage.getItem("mailchimpModalShown")) {
+      setShowMailchimpModal(true)
+      localStorage.setItem("mailchimpModalShown", "true")
+      return
+    }
+
     let symbols
     let gridSize
     if (memoryMode) {
@@ -170,7 +192,7 @@ function App() {
     } else {
       setStartTime(new Date())
     }
-  }, [difficulty, memoryMode, memoryGrid, hardModeTimeLimit, isDailyChallenge])
+  }, [difficulty, memoryMode, memoryGrid, hardModeTimeLimit, isDailyChallenge, hasPlayedGame])
 
   useEffect(() => {
     if (gameStarted) {
@@ -179,18 +201,23 @@ function App() {
   }, [gameStarted, initializeGame])
 
   const formatTime = (time, isHardMode = false) => {
-    const roundedTime = Math.round(time / 1000) * 1000 // Round to the nearest second
+    // If game is completed, don't allow time to increase beyond completion time
+    if (completionTime !== null && !isHardMode) {
+      time = Math.min(time, completionTime * 1000)
+    }
+
+    const roundedTime = Math.round(time) // Remove rounding to the nearest second
     const hours = Math.floor(roundedTime / 3600000)
     const minutes = Math.floor((roundedTime % 3600000) / 60000)
     const seconds = Math.floor((roundedTime % 60000) / 1000)
     const milliseconds = roundedTime % 1000
-  
+
     let timeString = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.<span class="milliseconds">${milliseconds.toString().padStart(3, "0")}</span>`
-  
+
     if (hours > 0) {
       timeString = `${hours.toString().padStart(2, "0")}:${timeString}`
     }
-  
+
     if (isHardMode && Math.floor(roundedTime / 1000) <= 10) {
       return `<span class="text-red-500">${timeString}</span>`
     }
@@ -199,7 +226,14 @@ function App() {
 
   useEffect(() => {
     let timer
-    if (startTime && matched.length < cards.length && !gamePaused) {
+    if (
+      startTime &&
+      matched.length < cards.length &&
+      !gamePaused &&
+      !showDailyResults &&
+      completionTime === null &&
+      gameStarted
+    ) {
       timer = setInterval(() => {
         const currentTime = new Date()
         const elapsed = currentTime - startTime - totalPausedTime
@@ -217,8 +251,18 @@ function App() {
       }, 10)
     }
     return () => clearInterval(timer)
-  }, [startTime, matched.length, cards.length, difficulty, hardModeTimeLimit, gamePaused, totalPausedTime])
-
+  }, [
+    startTime,
+    matched.length,
+    cards.length,
+    difficulty,
+    hardModeTimeLimit,
+    gamePaused,
+    totalPausedTime,
+    showDailyResults,
+    completionTime,
+    gameStarted,
+  ])
   // Update all audio playback instances to include mobile check
   const handleClick = (index) => {
     if (flipped.length < 2 && !flipped.includes(index)) {
@@ -232,7 +276,7 @@ function App() {
     if (flipped.length === 2) {
       setMoveCount((prevCount) => prevCount + 1) // Increment move count
       const [first, second] = flipped
-  
+
       if (cards[first] === cards[second]) {
         setMatched([...matched, first, second])
         setMoveHistory((prev) => [...prev, "✅"]) // Add success move
@@ -241,52 +285,53 @@ function App() {
         setMoveHistory((prev) => [...prev, "❌"]) // Add wrong move
         if (!isMuted && !isMobileDevice()) wrongMatchAudio.play() // Play wrong match sound
       }
-  
+
       setTimeout(() => setFlipped([]), 500)
     }
   }, [flipped, cards, isMuted])
 
-  // In the useEffect for matched cards
+  // Modify the useEffect for matched cards to set hasPlayedGame to true when a game is completed
   useEffect(() => {
     if (matched.length === cards.length && cards.length > 0) {
       if (!isMuted && !isMobileDevice()) winAudio.play() // Modified
       const endTime = new Date()
       const timeTaken = (endTime - startTime - totalPausedTime) / 1000
       setCompletionTime(timeTaken)
-  
+      setHasPlayedGame(true) // Set hasPlayedGame to true when a game is completed
+
       if (isDailyChallenge) {
         // Save daily challenge completion
         try {
           const today = new Date().toISOString().split("T")[0]
           const dailyScores = JSON.parse(localStorage.getItem("dailyScores") || "{}")
-  
+
           // Save today's score
           dailyScores[today] = { time: timeTaken, moves: moveCount }
           localStorage.setItem("dailyScores", JSON.stringify(dailyScores))
-  
+
           // Save move history
           localStorage.setItem("dailyMoveHistory", JSON.stringify(moveHistory))
-  
+
           // Update streak
           let streak = Number(localStorage.getItem("dailyStreak") || "0")
-  
+
           // Check if yesterday's challenge was completed
           const yesterday = new Date()
           yesterday.setDate(yesterday.getDate() - 1)
           const yesterdayStr = yesterday.toISOString().split("T")[0]
-  
+
           if (dailyScores[yesterdayStr]) {
             streak += 1
           } else {
             streak = 1 // Reset streak if there was a gap
           }
-  
+
           localStorage.setItem("dailyStreak", streak.toString())
           setDailyStreak(streak)
         } catch (error) {
           console.error("Error saving daily challenge completion:", error)
         }
-  
+
         setShowDailyResults(true)
       } else {
         // Regular game logic
@@ -295,13 +340,12 @@ function App() {
           setBestTime(roundedTimeTaken)
         }
       }
-  
+
       setConfettiRunning(true)
       setTimeout(() => setConfettiRunning(false), 8000)
     }
   }, [matched, cards.length, startTime, bestTime, isDailyChallenge, moveCount, totalPausedTime, isMuted])
-  
-  
+
   // In the useEffect for game lost
   useEffect(() => {
     if (gameLost) {
@@ -313,7 +357,7 @@ function App() {
     const minutes = Math.floor(time / 60000)
     const seconds = Math.floor((time % 60000) / 1000)
     const milliseconds = time % 1000
-    return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.<span class="milliseconds">${milliseconds.toString().padStart(3, "0")}</span>`
+    return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(3, "0")}.<span class="milliseconds">${milliseconds.toString().padStart(3, "0")}</span>`
   }
 
   // Modify the toggleSound function to automatically mute on mobile
@@ -345,26 +389,28 @@ function App() {
     }
   }, [isMuted])
 
+  // Modify the useEffect that checks for daily challenge data
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0]
     const dailyScores = JSON.parse(localStorage.getItem("dailyScores") || "{}")
     const todayScore = dailyScores[today]
-  
+
     // Check if the user was actively playing before the refresh
     const wasPlaying = localStorage.getItem("wasPlayingDailyChallenge") === "true"
-  
+
+    // Only show daily results if wasPlaying flag is true
     if (todayScore && wasPlaying) {
       setCompletionTime(todayScore.time)
       setMoveCount(todayScore.moves)
-  
+
       // Load move history
       const savedMoveHistory = JSON.parse(localStorage.getItem("dailyMoveHistory") || "[]")
       setMoveHistory(savedMoveHistory)
-  
+
       // Load streak
       const currentStreak = Number.parseInt(localStorage.getItem("dailyStreak") || "0")
       setDailyStreak(currentStreak)
-  
+
       setShowDailyResults(true)
     } else {
       // Reset the "wasPlayingDailyChallenge" flag
@@ -372,7 +418,22 @@ function App() {
     }
   }, [])
 
-  
+  // Also add a beforeunload event listener to clear the flag when navigating away
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      // Only keep the flag if the user completed the daily challenge
+      if (!showDailyResults) {
+        localStorage.removeItem("wasPlayingDailyChallenge")
+      }
+    }
+
+    window.addEventListener("beforeunload", handleBeforeUnload)
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload)
+    }
+  }, [showDailyResults])
+
   // Also add this effect to automatically mute on mobile when the component mounts
   useEffect(() => {
     const isMobile = window.innerWidth <= 768
@@ -387,15 +448,23 @@ function App() {
   }, [])
 
   const handleIcon1Click = () => {
-    setShowInstructions(true)
-    setGamePaused(true)
-    setPauseStartTime(new Date())
+    if (completionTime !== null || showDailyResults) {
+      setShowInstructions(true)
+    } else {
+      setShowInstructions(true)
+      setGamePaused(true)
+      setPauseStartTime(new Date())
+    }
   }
 
   const handleIcon2Click = () => {
-    setShowModal(true)
-    setGamePaused(true)
-    setPauseStartTime(new Date())
+    if (completionTime !== null || showDailyResults) {
+      setShowModal(true)
+    } else {
+      setShowModal(true)
+      setGamePaused(true)
+      setPauseStartTime(new Date())
+    }
   }
 
   useEffect(() => {
@@ -419,36 +488,17 @@ function App() {
     }
   }
 
-  const handleShare = async () => {
+  // Update the handleShare function to toggle the share panel instead of just copying
+  const handleShare = () => {
     if (completionTime === null) return
-  
-    // Format time as "Xm Ys"
-    const minutes = Math.floor(completionTime / 60)
-    const seconds = Math.floor(completionTime % 60)
-    const formattedTime = `${minutes}m ${seconds}s`
-  
-    // Convert move history array to a formatted string
-    let matchSequence = moveHistory.join(" ")
-  
-    // If player lost in Hard Mode, add ⏳ at the end
-    if (gameLost) matchSequence += " ⏳"
-  
-    // Construct the share message
-    const shareText = `MATCHA ❇️  
-  Moves: ${moveCount} | Time: ${formattedTime}  
-  ${matchSequence}  
-  Can you beat my score? Play here: https://matcha-game.com`
-  
-    try {
-      await navigator.clipboard.writeText(shareText)
-  
-      // Show "Copied!" message
-      setCopied(true)
-      setTimeout(() => setCopied(false), 2000) // Hide message after 2s
-    } catch (error) {
-      console.error("Failed to copy:", error)
-    }
+    setShowSharePanel(!showSharePanel)
   }
+
+  // Add a function to close the share panel
+  const closeSharePanel = () => {
+    setShowSharePanel(false)
+  }
+
   return (
     <div className={`App ${showDailyResults ? "daily-results-active" : ""}`}>
       <ConfettiEffect confettiRunning={confettiRunning} />
@@ -509,37 +559,6 @@ function App() {
           </div>
         </div>
       )}
-     {completionTime !== null && !isDailyChallenge && !showDailyResults ? (
-  <div className="completion-time">
-    <h2 className="time-container">
-      <span className="time-value" dangerouslySetInnerHTML={{ __html: formatTime(Math.ceil(completionTime * 1000)) }} />
-      <span className="time-label">Completion Time</span>
-    </h2>
-    {bestTime !== null && (
-      <h2 className="best-time" dangerouslySetInnerHTML={{ __html: formatTime(Math.ceil(bestTime * 1000)) }} />
-    )}
-  </div>
-) : null}
-
-{matched.length === cards.length && cards.length > 0 && !isDailyChallenge && (
-  <div className="win-message-container">
-    <div className="fire-emoji">🔥</div>
-    <h2>{completionTime < bestTime ? "New Best!" : "You're on Fire!"}</h2>
-          <div className="subheader">
-            <p className="time-container">
-              <span className="time-value" dangerouslySetInnerHTML={{ __html: formatTime(completionTime * 1000) }} />
-              <span className="time-label">Completion Time</span>
-            </p>
-            <p className="time-container">
-              <span className="time-value-best" dangerouslySetInnerHTML={{ __html: formatTime(bestTime * 1000) }} />
-              <span className="time-label-best">Best Time</span>
-            </p>
-          </div>
-          <button onClick={initializeGame} className="play-again-btn">
-            Play Again
-          </button>
-        </div>
-      )}
 
       {gameLost && (
         <div className="lose-message-container">
@@ -549,6 +568,25 @@ function App() {
           <button onClick={initializeGame} className="try-again-btn">
             Try Again
           </button>
+          <button onClick={handleShare} className="share-btn">
+            Share Results
+          </button>
+          {showSharePanel && (
+            <SharePanel
+              shareText={`MATCHA ❇️  
+Moves: ${moveCount} | Time: ${Math.floor(completionTime / 60)}m ${Math.floor(completionTime % 60)}s | Mode: ${
+                isDailyChallenge
+                  ? "Daily Challenge"
+                  : memoryMode
+                    ? `Memory Mode (${memoryGrid})`
+                    : difficulty.charAt(0).toUpperCase() + difficulty.slice(1)
+              }  
+${moveHistory.join(" ")} ⏳  
+Can you beat my score? Play here: https://matcha-game.com`}
+              url="https://matcha-game.com"
+              onClose={closeSharePanel}
+            />
+          )}
         </div>
       )}
 
@@ -678,27 +716,27 @@ function App() {
         >
           <div className="instructions-container">
             <h2>How to Play</h2>
-            <ul className="instructions-list">
-              <li>Flip two cards to reveal their emojis.</li>
-              <li>Match the pairs—if they match, they stay flipped!</li>
-              <li>If they don’t match, they flip back after a second.</li>
-              <li>Clear the board as fast as you can to win!</li>
-            </ul>
+            <div className="instructions-list">
+              <p>Flip two cards to reveal their emojis.</p>
+              <p>Match the pairs—if they match, they stay flipped!</p>
+              <p>If they don't match, they flip back after a second.</p>
+              <p>Clear the board as fast as you can to win!</p>
+            </div>
             <h2>Game Modes:</h2>
-            <ul className="game-modes-list">
-              <li>
+            <div className="game-modes-list">
+              <p>
                 🟢 <strong>Easy:</strong> Cards preview before starting
-              </li>
-              <li>
+              </p>
+              <p>
                 🟡 <strong>Medium:</strong> No preview
-              </li>
-              <li>
+              </p>
+              <p>
                 🔴 <strong>Hard:</strong> Timed challenge
-              </li>
-              <li>
+              </p>
+              <p>
                 🔥 <strong>Memory Mode:</strong> Larger grids
-              </li>
-            </ul>
+              </p>
+            </div>
             <button
               onClick={() => {
                 setShowInstructions(false)
@@ -712,52 +750,144 @@ function App() {
         </Modal>
       )}
 
-{showDailyResults && (
-  <Modal
-    onClose={() => {
-      setShowDailyResults(false)
-    }}
-    hideContent={true}
-  >
-    <div className="daily-results-container">
-      <div className="fire-emoji">🏆</div>
-      <h2>Daily Challenge Complete!</h2>
-      <div className="subheader">
-        <div className="time-container">
-          <span className="time-value-moves">{moveCount}</span>
-          <span className="time-label">Moves</span>
+      {completionTime !== null && !isDailyChallenge && !showDailyResults && (
+        <div className="completion-time">
+          <h2 className="time-container">
+            <span
+              className="time-value"
+              dangerouslySetInnerHTML={{ __html: formatTime(Math.ceil(completionTime * 1000)) }}
+            />
+            <span className="time-label">Completion Time</span>
+          </h2>
+          {bestTime !== null && (
+            <h2 className="best-time" dangerouslySetInnerHTML={{ __html: formatTime(Math.ceil(bestTime * 1000)) }} />
+          )}
+          <button onClick={handleShare} className="share-btn">
+            {showSharePanel ? "Hide Share Options" : "Share Results"}
+          </button>
+          {showSharePanel && (
+            <SharePanel
+              shareText={`MATCHA ❇️  
+Moves: ${moveCount} | Time: ${Math.floor(completionTime / 60)}m ${Math.floor(completionTime % 60)}s | Mode: ${
+                isDailyChallenge
+                  ? "Daily Challenge"
+                  : memoryMode
+                    ? `Memory Mode (${memoryGrid})`
+                    : difficulty.charAt(0).toUpperCase() + difficulty.slice(1)
+              }  
+${moveHistory.join(" ")}  
+Can you beat my score? Play here: https://matcha-game.com`}
+              url="https://matcha-game.com"
+              onClose={closeSharePanel}
+            />
+          )}
         </div>
-        <div className="time-container">
-          <span className="time-value" dangerouslySetInnerHTML={{ __html: formatTime(completionTime * 1000) }} />
-          <span className="time-label">Time</span>
-        </div>
-        <div className="time-container">
-          <span className="time-value-streak">{dailyStreak}🔥</span>
-          <span className="time-label">Day Streak </span>
-        </div>
-      </div>
-      <button
-        onClick={() => {
-          setShowDailyResults(false)
-          setGameStarted(false)
-          setCompletionTime(null) // Reset the completion time
-        }}
-        className="play-again-btn"
-      >
-        Back to Menu
-      </button>
+      )}
 
-      {/* Share Results button */}
-      <button onClick={handleShare} className="share-btn">
-  {copied ? "Copied!" : "Share Results"}
-</button>
-    </div>
-  </Modal>
-)}
+      {matched.length === cards.length && cards.length > 0 && !isDailyChallenge && (
+        <div className="win-message-container">
+          <div className="fire-emoji">🔥</div>
+          <h2>{completionTime < bestTime ? "New Best!" : "You're on Fire!"}</h2>
+          <div className="subheader">
+            <p className="time-container">
+              <span className="time-value" dangerouslySetInnerHTML={{ __html: formatTime(completionTime * 1000) }} />
+              <span className="time-label">Completion Time</span>
+            </p>
+            <p className="time-container">
+              <span className="time-value-best" dangerouslySetInnerHTML={{ __html: formatTime(bestTime * 1000) }} />
+              <span className="time-label-best">Best Time</span>
+            </p>
+          </div>
+          <button onClick={initializeGame} className="play-again-btn">
+            Play Again
+          </button>
+          <button onClick={handleShare} className="share-btn">
+            {showSharePanel ? "Hide Share Options" : "Share Results"}
+          </button>
+          {showSharePanel && (
+            <SharePanel
+              shareText={`MATCHA ❇️  
+Moves: ${moveCount} | Time: ${Math.floor(completionTime / 60)}m ${Math.floor(completionTime % 60)}s | Mode: ${
+                isDailyChallenge
+                  ? "Daily Challenge"
+                  : memoryMode
+                    ? `Memory Mode (${memoryGrid})`
+                    : difficulty.charAt(0).toUpperCase() + difficulty.slice(1)
+              }  
+${moveHistory.join(" ")}  
+Can you beat my score? Play here: https://matcha-game.com`}
+              url="https://matcha-game.com"
+              onClose={closeSharePanel}
+            />
+          )}
+        </div>
+      )}
+
+      {showDailyResults && (
+        <Modal
+          onClose={() => {
+            setShowDailyResults(false)
+          }}
+          hideContent={true}
+        >
+          <div className="daily-results-container">
+            <div className="fire-emoji">🏆</div>
+            <h2>Daily Challenge Complete!</h2>
+            <div className="subheader">
+              <div className="time-container">
+                <span className="time-value-moves">{moveCount}</span>
+                <span className="time-label">Moves</span>
+              </div>
+              <div className="time-container">
+                <span className="time-value" dangerouslySetInnerHTML={{ __html: formatTime(completionTime * 1000) }} />
+                <span className="time-label">Time</span>
+              </div>
+              <div className="time-container">
+                <span className="time-value-streak">{dailyStreak}🔥</span>
+                <span className="time-label">Day Streak </span>
+              </div>
+            </div>
+            <button
+              onClick={() => {
+                setShowDailyResults(false)
+                setGameStarted(false)
+                setCompletionTime(null) // Reset the completion time
+              }}
+              className="play-again-btn"
+            >
+              Back to Menu
+            </button>
+            <button onClick={handleShare} className="share-btn">
+              {showSharePanel ? "Hide Share Options" : "Share Results"}
+            </button>
+            {showSharePanel && (
+              <SharePanel
+                shareText={`MATCHA ❇️  
+Moves: ${moveCount} | Time: ${Math.floor(completionTime / 60)}m ${Math.floor(completionTime % 60)}s | Mode: Daily Challenge  
+${moveHistory.join(" ")}  
+Can you beat my score? Play here: https://matcha-game.com`}
+                url="https://matcha-game.com"
+                onClose={closeSharePanel}
+              />
+            )}
+          </div>
+        </Modal>
+      )}
 
       <footer>
-        <p>© 2025 Matcha Game. All rights reserved.</p>
+        <p>
+          © 2025 Matcha Game. All rights reserved. Made by{" "}
+          <a href="https://www.x.com/colored_savage" target="_blank" rel="noopener noreferrer">
+            Savage
+          </a>{" "}
+          |
+          <a href="#" onClick={handleSignupClick}>
+            {" "}
+            Signup for Updates
+          </a>
+        </p>
       </footer>
+      {showMailchimpModal && <MailchimpModal onClose={() => setShowMailchimpModal(false)} />}
     </div>
   )
 }

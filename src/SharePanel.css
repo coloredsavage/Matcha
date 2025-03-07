@@ -1,0 +1,202 @@
+
+@font-face {
+    font-family: "Groteska";
+    src: url("/public/fonts/Groteska-Light.otf") format("opentype");
+    font-weight: 200;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: "Groteska";
+    src: url("/public/fonts/Groteska-Thin.otf") format("opentype");
+    font-weight: 100;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: "Groteska";
+    src: url("/public/fonts/Groteska-Book.otf") format("opentype");
+    font-weight: 300;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: "Groteska";
+    src: url("/public/fonts/Groteska-Medium.otf") format("opentype");
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  
+.share-panel-inline {
+    background-color: #000000;
+    border-radius: 12px;
+    padding: 16px;
+    font-family: "Groteska", sans-serif;
+    width: 100%;
+    margin-top: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: slideDown 0.3s ease-out;
+    position: relative;
+    left: -25px;
+  }
+  
+  @media (max-width: 600px) {
+    .share-panel-inline {
+      padding: 12px; /* Reduce padding for better fit */
+      border-radius: 8px; /* Slightly smaller border radius for compact look */
+      font-size: 14px; /* Adjust font size for readability */
+      margin-top: 12px; /* Reduce margin for better spacing */
+      width: 40vh;
+      position: relative;
+      left: -13px;
+      max-width: none; 
+    }
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .share-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+
+  
+  .share-panel-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    font-family: "Groteska", sans-serif;
+    margin: 0;
+    color: #fff;
+  }
+  
+  .close-button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #000000;
+    opacity: 0.7;
+    display: none;
+    transition: opacity 0.2s;
+  }
+  
+  .close-button:hover {
+    opacity: 1;
+  }
+  
+  .share-link-section,
+  .share-to-section {
+    margin-bottom: 16px;
+  }
+  
+  .share-link-container {
+    display: flex;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+  
+  .share-link-input {
+    flex: 1;
+    font-family: "Groteska", sans-serif;
+    padding: 8px 12px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    color: #fff;
+    background: transparent;
+    min-height: 80px;
+    resize: none;
+    font-family: inherit;
+    line-height: 1.4;
+  }
+  
+  .copy-button {
+    background: none;
+    border: none;
+    padding: 0 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    align-self: center;
+  }
+  
+  .social-icons {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+  
+  .social-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    width: 60px;
+    margin-bottom: 10px;
+    transition: transform 0.2s;
+  }
+  
+  .social-icon:hover {
+    transform: scale(1.05);
+  }
+  
+  .icon-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 6px;
+  }
+  
+  .social-icon span {
+    font-size: 11px;
+    color: #fff;
+    opacity: 0.8;
+  }
+  
+  
+  
+  /* Mobile responsiveness */
+  @media (max-width: 768px) {
+    .social-icons {
+      justify-content: center;
+      margin-top: 10px;
+      gap: 20px;
+    }
+  
+    .social-icon {
+      width: 40px;
+    }
+  
+    .icon-circle {
+      width: 36px;
+      height: 36px;
+    }
+  
+    .social-icon span {
+      font-size: 10px;
+    }
+  }
+  
+  
+  

@@ -1,75 +1,127 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
 .modal-content {
-    text-align: center;
-    border: none;
-  }
-  
-  .modal-content .logo {
-    width: 300px;
-    height: auto;
-    padding: 20px;
-    margin-bottom: 20px;
-  }
-  
-  /* Mobile adjustments */
+  position: relative;
+  background-color: black;
+  padding: 30px;
+  border-radius: 8px;
+  border: 2px solid #01c482; /* Add a visible border with the app's primary color */
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  color: white; /* Ensure text is visible on black background */
+}
+
+.modal-content .logo {
+  width: 300px;
+  height: auto;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+/* Mobile adjustments */
 @media (max-width: 768px) {
-    .modal-content .logo {
-      width: 200px; /* Reduce size for smaller screens */
-      padding: 10px; /* Adjust padding */
-      margin-bottom: 15px; /* Reduce margin for better spacing */
-    }
+  .modal-content .logo {
+    width: 200px; /* Reduce size for smaller screens */
+    padding: 10px; /* Adjust padding */
+    margin-bottom: 15px; /* Reduce margin for better spacing */
   }
+}
 
-  .modal-content h2 {
-    margin-bottom: 20px;
-    font-family: 'groteska', sans-serif;
-  }
-  .difficulty-buttons {
-    display: flex;
-    flex-direction: column; /* Stack buttons on top of each other */
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  
-  .difficulty-btn {
-    background: #000000;
-    color: rgb(255, 255, 255);
-    border: #01C482 1px solid;
-    padding: 10px 10px;
-    font-size: 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: transform 0.2s;
-    font-family: 'Groteska', sans-serif;
-    font-weight: 400;
-  }
-  
-  .difficulty-btn:hover {
-    transform: scale(1.02);
-    background: #01C482;
-    color: #000000;
-  }
-  
-  .divider {
-    border: 0;
-    height: 1px;
-    background: #ccc;
-    margin: 20px 0;
-  }
-  
-  .memory-mode {
-    margin-bottom: 20px;
-  }
-  
-  .memory-grid-selection {
-    margin-top: 10px;
-  }
+.modal-content h2 {
+  margin-bottom: 20px;
+  font-family: "groteska", sans-serif;
+}
 
-  .h2 {
-    font-family: 'Groteska', sans-serif;
-  }
+.difficulty-buttons {
+  display: flex;
+  flex-direction: column; /* Stack buttons on top of each other */
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
 
-  .daily-results-active .completion-time,
+.difficulty-btn {
+  background: #000000;
+  color: rgb(255, 255, 255);
+  border: #01c482 1px solid;
+  padding: 10px 10px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  font-family: "Groteska", sans-serif;
+  font-weight: 400;
+}
+
+.difficulty-btn:hover {
+  transform: scale(1.02);
+  background: #01c482;
+  color: #000000;
+}
+
+.divider {
+  border: 0;
+  height: 1px;
+  background: #ccc;
+  margin: 20px 0;
+}
+
+.memory-mode {
+  margin-bottom: 20px;
+}
+
+.memory-grid-selection {
+  margin-top: 10px;
+}
+
+.h2 {
+  font-family: "Groteska", sans-serif;
+}
+
+.daily-results-active .completion-time,
 .daily-results-active .win-message-container {
   display: none;
 }
+
+/* Update the close button styling to make it more visible */
+.close-button {
+  position: absolute;
+  top: 20px;
+  right: 15px;
+  background: #000000; /* Change background to the app's primary color */
+  color: #ffffff; /* Black text on colored background for contrast */
+  border: none;
+  border-radius: 50%; /* Make it a circle */
+  width: 30px;
+  height: 30px;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: "Groteska", sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 5000; /* Ensure it appears above other elements */
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.close-button:hover {
+  transform: scale(1.1);
+  background: #ffffff; /* White background on hover */
+}
+

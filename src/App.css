@@ -62,7 +62,7 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: repeat;
-  opacity: 0.5; /* Adjust the opacity as needed */
+  opacity: 0.8; /* Adjust the opacity as needed */
   z-index: -1; /* Ensure the background is behind the content */
 }
 
@@ -264,7 +264,7 @@ footer {
   background: #000000;
   color: #01c482;
   border: none;
-  padding: 30px 80px; /* Increased padding for larger size */
+  padding: 20px 40px; /* Increased padding for larger size */
   font-size: 1.2rem; /* Increased font size */
   border-radius: 75px;
   cursor: pointer;
@@ -559,6 +559,7 @@ footer {
 
   .play-again-btn {
     padding: 20px 30px;
+    margin: 0px;
     font-size: 1rem;
   }
 
@@ -603,12 +604,12 @@ footer {
   top: 0;
   left: 0;
   width: 100%;
-  border: none;
+  border: #01c482;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 3000;
   outline: none; /* Remove unwanted outlines */
   box-shadow: none; /* Disable extra shadows */
 }
@@ -616,23 +617,23 @@ footer {
 .modal-content {
   background: rgb(0, 0, 0);
   padding: 45px 90px;
-  border: #01c482 1px solid;
   border-radius: 20px;
   position: relative;
   max-width: 500px;
   width: 100%;
   text-align: center;
+
 }
 
 .close-button {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 20px;
+  right: 15px;
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-family: "Groteska", sans-serif;
+  font-size: 1.2rem;
   cursor: pointer;
-  display: none;
 }
 
 /* Modal container */
@@ -670,10 +671,9 @@ footer {
   }
 
   .close-button {
-    font-size: 1.2rem; /* Adjust close button size */
-    top: 5px;
-    right: 5px;
-    display: none;
+    font-size: 1rem; /* Adjust close button size */
+    top: 16px;
+    right: 16px;
   }
 }
 
@@ -821,7 +821,7 @@ footer {
 }
 
 .win-message-container h2 {
-  font-size: 3rem;
+  font-size: 2rem;
   margin-bottom: 30px;
   margin-top: 0px;
   font-family: "Sf-Pro-Display", sans-serif;
@@ -849,7 +849,7 @@ footer {
   background: #000000;
   color: #01c482;
   border: none;
-  padding: 30px 80px; /* Increased padding for larger size */
+  padding: 20px 60px; /* Increased padding for larger size */
   font-size: 1.2rem; /* Increased font size */
   border-radius: 75px;
   cursor: pointer;
@@ -897,7 +897,7 @@ footer {
 }
 
 .time-value {
-  font-size: 5rem; /* Larger for emphasis */
+  font-size: 3rem; /* Larger for emphasis */
   font-weight: bold;
   color: black;
   font-family: "Groteska", sans-serif;
@@ -940,7 +940,7 @@ footer {
   margin-bottom: 15px;
   font-family: "Groteska", sans-serif;
   font-size: 0.8em;
-  text-align: left;
+  text-align: center;
 }
 
 .instructions-list li {
@@ -954,7 +954,7 @@ footer {
   margin-bottom: 15px;
   font-family: "Groteska", sans-serif;
   font-size: 0.8em;
-  text-align: left;
+  text-align: center;
 }
 
 .game-modes-list {
@@ -963,7 +963,7 @@ footer {
   margin-bottom: 15px;
   font-family: "Groteska", sans-serif;
   font-size: 0.8em;
-  text-align: left;
+  text-align: center;
 }
 
 .game-modes-list li {
@@ -1000,7 +1000,7 @@ footer {
   }
 
   .time-value {
-    font-size: 3rem; /* Scale down main time value */
+    font-size: 2rem; /* Scale down main time value */
   }
 
   .time-value-best {
@@ -1033,7 +1033,7 @@ footer {
   }
 
   .instructions-container {
-    text-align: left;
+    text-align: center;
     font-family: "Groteska", sans-serif;
     max-width: 400px; /* Adjust width as needed */
     margin: 0 auto;
@@ -1152,8 +1152,8 @@ footer {
 }
 
 .daily-challenge-btn {
-  background: #000000;
-  color: rgb(255, 255, 255);
+  background: #febe00;
+  color: rgb(0, 0, 0);
   border: #febe00 1px solid; /* Yellow border for daily challenge */
   padding: 10px 192px;
   font-size: 1rem;
@@ -1167,8 +1167,8 @@ footer {
 
 .daily-challenge-btn:hover {
   transform: scale(1.02);
-  background: #febe00;
-  color: #000000;
+  background: #000000;
+  color: #ffffff;
 }
 
 /* Mobile Optimization */
@@ -1186,20 +1186,20 @@ footer {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #febe00; /* Yellow background for daily challenge */
+  background: #febe00;
   color: rgb(0, 0, 0);
   padding-left: 80px;
   padding-right: 80px;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding-top: 40px;
+  padding-bottom: 30px;
   border-radius: 40px;
   text-align: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
+  z-index: 1000; /* Ensure it is above other elements */
 }
 
 .daily-results-container h2 {
-  font-size: 2.5rem;
+  font-size: 2rem;
   margin-bottom: 30px;
   margin-top: 0px;
   font-family: "Sf-Pro-Display", sans-serif;
@@ -1215,7 +1215,7 @@ footer {
 
 .time-value-moves,
 .time-value-streak {
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: bold;
   color: black;
   font-family: "Groteska", sans-serif;
@@ -1224,14 +1224,14 @@ footer {
 
 @media (max-width: 768px) {
   .daily-results-container {
-    width: 50vw;
-    max-width: 350px;
-    padding: 25px;
+    width: 100vw;
+    max-width: 300px;
     border-radius: 20px;
+    padding: 20px;
   }
 
   .daily-results-container h2 {
-    font-size: 1.8rem;
+    font-size: 2rem;
     margin-bottom: 20px;
   }
 
@@ -1264,22 +1264,7 @@ footer {
   }
 }
 
-.daily-results-container {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #febe00;
-  color: rgb(0, 0, 0);
-  padding-left: 80px;
-  padding-right: 80px;
-  padding-top: 40px;
-  padding-bottom: 30px;
-  border-radius: 40px;
-  text-align: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  z-index: 1000; /* Ensure it is above other elements */
-}
+
 
 .daily-results-container .time-container {
   display: flex;
@@ -1314,9 +1299,20 @@ footer {
   font-weight: 400;
 }
 
+@media (max-width: 600px) {
+  .daily-results-container .time-value,
+  .daily-results-container .time-value-moves {
+    font-size: 1.5rem; /* Reduce font size for better readability */
+    font-weight: 400; /* Keep the intended font weight */
+    color: black;
+    font-family: "Groteska", sans-serif;
+    text-align: center; /* Center align for better mobile UX */
+    line-height: 1.3; /* Improve spacing */
+  }
+}
 /* Add styles for the streak display in the daily results container */
 .time-value-streak {
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: bold;
   color: black;
   font-family: "Groteska", sans-serif;
@@ -1342,7 +1338,7 @@ footer {
 
 @media (max-width: 768px) {
   .time-value-streak {
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
 
   .streak-container {
@@ -1427,34 +1423,125 @@ footer {
   }
 }
 
-/* Add styles for the Share button */
+
+
 .share-btn {
-  background: #000000;
-  color: #febe00;
-  border: 1px solid #febe00;
-  padding: 30px 80px; /* Increased padding for larger size */
+  padding: 20px 40px; /* Increased padding for larger size */
   font-size: 1.2rem; /* Increased font size */
   border-radius: 75px;
+  border: 0;
   cursor: pointer;
   transition: transform 0.2s;
   margin-top: 0rem;
   margin-bottom: 1rem;
   font-family: "Groteska", sans-serif;
   font-weight: 500;
-}
-
-.share-btn:hover {
-  transform: scale(1.02);
-  background: #ffffff;
-  color: #000000;
+  background: #000000;
+  color: #febe00;
+  margin-left: 5px;
+margin-right:5px;
 }
 
 /* Mobile optimization for the share button */
 @media (max-width: 768px) {
   .share-btn {
-    padding: 12px 30px;
-    font-size: 0.9rem;
+    padding: 20px 34px;
+    font-size: 1rem;
     margin-top: 10px;
+
   }
 }
 
+
+.share-btn:hover {
+  opacity: 1;
+  transform: scale(1.02);
+  background: #ffffff;
+  color: #000000;
+}
+
+.App {
+  position: relative;
+}
+
+.share-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+
+/* Add a backdrop for the share panel */
+.share-panel::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: -1;
+}
+
+/* Add these styles for the inline share panel */
+.win-message-container .share-panel-inline,
+.lose-message-container .share-panel-inline,
+.completion-time .share-panel-inline,
+.daily-results-container .share-panel-inline {
+  margin-top:-5px;
+  max-width: 100%;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Adjust button text when panel is open */
+.share-btn.active {
+  background: #000000;
+  color: #01c482;
+}
+
+/* Mobile responsiveness for share panel */
+@media (max-width: 768px) {
+  .share-panel-inline {
+    padding: 12px;
+  }
+
+  .social-icons {
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .social-icon {
+    width: 48px;
+  }
+
+  .icon-circle {
+    width: 32px;
+    height: 32px;
+  }
+
+  .social-icon span {
+    font-size: 9px;
+  }
+}
+
+
+p a {
+  color: white; /* Make links white */
+  text-decoration: underline; /* Keep them underlined */
+}
+
+p a:hover {
+  color: #01c482;  /* Slight fade effect on hover */
+}
