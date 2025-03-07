@@ -290,6 +290,7 @@ footer {
   font-size: 1.2rem;
   max-width: 400px;
   text-align: center;
+  display: none;
 }
 
 .text-red-500 {
@@ -560,7 +561,7 @@ footer {
   .play-again-btn {
     padding: 20px 30px;
     margin: 0px;
-    font-size: 1rem;
+    font-size: 0.8rem;
   }
 
   .main-time {
@@ -616,13 +617,12 @@ footer {
 
 .modal-content {
   background: rgb(0, 0, 0);
-  padding: 45px 90px;
+
   border-radius: 20px;
   position: relative;
   max-width: 500px;
   width: 100%;
   text-align: center;
-
 }
 
 .close-button {
@@ -1032,6 +1032,10 @@ footer {
     list-style-type: none; /* Remove default bullets */
   }
 
+  .game-modes-list li {
+    margin-bottom: 9px;
+  }
+
   .instructions-container {
     text-align: center;
     font-family: "Groteska", sans-serif;
@@ -1207,9 +1211,6 @@ footer {
 }
 
 .daily-results-container .subheader {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   margin-bottom: 20px;
 }
 
@@ -1231,7 +1232,7 @@ footer {
   }
 
   .daily-results-container h2 {
-    font-size: 2rem;
+    font-size: 1.8rem;
     margin-bottom: 20px;
   }
 
@@ -1264,7 +1265,28 @@ footer {
   }
 }
 
+/* Change the subheader in daily results to display horizontally */
+.daily-results-container .subheader {
+  display: flex;
+  flex-direction: row; /* Change from column to row */
+  justify-content: center; /* Center the items horizontally */
+  align-items: flex-start; /* Align items at the top */
+  gap: 60px; /* Add spacing between items */
+  margin-bottom: 20px;
+}
 
+/* Add responsive styling for mobile */
+@media (max-width: 480px) {
+  .daily-results-container .subheader {
+    flex-direction: row; /* Keep as row even on small screens */
+    flex-wrap: wrap; /* Allow wrapping if needed */
+    gap: 15px; /* Slightly reduce gap on mobile */
+  }
+
+  .daily-results-container .time-container {
+    min-width: 80px; /* Ensure minimum width for each stat */
+  }
+}
 
 .daily-results-container .time-container {
   display: flex;
@@ -1302,7 +1324,7 @@ footer {
 @media (max-width: 600px) {
   .daily-results-container .time-value,
   .daily-results-container .time-value-moves {
-    font-size: 1.5rem; /* Reduce font size for better readability */
+    font-size: 2rem; /* Reduce font size for better readability */
     font-weight: 400; /* Keep the intended font weight */
     color: black;
     font-family: "Groteska", sans-serif;
@@ -1338,7 +1360,7 @@ footer {
 
 @media (max-width: 768px) {
   .time-value-streak {
-    font-size: 1.5rem;
+    font-size: 2rem;
   }
 
   .streak-container {
@@ -1423,8 +1445,6 @@ footer {
   }
 }
 
-
-
 .share-btn {
   padding: 20px 40px; /* Increased padding for larger size */
   font-size: 1.2rem; /* Increased font size */
@@ -1439,19 +1459,17 @@ footer {
   background: #000000;
   color: #febe00;
   margin-left: 5px;
-margin-right:5px;
+  margin-right: 5px;
 }
 
 /* Mobile optimization for the share button */
 @media (max-width: 768px) {
   .share-btn {
     padding: 20px 34px;
-    font-size: 1rem;
+    font-size: 0.8rem;
     margin-top: 10px;
-
   }
 }
-
 
 .share-btn:hover {
   opacity: 1;
@@ -1489,7 +1507,7 @@ margin-right:5px;
 .lose-message-container .share-panel-inline,
 .completion-time .share-panel-inline,
 .daily-results-container .share-panel-inline {
-  margin-top:-5px;
+  margin-top: -5px;
   max-width: 100%;
   animation: slideDown 0.3s ease-out;
 }
@@ -1536,14 +1554,13 @@ margin-right:5px;
   }
 }
 
-
 p a {
   color: white; /* Make links white */
   text-decoration: underline; /* Keep them underlined */
 }
 
 p a:hover {
-  color: #01c482;  /* Slight fade effect on hover */
+  color: #01c482; /* Slight fade effect on hover */
 }
 
 .signup-link-container {
@@ -1572,4 +1589,8 @@ p a:hover {
   .signup-link {
     font-size: 0.7rem;
   }
+}
+
+.daily-results-container .close-button {
+  display: none; /* Hide the close button */
 }

@@ -894,10 +894,10 @@ Can you beat my score? Play here: https://matcha-game.com`}
           <a href="https://www.x.com/colored_savage" target="_blank" rel="noopener noreferrer">
             Savage
           </a>{" "}
-          |
+          |     {" "}
           <a href="#" onClick={handleSignupClick}>
-            {" "}
-            Signup for Updates
+        
+          Signup for Updates
           </a>
         </p>
       </footer>
