@@ -158,7 +158,7 @@
 
   @media (max-width: 480px) {
     .close-button {
-        top: 10VH;
+        top: 2VH;
         right: 10px;
         width: 26px;
         height: 26px;

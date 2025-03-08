@@ -893,11 +893,13 @@ Can you beat my score? Play here: https://matcha-game.com`}
           © 2025 Matcha Game. All rights reserved. Made by{" "}
           <a href="https://www.x.com/colored_savage" target="_blank" rel="noopener noreferrer">
             Savage
-          </a>{" "}
-          |     {" "}
-          <a href="#" onClick={handleSignupClick}>
+          </a>  |  
+          {" "}  <a href="#" onClick={handleSignupClick}>
         
           Signup for Updates
+          </a>
+          {" "}   <a href="https://buymeacoffee.com/edbhit6dab" target="_blank" rel="noopener noreferrer">
+       | {" "}Buy me a Matcha!
           </a>
         </p>
       </footer>
