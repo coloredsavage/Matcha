@@ -62,7 +62,7 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: repeat;
-  opacity: 0.6; /* Adjust the opacity as needed */
+  opacity: 0.5; /* Adjust the opacity as needed */
   z-index: -1; /* Ensure the background is behind the content */
 }
 
@@ -1474,7 +1474,7 @@ footer {
 .share-btn:hover {
   opacity: 1;
   transform: scale(1.02);
-  background: #ffffff;
+  background: #fffbe8;
   color: #000000;
 }
 
@@ -1555,7 +1555,7 @@ footer {
 }
 
 p a {
-  color: white; /* Make links white */
+  color: #fffbe8; /* Make links white */
   text-decoration: underline; /* Keep them underlined */
 }
 
@@ -1571,7 +1571,7 @@ p a:hover {
 .signup-link {
   background: none;
   border: none;
-  color: #ffffff;
+  color: #fffbe8;
   font-size: 0.8rem;
   font-family: "Groteska", sans-serif;
   text-decoration: underline;
