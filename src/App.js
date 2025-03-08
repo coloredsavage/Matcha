@@ -582,8 +582,8 @@ Moves: ${moveCount} | Time: ${Math.floor(completionTime / 60)}m ${Math.floor(com
                     : difficulty.charAt(0).toUpperCase() + difficulty.slice(1)
               }  
 ${moveHistory.join(" ")} ⏳  
-Can you beat my score? Play here: https://matcha-game.com`}
-              url="https://matcha-game.com"
+Can you beat my score? Play here: https://.com`}
+              url="https://www.matcha-game.com"
               onClose={closeSharePanel}
             />
           )}
@@ -785,8 +785,8 @@ Moves: ${moveCount} | Time: ${Math.floor(completionTime / 60)}m ${Math.floor(com
                     : difficulty.charAt(0).toUpperCase() + difficulty.slice(1)
               }  
 ${moveHistory.join(" ")}  
-Can you beat my score? Play here: https://matcha-game.com`}
-              url="https://matcha-game.com"
+Can you beat my score? Play here: www.matcha-game.com`}
+              url="https://www.matcha-game.com"
               onClose={closeSharePanel}
             />
           )}
@@ -824,8 +824,8 @@ Moves: ${moveCount} | Time: ${Math.floor(completionTime / 60)}m ${Math.floor(com
                     : difficulty.charAt(0).toUpperCase() + difficulty.slice(1)
               }  
 ${moveHistory.join(" ")}  
-Can you beat my score? Play here: https://matcha-game.com`}
-              url="https://matcha-game.com"
+Can you beat my score? Play here: https://www.matcha-game.com`}
+              url="https://www.matcha-game.com"
               onClose={closeSharePanel}
             />
           )}
