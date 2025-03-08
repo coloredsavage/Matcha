@@ -88,6 +88,7 @@ function App() {
   const [isMuted, setIsMuted] = useState(false)
   const [copied, setCopied] = useState(false)
   const [moveHistory, setMoveHistory] = useState([])
+  const [dailyResultsVersion, setDailyResultsVersion] = useState(0);
 
   // State variables for pausing
   const [gamePaused, setGamePaused] = useState(false)
@@ -307,37 +308,35 @@ function App() {
       if (isDailyChallenge) {
         // Save daily challenge completion
         try {
-          const today = new Date().toISOString().split("T")[0]
-          const dailyScores = JSON.parse(localStorage.getItem("dailyScores") || "{}")
-
-          // Save today's score
-          dailyScores[today] = { time: timeTaken, moves: moveCount }
-          localStorage.setItem("dailyScores", JSON.stringify(dailyScores))
-
-          // Save move history
-          localStorage.setItem("dailyMoveHistory", JSON.stringify(moveHistory))
-
-          // Update streak
-          let streak = Number(localStorage.getItem("dailyStreak") || "0")
-
-          // Check if yesterday's challenge was completed
-          const yesterday = new Date()
-          yesterday.setDate(yesterday.getDate() - 1)
-          const yesterdayStr = yesterday.toISOString().split("T")[0]
-
+          const today = new Date().toISOString().split("T")[0];
+          const dailyScores = JSON.parse(localStorage.getItem("dailyScores") || "{}");
+      
+          dailyScores[today] = { time: timeTaken, moves: moveCount };
+          localStorage.setItem("dailyScores", JSON.stringify(dailyScores));
+      
+          localStorage.setItem("dailyMoveHistory", JSON.stringify(moveHistory));
+      
+          let streak = Number(localStorage.getItem("dailyStreak") || "0");
+      
+          const yesterday = new Date();
+          yesterday.setDate(yesterday.getDate() - 1);
+          const yesterdayStr = yesterday.toISOString().split("T")[0];
+      
           if (dailyScores[yesterdayStr]) {
-            streak += 1
+            streak += 1;
           } else {
-            streak = 1 // Reset streak if there was a gap
+            streak = 1;
           }
-
-          localStorage.setItem("dailyStreak", streak.toString())
-          setDailyStreak(streak)
+      
+          localStorage.setItem("dailyStreak", streak.toString());
+          setDailyStreak(streak);
+      
+          setDailyResultsVersion(prev => prev + 1); // ✅ Force UI update
         } catch (error) {
-          console.error("Error saving daily challenge completion:", error)
+          console.error("Error saving daily challenge completion:", error);
         }
-
-        setShowDailyResults(true)
+      
+        setShowDailyResults(true);
       } else {
         // Regular game logic
         const roundedTimeTaken = Math.ceil(timeTaken)
@@ -396,33 +395,23 @@ function App() {
 
   // Modify the useEffect that checks for daily challenge data
   useEffect(() => {
-    const today = new Date().toISOString().split("T")[0]
-    const dailyScores = JSON.parse(localStorage.getItem("dailyScores") || "{}")
-    const todayScore = dailyScores[today]
+  const today = new Date().toISOString().split("T")[0];
+  const dailyScores = JSON.parse(localStorage.getItem("dailyScores") || "{}");
+  const todayScore = dailyScores[today];
 
-    // Check if the user was actively playing before the refresh
-    const wasPlaying = localStorage.getItem("wasPlayingDailyChallenge") === "true"
+  if (todayScore) {
+    setCompletionTime(todayScore.time);
+    setMoveCount(todayScore.moves);
 
-    // Only show daily results if wasPlaying flag is true
-    if (todayScore && wasPlaying) {
-      setCompletionTime(todayScore.time)
-      setMoveCount(todayScore.moves)
+    const savedMoveHistory = JSON.parse(localStorage.getItem("dailyMoveHistory") || "[]");
+    setMoveHistory(savedMoveHistory);
 
-      // Load move history
-      const savedMoveHistory = JSON.parse(localStorage.getItem("dailyMoveHistory") || "[]")
-      setMoveHistory(savedMoveHistory)
+    const currentStreak = Number(localStorage.getItem("dailyStreak") || "0");
+    setDailyStreak(currentStreak);
 
-      // Load streak
-      const currentStreak = Number.parseInt(localStorage.getItem("dailyStreak") || "0")
-      setDailyStreak(currentStreak)
-
-      setShowDailyResults(true)
-    } else {
-      // Reset the "wasPlayingDailyChallenge" flag
-      localStorage.removeItem("wasPlayingDailyChallenge")
-    }
-  }, [])
-
+    setShowDailyResults(true);
+  }
+}, [dailyResultsVersion]); // ✅ Now triggers when data changes
   // Also add a beforeunload event listener to clear the flag when navigating away
   useEffect(() => {
     const handleBeforeUnload = () => {
