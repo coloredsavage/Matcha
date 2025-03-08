@@ -395,23 +395,29 @@ function App() {
 
   // Modify the useEffect that checks for daily challenge data
   useEffect(() => {
-  const today = new Date().toISOString().split("T")[0];
-  const dailyScores = JSON.parse(localStorage.getItem("dailyScores") || "{}");
-  const todayScore = dailyScores[today];
-
-  if (todayScore) {
-    setCompletionTime(todayScore.time);
-    setMoveCount(todayScore.moves);
-
-    const savedMoveHistory = JSON.parse(localStorage.getItem("dailyMoveHistory") || "[]");
-    setMoveHistory(savedMoveHistory);
-
-    const currentStreak = Number(localStorage.getItem("dailyStreak") || "0");
-    setDailyStreak(currentStreak);
-
-    setShowDailyResults(true);
-  }
-}, [dailyResultsVersion]); // ✅ Now triggers when data changes
+    const today = new Date().toISOString().split("T")[0];
+    const dailyScores = JSON.parse(localStorage.getItem("dailyScores") || "{}");
+    const todayScore = dailyScores[today];
+  
+    // Only show results if the user was actively playing before refresh
+    const wasPlaying = localStorage.getItem("wasPlayingDailyChallenge") === "true";
+  
+    if (todayScore && wasPlaying) {
+      setCompletionTime(todayScore.time);
+      setMoveCount(todayScore.moves);
+  
+      const savedMoveHistory = JSON.parse(localStorage.getItem("dailyMoveHistory") || "[]");
+      setMoveHistory(savedMoveHistory);
+  
+      const currentStreak = Number(localStorage.getItem("dailyStreak") || "0");
+      setDailyStreak(currentStreak);
+  
+      setShowDailyResults(true);
+    } else {
+      setShowDailyResults(false); // ✅ Ensure it doesn’t force the modal on page load
+      localStorage.removeItem("wasPlayingDailyChallenge");
+    }
+  }, [dailyResultsVersion]);
   // Also add a beforeunload event listener to clear the flag when navigating away
   useEffect(() => {
     const handleBeforeUnload = () => {
