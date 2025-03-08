@@ -874,8 +874,8 @@ Can you beat my score? Play here: https://matcha-game.com`}
                 shareText={`MATCHA ❇️  
 Moves: ${moveCount} | Time: ${Math.floor(completionTime / 60)}m ${Math.floor(completionTime % 60)}s | Mode: Daily Challenge  
 ${moveHistory.join(" ")}  
-Can you beat my score? Play here: https://matcha-game.com`}
-                url="https://matcha-game.com"
+Can you beat my score? Play here: https://www.matcha-game.com`}
+                url="https://www.matcha-game.com"
                 onClose={closeSharePanel}
               />
             )}
