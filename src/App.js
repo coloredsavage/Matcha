@@ -14,6 +14,7 @@ import loseSound from "./sounds/game-lost.mp3"
 import seedrandom from "seedrandom"
 import SharePanel from "./SharePanel"
 import MailchimpModal from "./MailchimpModal"
+import { Analytics } from "@vercel/analytics/react"
 
 const ConfettiEffect = ({ confettiRunning }) => {
   const confettiAnchorRef = useRef(null)
@@ -582,8 +583,8 @@ Moves: ${moveCount} | Time: ${Math.floor(completionTime / 60)}m ${Math.floor(com
                     : difficulty.charAt(0).toUpperCase() + difficulty.slice(1)
               }  
 ${moveHistory.join(" ")} ⏳  
-Can you beat my score? Play here: https://.com`}
-              url="https://www.matcha-game.com"
+Can you beat my score? Play here: https://matcha-game.com`}
+              url="https://matcha-game.com"
               onClose={closeSharePanel}
             />
           )}
@@ -785,8 +786,8 @@ Moves: ${moveCount} | Time: ${Math.floor(completionTime / 60)}m ${Math.floor(com
                     : difficulty.charAt(0).toUpperCase() + difficulty.slice(1)
               }  
 ${moveHistory.join(" ")}  
-Can you beat my score? Play here: www.matcha-game.com`}
-              url="https://www.matcha-game.com"
+Can you beat my score? Play here: https://matcha-game.com`}
+              url="https://matcha-game.com"
               onClose={closeSharePanel}
             />
           )}
@@ -824,8 +825,8 @@ Moves: ${moveCount} | Time: ${Math.floor(completionTime / 60)}m ${Math.floor(com
                     : difficulty.charAt(0).toUpperCase() + difficulty.slice(1)
               }  
 ${moveHistory.join(" ")}  
-Can you beat my score? Play here: https://www.matcha-game.com`}
-              url="https://www.matcha-game.com"
+Can you beat my score? Play here: https://matcha-game.com`}
+              url="https://matcha-game.com"
               onClose={closeSharePanel}
             />
           )}
@@ -874,7 +875,7 @@ Can you beat my score? Play here: https://www.matcha-game.com`}
                 shareText={`MATCHA ❇️  
 Moves: ${moveCount} | Time: ${Math.floor(completionTime / 60)}m ${Math.floor(completionTime % 60)}s | Mode: Daily Challenge  
 ${moveHistory.join(" ")}  
-Can you beat my score? Play here: https://www.matcha-game.com`}
+Can you beat my score? Play here: www.matcha-game.com`}
                 url="https://www.matcha-game.com"
                 onClose={closeSharePanel}
               />
